@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repositorio de Etiquetas HTML - Clase 1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --primary: #3b82f6;
+            --accent: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --border: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 0 0 10px 0;
+            background: linear-gradient(to right, #60a5fa, #34d399);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        p.subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 30px;
+            padding: 8px 16px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateX(-5px);
+        }
+
+        details {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease-out both;
+        }
+
+        details[open] {
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        summary {
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        summary::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--primary);
+            transition: transform 0.3s ease;
+        }
+
+        details[open] summary::after {
+            transform: rotate(45deg);
+            color: var(--accent);
+        }
+
+        .content {
+            padding: 0 20px 20px 20px;
+            border-top: 1px solid var(--border);
+            margin-top: 5px;
+            padding-top: 15px;
+        }
+
+        .tag-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed rgba(255,255,255,0.05);
+        }
+
+        .tag-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .tag-name {
+            font-family: 'Fira Code', monospace;
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            margin-right: 15px;
+            min-width: 100px;
+            text-align: center;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .tag-desc {
+            color: var(--text-main);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            padding-top: 3px;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Staggered animation */
+        details:nth-of-type(1) { animation-delay: 0.1s; }
+        details:nth-of-type(2) { animation-delay: 0.2s; }
+        details:nth-of-type(3) { animation-delay: 0.3s; }
+        details:nth-of-type(4) { animation-delay: 0.4s; }
+        details:nth-of-type(5) { animation-delay: 0.5s; }
+        details:nth-of-type(6) { animation-delay: 0.6s; }
+        details:nth-of-type(7) { animation-delay: 0.7s; }
+        details:nth-of-type(8) { animation-delay: 0.8s; }
+        details:nth-of-type(9) { animation-delay: 0.9s; }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+            width: 100%;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        [data-theme="light"] .theme-toggle {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 600px) {
+            .tag-item {
+                flex-direction: column;
+            }
+            .tag-name {
+                margin-bottom: 8px;
+            }
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle">☀️ Modo Claro</button>
+
+    <div class="container">
+        <a href="index.html" class="btn-back">
+            &larr; Volver al Inicio
+        </a>
+
+        <header>
+            <h1>Diccionario de Etiquetas HTML</h1>
+            <p class="subtitle">Las 100 etiquetas más utilizadas agrupadas por categoría funcional.</p>
+        </header>
+
+        <details>
+            <summary>1. Estructura y Raíz (4)</summary>
+            <div class="content">
+                <div class="tag-item">
+                    <div class="tag-name">&lt;!DOCTYPE html&gt;</div>
+                    <div class="tag-desc">Declara que el documento es HTML5.</div>
+                </div>
+                <div class="tag-item">
+                    <div class="tag-name">&lt;html&gt;</div>
+                    <div class="tag-desc">El contenedor raíz de todo el documento.</div>
+                </div>
+                <div class="tag-item">
+                    <div class="tag-name">&lt;head&gt;</div>
+                    <div class="tag-desc">Contiene metadatos, títulos y enlaces a estilos (no visible).</div>
+                </div>
+                <div class="tag-item">
+                    <div class="tag-name">&lt;body&gt;</div>
+                    <div class="tag-desc">Contiene todo el contenido visible de la página.</div>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary>2. Metadatos y Scripting (8)</summary>
+            <div class="content">
+                <div class="tag-item"><div class="tag-name">&lt;title&gt;</div><div class="tag-desc">Define el título de la pestaña del navegador.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;meta&gt;</div><div class="tag-desc">Define metadatos (charset, descripción, viewport).</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;link&gt;</div><div class="tag-desc">Vincula el HTML con recursos externos (como CSS).</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;style&gt;</div><div class="tag-desc">Permite escribir CSS directamente en el HTML.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;script&gt;</div><div class="tag-desc">Carga o contiene código JavaScript.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;noscript&gt;</div><div class="tag-desc">Contenido que se muestra si JavaScript está desactivado.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;template&gt;</div><div class="tag-desc">Contenedor de contenido que no se renderiza al cargar.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;base&gt;</div><div class="tag-desc">Especifica la URL base para todos los enlaces relativos.</div></div>
+            </div>
+        </details>
+
+        <details>
+            <summary>3. Secciones Semánticas (12)</summary>
+            <div class="content">
+                <div class="tag-item"><div class="tag-name">&lt;header&gt;</div><div class="tag-desc">Cabecera de una página o sección.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;nav&gt;</div><div class="tag-desc">Bloque de enlaces de navegación.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;main&gt;</div><div class="tag-desc">El contenido principal y único del documento.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;article&gt;</div><div class="tag-desc">Contenido independiente y distribuible (post, noticia).</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;section&gt;</div><div class="tag-desc">Sección genérica de contenido relacionado.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;aside&gt;</div><div class="tag-desc">Contenido tangencial o barra lateral.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;footer&gt;</div><div class="tag-desc">Pie de página o de una sección.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;h1&gt; a &lt;h6&gt;</div><div class="tag-desc">Encabezados jerárquicos (del más al menos importante).</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;hgroup&gt;</div><div class="tag-desc">Agrupa varios niveles de encabezados relacionados.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;address&gt;</div><div class="tag-desc">Información de contacto del autor.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;details&gt;</div><div class="tag-desc">Crea un desplegable que el usuario puede abrir.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;summary&gt;</div><div class="tag-desc">El título visible de un elemento &lt;details&gt;.</div></div>
+            </div>
+        </details>
+
+        <details>
+            <summary>4. Agrupación de Contenido (11)</summary>
+            <div class="content">
+                <div class="tag-item"><div class="tag-name">&lt;p&gt;</div><div class="tag-desc">Define un párrafo.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;hr&gt;</div><div class="tag-desc">Ruptura temática (línea horizontal).</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;pre&gt;</div><div class="tag-desc">Texto preformateado (respeta espacios y saltos).</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;blockquote&gt;</div><div class="tag-desc">Cita en bloque de una fuente externa.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;ol&gt;</div><div class="tag-desc">Lista ordenada (numerada).</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;ul&gt;</div><div class="tag-desc">Lista no ordenada (viñetas).</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;li&gt;</div><div class="tag-desc">Ítem de una lista.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;dl&gt;</div><div class="tag-desc">Lista de descripción.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;dt&gt;</div><div class="tag-desc">Término en una lista de descripción.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;dd&gt;</div><div class="tag-desc">Descripción del término anterior.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;div&gt;</div><div class="tag-desc">Contenedor genérico de bloque (usar solo si no hay opción semántica).</div></div>
+            </div>
+        </details>
+
+        <details>
+            <summary>5. Semántica de Texto (23)</summary>
+            <div class="content">
+                <div class="tag-item"><div class="tag-name">&lt;a&gt;</div><div class="tag-desc">Hipervínculo (enlace).</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;em&gt;</div><div class="tag-desc">Énfasis ligero (cursiva).</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;strong&gt;</div><div class="tag-desc">Importancia fuerte (negrita).</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;small&gt;</div><div class="tag-desc">Comentarios secundarios o "letra pequeña" legal.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;s&gt;</div><div class="tag-desc">Texto que ya no es correcto o relevante (tachado).</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;cite&gt;</div><div class="tag-desc">Referencia a una obra creativa.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;q&gt;</div><div class="tag-desc">Cita corta en línea.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;dfn&gt;</div><div class="tag-desc">Indica la definición de un término.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;abbr&gt;</div><div class="tag-desc">Abreviatura o acrónimo (con atributo title).</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;ruby&gt;</div><div class="tag-desc">Anotaciones para tipografía de Asia Oriental.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;rt&gt;</div><div class="tag-desc">Pronunciación de los caracteres en &lt;ruby&gt;.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;rp&gt;</div><div class="tag-desc">Paréntesis para navegadores que no soportan &lt;ruby&gt;.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;data&gt;</div><div class="tag-desc">Enlaza contenido con un valor legible por máquinas.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;time&gt;</div><div class="tag-desc">Fecha o hora específica.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;code&gt;</div><div class="tag-desc">Fragmento de código de computadora.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;var&gt;</div><div class="tag-desc">Variable en programación o matemáticas.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;samp&gt;</div><div class="tag-desc">Salida de un programa o sistema.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;kbd&gt;</div><div class="tag-desc">Entrada de teclado del usuario.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;sub&gt;</div><div class="tag-desc">Subíndice.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;sup&gt;</div><div class="tag-desc">Superíndice.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;i&gt;</div><div class="tag-desc">Texto en cursiva por razones estéticas.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;b&gt;</div><div class="tag-desc">Texto en negrita por razones estéticas.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;u&gt;</div><div class="tag-desc">Texto subrayado.</div></div>
+            </div>
+        </details>
+
+        <details>
+            <summary>6. Multimedia e Incrustados (11)</summary>
+            <div class="content">
+                <div class="tag-item"><div class="tag-name">&lt;img&gt;</div><div class="tag-desc">Inserta una imagen.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;iframe&gt;</div><div class="tag-desc">Incrusta otra página web dentro de la actual.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;embed&gt;</div><div class="tag-desc">Contenedor para aplicaciones externas (obsoleto en su mayoría).</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;object&gt;</div><div class="tag-desc">Recurso externo (imagen, PDF, plugin).</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;param&gt;</div><div class="tag-desc">Parámetros para etiquetas &lt;object&gt;.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;video&gt;</div><div class="tag-desc">Reproductor de video.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;audio&gt;</div><div class="tag-desc">Reproductor de audio.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;source&gt;</div><div class="tag-desc">Define múltiples recursos multimedia para video/audio.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;track&gt;</div><div class="tag-desc">Pistas de texto (subtítulos) para video/audio.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;canvas&gt;</div><div class="tag-desc">Área para dibujar gráficos vía JavaScript.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;map&gt;</div><div class="tag-desc">Define un mapa de imagen interactivo.</div></div>
+            </div>
+        </details>
+
+        <details>
+            <summary>7. Tablas (8)</summary>
+            <div class="content">
+                <div class="tag-item"><div class="tag-name">&lt;table&gt;</div><div class="tag-desc">Define una tabla.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;caption&gt;</div><div class="tag-desc">Título o descripción de la tabla.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;thead&gt;</div><div class="tag-desc">Grupo de encabezados de la tabla.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;tbody&gt;</div><div class="tag-desc">Cuerpo de la tabla con los datos.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;tfoot&gt;</div><div class="tag-desc">Pie de la tabla (resúmenes).</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;tr&gt;</div><div class="tag-desc">Fila de la tabla.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;th&gt;</div><div class="tag-desc">Celda de encabezado.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;td&gt;</div><div class="tag-desc">Celda de datos.</div></div>
+            </div>
+        </details>
+
+        <details>
+            <summary>8. Formularios e Interacción (23)</summary>
+            <div class="content">
+                <div class="tag-item"><div class="tag-name">&lt;form&gt;</div><div class="tag-desc">Contenedor de un formulario.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;label&gt;</div><div class="tag-desc">Etiqueta para un elemento de entrada.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;input&gt;</div><div class="tag-desc">Campo de entrada de datos (múltiples tipos).</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;button&gt;</div><div class="tag-desc">Botón clickable.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;select&gt;</div><div class="tag-desc">Lista desplegable.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;datalist&gt;</div><div class="tag-desc">Opciones predefinidas para un &lt;input&gt;.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;optgroup&gt;</div><div class="tag-desc">Agrupa opciones dentro de un &lt;select&gt;.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;option&gt;</div><div class="tag-desc">Opción individual en un desplegable.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;textarea&gt;</div><div class="tag-desc">Campo de texto de múltiples líneas.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;output&gt;</div><div class="tag-desc">Resultado de un cálculo.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;progress&gt;</div><div class="tag-desc">Barra de progreso.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;meter&gt;</div><div class="tag-desc">Medida escalar dentro de un rango conocido.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;fieldset&gt;</div><div class="tag-desc">Agrupa elementos relacionados en un formulario.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;legend&gt;</div><div class="tag-desc">Título para un &lt;fieldset&gt;.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;search&gt;</div><div class="tag-desc">Sección que contiene herramientas de búsqueda.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;dialog&gt;</div><div class="tag-desc">Caja de diálogo o ventana modal.</div></div>
+            </div>
+        </details>
+
+        <details>
+            <summary>9. Otros y Edición (7)</summary>
+            <div class="content">
+                <div class="tag-item"><div class="tag-name">&lt;span&gt;</div><div class="tag-desc">Contenedor genérico en línea (inline).</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;br&gt;</div><div class="tag-desc">Salto de línea simple.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;wbr&gt;</div><div class="tag-desc">Oportunidad de salto de línea opcional.</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;ins&gt;</div><div class="tag-desc">Texto insertado (edición).</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;del&gt;</div><div class="tag-desc">Texto eliminado (edición).</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;area&gt;</div><div class="tag-desc">Región dentro de un mapa de imagen (&lt;map&gt;).</div></div>
+                <div class="tag-item"><div class="tag-name">&lt;picture&gt;</div><div class="tag-desc">Contenedor para ofrecer diferentes versiones de una imagen.</div></div>
+            </div>
+        </details>
+        
+        <footer>
+            <p>&copy; 2026 German Mardones. Todos los derechos reservados.</p>
+        </footer>
+    </div>
+
+    <script>
+        const toggleBtn = document.getElementById('themeToggle');
+        const root = document.documentElement;
+
+        if (localStorage.getItem('theme') === 'light') {
+            root.setAttribute('data-theme', 'light');
+            toggleBtn.innerHTML = '🌙 Modo Oscuro';
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            if (root.getAttribute('data-theme') === 'light') {
+                root.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'dark');
+                toggleBtn.innerHTML = '☀️ Modo Claro';
+            } else {
+                root.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                toggleBtn.innerHTML = '🌙 Modo Oscuro';
+            }
+        });
+    </script>
+</body>
+</html>
