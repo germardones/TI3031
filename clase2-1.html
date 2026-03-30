@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The CSS Specificity Battle | Lab Interactivo</title>
+    <!-- Tailwind CSS para Layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --surface: #1e293b;
+            --accent: #38bdf8;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f8fafc;
+            --surface: #ffffff;
+            --accent: #0284c7;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="light"] body {
+            color: #0f172a;
+        }
+
+        [data-theme="light"] .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="light"] .battle-button {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        [data-theme="light"] label {
+            background: #ffffff !important;
+            border-color: rgba(0, 0, 0, 0.05) !important;
+        }
+
+        [data-theme="light"] h1 {
+            background: linear-gradient(135deg, #0369a1 0%, #0c4a6e 100%) !important;
+            -webkit-background-clip: text !important;
+            background-clip: text !important;
+        }
+
+        [data-theme="light"] header p {
+            color: #475569 !important;
+        }
+
+        [data-theme="light"] nav a {
+            color: #0284c7 !important;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+
+        code, pre {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+        }
+
+        .battle-button {
+            transition: var(--transition);
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+        }
+
+        .battle-button.active {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px -5px currentColor;
+        }
+
+        .inspector-line {
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-bottom: 2px;
+            font-size: 0.85rem;
+        }
+
+        .overridden {
+            text-decoration: line-through;
+            opacity: 0.4;
+        }
+
+        .winning {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 3px solid var(--accent);
+        }
+
+        .point-badge {
+            animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Custom scrollbar for code */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <button class="fixed top-8 right-8 z-[1000] bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full font-semibold hover:bg-white/20 transition-all text-sm shadow-xl" id="themeToggle">
+        ☀️ Modo Claro
+    </button>
+
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+                <nav class="mb-4">
+                    <a href="index.html" class="text-sky-400 hover:text-sky-300 font-semibold flex items-center gap-2 transition-colors">
+                        &larr; Volver al Dashboard
+                    </a>
+                </nav>
+                <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-sky-400 bg-clip-text text-transparent">
+                    The CSS Specificity Battle
+                </h1>
+                <p class="text-slate-400 mt-2 text-lg">Controla la Cascada y domina la prioridad de los selectores.</p>
+            </div>
+            <div class="glass-panel px-6 py-4 flex items-center gap-4 border-sky-500/30">
+                <div class="text-right">
+                    <p class="text-xs uppercase tracking-widest text-slate-500 font-bold">Puntuación de Poder</p>
+                    <p id="totalScore" class="text-3xl font-bold text-sky-400 tabular-nums">0000</p>
+                </div>
+                <div class="h-10 w-[2px] bg-slate-700"></div>
+                <div id="specificityBadge" class="bg-sky-500/10 text-sky-400 px-3 py-1 rounded-full text-sm font-mono border border-sky-500/20">
+                    (0,0,0,0)
+                </div>
+            </div>
+        </header>
+
+        <main class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            
+            <!-- Panel Izquierdo: Simulador -->
+            <section class="glass-panel p-8 flex flex-col items-center justify-center min-h-[400px] relative overflow-hidden group">
+                <!-- Background Decoration -->
+                <div class="absolute inset-0 bg-gradient-to-br from-sky-500/5 to-transparent pointer-events-none"></div>
+                
+                <div class="relative z-10 text-center">
+                    <!-- The Battle Button -->
+                    <button id="battleButton" class="battle-button px-12 py-6 rounded-2xl text-2xl font-bold border-4 border-white/20 bg-slate-800 text-white mb-12">
+                        Analizando Prioridad...
+                    </button>
+
+                    <!-- Fake Browser Inspector -->
+                    <div class="w-full max-w-sm mx-auto text-left glass-panel bg-slate-900/80 p-6 shadow-2xl">
+                        <div class="flex items-center gap-2 mb-4 border-b border-slate-700 pb-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            <span class="text-[10px] text-slate-500 font-mono ml-2 uppercase tracking-tighter">Styles Inspector</span>
+                        </div>
+                        <div id="inspectorContent" class="font-mono space-y-4">
+                            <!-- JS will inject lines here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Panel Derecho: Editor de Atributos -->
+            <section class="glass-panel p-8">
+                <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-sky-400"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
+                    Editor de Atributos
+                </h3>
+                
+                <div class="space-y-4">
+                    <!-- Nivel 1: Elemento -->
+                    <label class="group flex items-center justify-between p-4 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-red-500/50 cursor-pointer transition-all">
+                        <div class="flex items-center gap-4">
+                            <input type="checkbox" data-level="1" class="w-5 h-5 rounded border-slate-600 bg-slate-700 text-red-500 focus:ring-red-500 transition-all">
+                            <div>
+                                <p class="font-bold text-red-400">Nivel 1: Elemento HTML</p>
+                                <p class="text-xs text-slate-500 font-mono">Selector: button { color: rojo; }</p>
+                            </div>
+                        </div>
+                        <span class="text-slate-600 font-bold">+1 pt</span>
+                    </label>
+
+                    <!-- Nivel 2: Clase -->
+                    <label class="group flex items-center justify-between p-4 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-green-500/50 cursor-pointer transition-all">
+                        <div class="flex items-center gap-4">
+                            <input type="checkbox" data-level="2" class="w-5 h-5 rounded border-slate-600 bg-slate-700 text-green-500 focus:ring-green-500 transition-all">
+                            <div>
+                                <p class="font-bold text-green-400">Nivel 2: Clase (.btn-primary)</p>
+                                <p class="text-xs text-slate-500 font-mono">.btn-primary { color: verde; }</p>
+                            </div>
+                        </div>
+                        <span class="text-slate-600 font-bold">+10 pts</span>
+                    </label>
+
+                    <!-- Nivel 3: ID -->
+                    <label class="group flex items-center justify-between p-4 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-blue-500/50 cursor-pointer transition-all">
+                        <div class="flex items-center gap-4">
+                            <input type="checkbox" data-level="3" class="w-5 h-5 rounded border-slate-600 bg-slate-700 text-blue-500 focus:ring-blue-500 transition-all">
+                            <div>
+                                <p class="font-bold text-blue-400">Nivel 3: ID (#main-action)</p>
+                                <p class="text-xs text-slate-500 font-mono">#main-action { color: azul; }</p>
+                            </div>
+                        </div>
+                        <span class="text-slate-600 font-bold">+100 pts</span>
+                    </label>
+
+                    <!-- Nivel 4: Inline Style -->
+                    <label class="group flex items-center justify-between p-4 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-orange-500/50 cursor-pointer transition-all">
+                        <div class="flex items-center gap-4">
+                            <input type="checkbox" data-level="4" class="w-5 h-5 rounded border-slate-600 bg-slate-700 text-orange-500 focus:ring-orange-500 transition-all">
+                            <div>
+                                <p class="font-bold text-orange-400">Nivel 4: Estilo Inline</p>
+                                <p class="text-xs text-slate-500 font-mono">style="color: naranja;"</p>
+                            </div>
+                        </div>
+                        <span class="text-slate-600 font-bold">+1000 pts</span>
+                    </label>
+
+                    <!-- Nivel 5: !important -->
+                    <label class="group flex items-center justify-between p-4 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-white/50 cursor-pointer transition-all">
+                        <div class="flex items-center gap-4">
+                            <input type="checkbox" data-level="5" class="w-5 h-5 rounded border-slate-600 bg-slate-700 text-slate-200 focus:ring-slate-200 transition-all">
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <p class="font-bold text-slate-100">Nivel 5: Modificador !important</p>
+                                    <span class="text-[10px] bg-red-600 text-white px-1 font-bold animate-pulse">DANGER</span>
+                                </div>
+                                <p class="text-xs text-slate-500 font-mono">color: negro !important;</p>
+                            </div>
+                        </div>
+                        <span class="text-slate-600 font-bold">MAX POWER</span>
+                    </label>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer: Secciones Informativas -->
+        <footer class="grid grid-cols-1 gap-8">
+            <!-- Lección del Profesor -->
+            <div class="glass-panel p-10 bg-sky-500/5 border-sky-500/20">
+                <h3 class="text-3xl font-bold mb-6 text-sky-400">Lección del Profesor: La Cascada Humana</h3>
+                <div class="prose prose-invert prose-slate max-w-none text-lg">
+                    <p class="mb-6">Elegir selectores es como jerarquizar una organización. Un mensaje para <strong>"todo el departamento"</strong> (Elemento) es ignorado si el jefe de <strong>"tu equipo específico"</strong> (Clase) dice lo contrario.</p>
+                    <p class="mb-6">Pero si te llega un correo directo con <strong>tu nombre y apellido</strong> (ID), esa orden gana. El estilo <strong>Inline</strong> es como si el jefe se parara frente a ti, y el <strong>!important</strong> es... bueno, es simplemente una ley marcial que rompe todas las reglas anteriores.</p>
+                    <div class="bg-slate-900/50 p-6 rounded-xl border border-slate-700 italic text-slate-300">
+                        "La especificidad se calcula en 4 niveles: (Directiva-Inline, ID, Clase, Elemento). ¡Estudia esto como la tabla del 10 si quieres ser un Pro!"
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+
+    <script>
+        const levelsData = {
+            1: { name: 'button', color: '#ef4444', score: 1, specificity: [0,0,0,1], label: 'Tag Selector' },
+            2: { name: '.btn-primary', color: '#22c55e', score: 10, specificity: [0,0,1,0], label: 'Class Selector' },
+            3: { name: '#main-action', color: '#3b82f6', score: 100, specificity: [0,1,0,0], label: 'ID Selector' },
+            4: { name: 'style="..."', color: '#f97316', score: 1000, specificity: [1,0,0,0], label: 'Inline Style' },
+            5: { name: '!important', color: '#000000', score: 9999, specificity: [9,9,9,9], label: 'Override Mod' }
+        };
+
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const button = document.getElementById('battleButton');
+        const inspector = document.getElementById('inspectorContent');
+        const totalScoreEl = document.getElementById('totalScore');
+        const specBadge = document.getElementById('specificityBadge');
+
+        function updateUI() {
+            let activeLevels = [];
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    activeLevels.push(parseInt(cb.dataset.level));
+                }
+            });
+
+            // Winning Level is the highest checked
+            const winningLevelId = activeLevels.length > 0 ? Math.max(...activeLevels) : null;
+            const winningLevel = winningLevelId ? levelsData[winningLevelId] : null;
+
+            // 1. Update Button
+            if (winningLevel) {
+                button.classList.add('active');
+                button.style.backgroundColor = winningLevel.color;
+                button.style.color = winningLevelId === 5 ? '#fff' : (winningLevelId === 4 ? '#000' : '#fff');
+                button.style.borderColor = winningLevel.color;
+                button.textContent = "Especificidad Ganadora!";
+                
+                // Special case for color contrast
+                if (winningLevelId === 5) {
+                    button.style.borderColor = 'rgba(255,255,255,0.3)';
+                }
+            } else {
+                button.classList.remove('active');
+                button.style.backgroundColor = 'transparent';
+                button.style.color = 'inherit';
+                button.style.borderColor = 'rgba(255,255,255,0.1)';
+                button.textContent = "Analizando Prioridad...";
+            }
+
+            // 2. Update Inspector
+            renderInspector(activeLevels, winningLevelId);
+
+            // 3. Update Score
+            calculateScore(activeLevels);
+        }
+
+        function renderInspector(activeIds, winnerId) {
+            inspector.innerHTML = '';
+            
+            // Rules in priority order (high to low)
+            const allIds = [5, 4, 3, 2, 1];
+            
+            allIds.forEach(id => {
+                if (!activeIds.includes(id)) return;
+
+                const data = levelsData[id];
+                const isWinner = id === winnerId;
+                
+                const line = document.createElement('div');
+                line.className = `inspector-line ${isWinner ? 'winning' : 'overridden'}`;
+                
+                const selector = id === 4 ? 'element.style' : 
+                               (id === 5 ? 'button' : 
+                               (id === 1 ? 'button' : data.name));
+
+                line.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="${isWinner ? 'text-sky-400' : 'text-slate-500'} font-bold">${selector} {</span>
+                    </div>
+                    <div class="pl-4">
+                        <span class="${isWinner ? 'text-white' : 'text-slate-600'}">color: ${data.color}${id === 5 ? ' !important' : ''};</span>
+                    </div>
+                    <div class="text-slate-500">}</div>
+                `;
+                inspector.appendChild(line);
+            });
+
+            if (inspector.innerHTML === '') {
+                inspector.innerHTML = '<p class="text-slate-600 text-xs italic">Ningún selector activo en el DOM.</p>';
+            }
+        }
+
+        function calculateScore(ids) {
+            let total = 0;
+            let spec = [0, 0, 0, 0];
+
+            ids.forEach(id => {
+                total += levelsData[id].score;
+                // Specificity calc (standard a,b,c,d)
+                const s = levelsData[id].specificity;
+                spec[0] = Math.max(spec[0], s[0]);
+                spec[1] = Math.max(spec[1], s[1]);
+                spec[2] = Math.max(spec[2], s[2]);
+                spec[3] = Math.max(spec[3], s[3]);
+            });
+
+            // Update DOM
+            totalScoreEl.textContent = total.toString().padStart(4, '0');
+            specBadge.textContent = `(${spec.join(',')})`;
+            
+            if (ids.length > 0) {
+                totalScoreEl.classList.add('point-badge');
+                setTimeout(() => totalScoreEl.classList.remove('point-badge'), 400);
+            }
+        }
+
+        checkboxes.forEach(cb => cb.addEventListener('change', updateUI));
+
+
+        // Theme Toggle Logic
+        const toggleBtn = document.getElementById('themeToggle');
+        const root = document.documentElement;
+
+        if (localStorage.getItem('theme') === 'light') {
+            root.setAttribute('data-theme', 'light');
+            toggleBtn.innerHTML = '🌙 Modo Oscuro';
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            if (root.getAttribute('data-theme') === 'light') {
+                root.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'dark');
+                toggleBtn.innerHTML = '☀️ Modo Claro';
+            } else {
+                root.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                toggleBtn.innerHTML = '🌙 Modo Oscuro';
+            }
+        });
+
+        // Init
+        updateUI();
+    </script>
+</body>
+</html>

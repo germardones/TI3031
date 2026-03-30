@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio Interactivo | El Modelo de Caja CSS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --surface: #1e293b;
+            --accent: #38bdf8;
+            --transition: all 0.3s ease;
+            
+            /* Box Model Colors */
+            --color-content: rgba(56, 189, 248, 0.4);
+            --color-padding: rgba(34, 197, 94, 0.3);
+            --color-border: rgba(234, 179, 8, 0.5);
+            --color-margin: rgba(249, 115, 22, 0.2);
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f1f5f9;
+            --surface: #ffffff;
+            --accent: #0284c7;
+        }
+
+        [data-theme="light"] body {
+            color: #0f172a;
+        }
+
+        [data-theme="light"] h1 { color: #0f172a; }
+
+        [data-theme="light"] .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="light"] .math-panel {
+            background: rgba(2, 132, 199, 0.05);
+        }
+
+        [data-theme="light"] section.glass-panel {
+            background: #ffffff;
+        }
+
+        [data-theme="light"] .text-white { color: #0f172a !important; }
+        [data-theme="light"] .text-slate-300 { color: #475569 !important; }
+        [data-theme="light"] .text-slate-400 { color: #64748b !important; }
+        [data-theme="light"] .text-sky-200 { color: #0369a1 !important; }
+        [data-theme="light"] .bg-sky-500\/10 { background-color: rgba(2, 132, 199, 0.1) !important; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+
+        code, .mono { font-family: 'JetBrains Mono', monospace; }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+        }
+
+        /* Essential Box Styles */
+        #masterBox {
+            background-color: var(--color-content);
+            border-style: solid;
+            border-color: var(--color-border);
+            padding: 20px;
+            margin: 20px;
+            width: 200px;
+            height: 200px;
+            box-sizing: content-box;
+            position: relative;
+            transition: box-sizing 0.5s ease;
+        }
+
+        /* Area Visualizers */
+        .area-label {
+            position: absolute;
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            pointer-events: none;
+            white-space: nowrap;
+            background: rgba(0,0,0,0.4);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* Range Input Styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]:focus { outline: none; }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+            background: #334155;
+            border-radius: 3px;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            height: 18px;
+            width: 18px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -6px;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        .toggle-btn.active {
+            background-color: var(--accent);
+            color: #0f172a;
+            box-shadow: 0 0 20px var(--accent);
+        }
+
+        .math-panel {
+            border-left: 4px solid var(--accent);
+            background: rgba(56, 189, 248, 0.05);
+        }
+
+        /* Layer Highlight effect */
+        .layer-margin { outline: 2px dashed rgba(249, 115, 22, 0.5); outline-offset: 10px; }
+    </style>
+</head>
+<body class="p-6 md:p-10">
+    <button class="fixed top-8 right-8 z-[1000] bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full font-semibold hover:bg-white/20 transition-all text-sm shadow-xl" id="themeToggle">
+        ☀️ Modo Claro
+    </button>
+
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <header class="mb-10">
+            <nav class="mb-4">
+                <a href="clase2.html" class="text-sky-400 hover:text-sky-300 font-semibold flex items-center gap-2 transition-colors">
+                    &larr; Volver al Hub Clase 2
+                </a>
+            </nav>
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-2">Laboratorio: El Modelo de Caja</h1>
+            <p class="text-slate-400 text-lg">Visualiza y comprende cómo se calcula el espacio real en la web.</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            
+            <!-- Columna Izquierda: Teoría y Controles -->
+            <aside class="space-y-8">
+                <!-- Box Model Explanation -->
+                <div class="glass-panel p-8">
+                    <h2 class="text-2xl font-bold mb-4 text-sky-400">¿Qué es el Box Model?</h2>
+                    <p class="text-slate-300 mb-6 leading-relaxed">
+                        Todo elemento en HTML es una caja. Se compone de 4 capas: 
+                        <span class="text-sky-400 font-bold">Contenido</span>, 
+                        <span class="text-green-400 font-bold">Padding</span> (espacio interno), 
+                        <span class="text-yellow-400 font-bold">Border</span> y 
+                        <span class="text-orange-400 font-bold">Margin</span> (espacio externo).
+                    </p>
+                    
+                    <div class="h-[1px] bg-white/10 mb-8"></div>
+
+                    <!-- Layout Toggle -->
+                    <div class="mb-8">
+                        <label class="block text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">Propiedad Box Sizing</label>
+                        <div class="flex gap-4">
+                            <button id="contentBoxBtn" class="toggle-btn active flex-1 py-3 rounded-xl border border-white/10 font-bold transition-all">content-box</button>
+                            <button id="borderBoxBtn" class="toggle-btn flex-1 py-3 rounded-xl border border-white/10 font-bold transition-all">border-box</button>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-3 italic">
+                            * content-box suma todo al ancho. border-box incluye padding y border dentro del ancho definido.
+                        </p>
+                    </div>
+
+                    <!-- Controls -->
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <label class="text-sm font-bold text-slate-400">Width (Ancho Base)</label>
+                                <span id="widthVal" class="text-sky-400 font-mono font-bold">200px</span>
+                            </div>
+                            <input type="range" id="widthSlider" min="100" max="350" value="200">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <label class="text-sm font-bold text-green-400">Padding (Interno)</label>
+                                <span id="paddingVal" class="text-green-400 font-mono font-bold">20px</span>
+                            </div>
+                            <input type="range" id="paddingSlider" min="0" max="60" value="20">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <label class="text-sm font-bold text-yellow-400">Border Width (Borde)</label>
+                                <span id="borderVal" class="text-yellow-400 font-mono font-bold">10px</span>
+                            </div>
+                            <input type="range" id="borderSlider" min="0" max="30" value="10">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <label class="text-sm font-bold text-orange-400">Margin (Externo)</label>
+                                <span id="marginVal" class="text-orange-400 font-mono font-bold">20px</span>
+                            </div>
+                            <input type="range" id="marginSlider" min="0" max="60" value="20">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Math Panel -->
+                <div class="glass-panel p-8 math-panel">
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-sky-400"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/><path d="M11 13H5a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h6"/><path d="M19 13h-6a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2Z"/></svg>
+                        Cálculo de Ancho Total
+                    </h3>
+                    <div class="font-mono text-slate-300 space-y-2">
+                        <div id="formulaText" class="text-lg">Width + (2 * Padding) + (2 * Border)</div>
+                        <div class="text-3xl font-bold text-white mt-4 flex items-baseline gap-2">
+                            Total Visual: <span id="totalWidthVal" class="text-sky-400">260px</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Columna Derecha: Visualizador -->
+            <section class="glass-panel p-8 flex items-center justify-center min-h-[500px] overflow-hidden bg-slate-900/50 relative">
+                <!-- Margin Outer Shadow (represents margin) -->
+                <div id="marginVisualizer" class="relative flex items-center justify-center" style="outline: 2px dashed rgba(249, 115, 22, 0.4); outline-offset: 20px;">
+                    <span class="area-label text-orange-400 absolute -top-10 scale-90">Margin Area</span>
+                    
+                    <!-- The Actual CSS Box -->
+                    <div id="masterBox">
+                        <!-- Labels inside layers -->
+                        <span id="labelContent" class="area-label text-sky-300 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">Content</span>
+                        <span id="labelPadding" class="area-label text-green-300 absolute top-2 left-2 text-[8px]">Padding</span>
+                        <span id="labelBorder" class="area-label text-yellow-300 absolute -top-6 -left-6 text-[8px]">Border</span>
+                    </div>
+                </div>
+
+                <!-- Teacher's Note (Absolute) -->
+                <div class="absolute bottom-8 left-8 right-8 bg-sky-500/10 border border-sky-400/20 p-4 rounded-xl">
+                    <p class="text-xs italic text-sky-200">
+                        <strong>Nota del Profesor:</strong> "En producción, el 99% de los devs usamos <code>box-sizing: border-box</code> en el reset de CSS. Esto evita que añadir padding 'rompa' tu diseño lateral."
+                    </p>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script>
+        const box = document.getElementById('masterBox');
+        const marginVis = document.getElementById('marginVisualizer');
+        
+        const sliders = {
+            width: document.getElementById('widthSlider'),
+            padding: document.getElementById('paddingSlider'),
+            border: document.getElementById('borderSlider'),
+            margin: document.getElementById('marginSlider')
+        };
+
+        const values = {
+            width: document.getElementById('widthVal'),
+            padding: document.getElementById('paddingVal'),
+            border: document.getElementById('borderVal'),
+            margin: document.getElementById('marginVal'),
+            total: document.getElementById('totalWidthVal'),
+            formula: document.getElementById('formulaText')
+        };
+
+        const btns = {
+            content: document.getElementById('contentBoxBtn'),
+            border: document.getElementById('borderBoxBtn')
+        };
+
+        let currentBoxSizing = 'content-box';
+
+        function update() {
+            const w = parseInt(sliders.width.value);
+            const p = parseInt(sliders.padding.value);
+            const b = parseInt(sliders.border.value);
+            const m = parseInt(sliders.margin.value);
+
+            // Update UI Labels
+            values.width.textContent = `${w}px`;
+            values.padding.textContent = `${p}px`;
+            values.border.textContent = `${b}px`;
+            values.margin.textContent = `${m}px`;
+
+            // Apply Styles to Box
+            box.style.width = `${w}px`;
+            box.style.height = `${w}px`; // Keep it square for visual
+            box.style.padding = `${p}px`;
+            box.style.borderWidth = `${b}px`;
+            box.style.margin = `${m}px`;
+            box.style.boxSizing = currentBoxSizing;
+
+            // Update Margin Visualizer outline
+            marginVis.style.outlineOffset = `${m}px`;
+
+            // Calculate Visual Width
+            let totalVisualWidth;
+            if (currentBoxSizing === 'content-box') {
+                totalVisualWidth = w + (2 * p) + (2 * b);
+                values.formula.textContent = `${w} + (2 * ${p}) + (2 * ${b})`;
+            } else {
+                totalVisualWidth = w;
+                values.formula.textContent = `Width (Padding y Border incluidos)`;
+            }
+
+            values.total.textContent = `${totalVisualWidth}px`;
+        }
+
+        // Event Listeners
+        Object.values(sliders).forEach(s => s.addEventListener('input', update));
+
+        btns.content.addEventListener('click', () => {
+            currentBoxSizing = 'content-box';
+            btns.content.classList.add('active');
+            btns.border.classList.remove('active');
+            update();
+        });
+
+        btns.border.addEventListener('click', () => {
+            currentBoxSizing = 'border-box';
+            btns.border.classList.add('active');
+            btns.content.classList.remove('active');
+            update();
+        });
+
+        // Theme Toggle Logic
+        const toggleBtn = document.getElementById('themeToggle');
+        const root = document.documentElement;
+
+        if (localStorage.getItem('theme') === 'light') {
+            root.setAttribute('data-theme', 'light');
+            toggleBtn.innerHTML = '🌙 Modo Oscuro';
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            if (root.getAttribute('data-theme') === 'light') {
+                root.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'dark');
+                toggleBtn.innerHTML = '☀️ Modo Claro';
+            } else {
+                root.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                toggleBtn.innerHTML = '🌙 Modo Oscuro';
+            }
+        });
+
+        // Initialize
+        update();
+    </script>
+</body>
+</html>
