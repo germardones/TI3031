@@ -1,349 +1,254 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
-    <title>Master Class: Anatomía de HTML5</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 1 | Estructura y Semántica HTML</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2c3e50;
-            --accent: #e74c3c;
-            --secondary: #34495e;
-            --bg: #f4f7f6;
-            --form-bg: #ecf0f1;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.2);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-dim: #475569;
+            --accent: #0284c7;
+            --accent-glow: rgba(2, 132, 199, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 25px;
-            box-sizing: border-box;
-            background: var(--bg);
-            color: #333;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             line-height: 1.6;
             min-height: 100vh;
-            overflow-x: hidden;
+            transition: var(--transition);
         }
 
-        /* Identificación universal de elementos */
-        header,
-        nav,
-        main,
-        section,
-        article,
-        aside,
-        footer,
-        h1,
-        h2,
-        h3,
-        p,
-        img,
-        form,
-        label,
-        input,
-        button,
-        select,
-        option,
-        table,
-        tr,
-        th,
-        td,
-        figure,
-        figcaption,
-        blockquote,
-        cite,
-        hr,
-        ul,
-        li,
-        strong,
-        b,
-        i {
-            position: relative;
-            border: 1px dashed #bdc3c7;
-            transition: all 0.2s ease;
-            cursor: help;
+        h1, h2, h3 {
+            font-family: 'Outfit', sans-serif;
         }
 
-        /* Resaltado en hover */
-        *:hover {
-            border: 2px solid var(--accent) !important;
-            background-color: rgba(231, 76, 60, 0.05);
-            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.05);
-        }
-
-        /* Tooltip dinámico usando el atributo data-tag */
-        header:hover::after,
-        nav:hover::after,
-        main:hover::after,
-        section:hover::after,
-        article:hover::after,
-        aside:hover::after,
-        footer:hover::after,
-        h1:hover::after,
-        h2:hover::after,
-        h3:hover::after,
-        p:hover::after,
-        img:hover::after,
-        form:hover::after,
-        label:hover::after,
-        input:hover::after,
-        button:hover::after,
-        select:hover::after,
-        option:hover::after,
-        table:hover::after,
-        tr:hover::after,
-        th:hover::after,
-        td:hover::after,
-        figure:hover::after,
-        figcaption:hover::after,
-        blockquote:hover::after,
-        cite:hover::after,
-        hr:hover::after,
-        ul:hover::after,
-        li:hover::after,
-        strong:hover::after,
-        b:hover::after,
-        i:hover::after {
-            content: attr(data-tag);
-            position: absolute;
-            top: -20px;
-            right: 0;
-            background: var(--accent);
-            color: white;
-            font-size: 11px;
-            padding: 1px 6px;
-            border-radius: 3px;
-            opacity: 1;
-            z-index: 1000;
-            pointer-events: none;
-            white-space: nowrap;
-        }
-
-        /* Layout y Ajustes Visuales */
-        header {
-            padding: 30px;
-            text-align: center;
-            background: white;
-            margin-bottom: 10px;
-        }
-
-        header h1,
-        header p {
-            border: none;
-        }
-
-        nav {
-            background: var(--secondary);
-            color: white;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-
-        nav ul {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            gap: 20px;
-            margin: 0;
-            padding: 0;
-            border: none;
-        }
-
-        main {
-            display: grid;
-            grid-template-columns: 2.5fr 1fr;
-            gap: 20px;
-            padding: 20px;
-            max-width: 1200px;
-            margin: auto;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        @media (max-width: 800px) {
-            main {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        section {
-            padding: 20px;
-            background: white;
-            border-radius: 4px;
-        }
-
-        article {
-            margin-top: 20px;
-            border: 1px solid #eee;
-            padding: 15px;
-            border-radius: 4px;
-        }
-
-        aside {
-            background: #fff;
-            padding: 20px;
-            border-radius: 4px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 25px;
-            background: var(--primary);
-            color: white;
-            margin-top: 20px;
-        }
-
-        /* Estilos para elementos nuevos */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 15px 0;
-        }
-
-        th,
-        td {
-            padding: 10px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-
-        figure {
-            margin: 20px 0;
-            padding: 10px;
-            background: #f9f9f9;
-            text-align: center;
-        }
-
-        blockquote {
-            border-left: 5px solid var(--accent);
-            margin: 20px 0;
-            padding: 10px 20px;
-            font-style: italic;
-            background: #fff;
-        }
-
-        hr {
-            border: 0;
-            height: 1px;
-            background: #ddd;
-            margin: 20px 0;
-        }
-
-        form {
-            background: var(--form-bg);
-            padding: 20px;
-            border-radius: 4px;
-        }
-
-        input,
-        select,
-        button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
-
-        button {
-            background: var(--accent);
-            color: white;
-            border: none;
+        #themeToggle {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            padding: 0.75rem 1.25rem;
+            border-radius: 100px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        header {
+            margin-bottom: 4rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .back-link:hover {
+            transform: translateX(-5px);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(to right, var(--text-main), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            max-width: 600px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .content-card {
+            background-color: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .content-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px -15px var(--accent-glow);
+        }
+
+        .card-tag {
+            background: var(--accent-glow);
+            color: var(--accent);
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-card h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-card p {
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+            flex-grow: 1;
+        }
+
+        .card-action {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .container { padding: 2rem 1.5rem; }
+        }
+        
+        [data-theme="light"] h1 {
+            background-image: linear-gradient(to right, #0f172a, #0284c7) !important;
         }
     </style>
 </head>
-
 <body>
 
-    <header data-tag="<header>">
-        <h1 data-tag="<h1>">Portal Educativo de HTML5</h1>
-        <p data-tag="<p>">Pasa el mouse para identificar cada componente semántico.</p>
-    </header>
+    <button id="themeToggle">☀️ Modo Claro</button>
 
-    <nav data-tag="<nav>">
-        <ul data-tag="<ul>">
-            <li data-tag="<li>"><a href="index.html" style="color:white; text-decoration:none;">Inicio</a></li>
-            <li data-tag="<li>">Lecciones</li>
-            <li data-tag="<li>"><a href="diccionario.html" style="color:white; text-decoration:none;">Diccionario
-                    HTML</a></li>
-        </ul>
-    </nav>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                Regresar al Hub Principal
+            </a>
+            <h1>Módulo 1: Estructura y Semántica</h1>
+            <p class="subtitle">Domina la arquitectura del DOM, la jerarquía de etiquetas y los pilares de la accesibilidad estructural en la web.</p>
+        </header>
 
-    <main data-tag="<main>">
+        <main class="content-grid">
+            <!-- Paso 01: El Esqueleto -->
+            <a href="esqueleto-web.html" class="content-card border-sky-500/20">
+                <div>
+                    <span class="card-tag">Paso 01</span>
+                    <h2 class="text-sky-400">El Esqueleto Web</h2>
+                    <p>Entiende la estructura base indispensable: Doctype, Head, Body y los metadatos esenciales.</p>
+                </div>
+                <div class="card-action text-sky-400">
+                    Iniciar Guía <span>&rarr;</span>
+                </div>
+            </a>
 
-        <section data-tag="<section>">
-            <h2 data-tag="<h2>">Contenido Principal y Multimedia</h2>
-            <p data-tag="<p>">HTML5 nos permite dar énfasis con <strong data-tag="<strong>">importancia fuerte</strong>,
-                usar <b data-tag="<b>">negritas visuales</b> o marcar términos en <i data-tag="<i>">itálica</i>.</p>
+            <!-- Paso 02: Anatomía Semántica -->
+            <a href="anatomia-html.html" class="content-card border-red-500/20">
+                <div>
+                    <span class="card-tag">Paso 02</span>
+                    <h2 class="text-red-500">Anatomía Semántica</h2>
+                    <p>Explorador interactivo de etiquetas estructurales. Identifica cada componente del documento con visión de rayos X.</p>
+                </div>
+                <div class="card-action text-red-500">
+                    Iniciar Explorador <span>&rarr;</span>
+                </div>
+            </a>
 
-            <hr data-tag="<hr>">
+            <!-- Paso 03: Atributos -->
+            <a href="atributos-html.html" class="content-card border-emerald-500/20">
+                <div>
+                    <span class="card-tag">Paso 03</span>
+                    <h2 class="text-emerald-500">Parámetros y Atributos</h2>
+                    <p>Dominio técnico de atributos (href, src, alt, class, id) y cómo afectan el comportamiento de cada etiqueta.</p>
+                </div>
+                <div class="card-action text-emerald-500">
+                    Ver Teoría <span>&rarr;</span>
+                </div>
+            </a>
+        </main>
+    </div>
 
-            <article data-tag="<article>">
-                <h3 data-tag="<h3>">Uso de Figuras y Citas</h3>
-                <figure data-tag="<figure>">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbpCsXGB81CTPyMRX50aX38LbaKJR2HBRkpQ&s"
-                        alt="Imagen de un gatito" data-tag="<img>">
-                    <figcaption data-tag="<figcaption>">Figura 1: Descripción de la imagen capturada.</figcaption>
-                </figure>
+    <script>
+        const toggleBtn = document.getElementById('themeToggle');
+        const root = document.documentElement;
 
-                <blockquote data-tag="<blockquote>">
-                    "La semántica es el alma de una web accesible y bien estructurada."
-                    <cite data-tag="<cite>">- Manual del Desarrollador</cite>
-                </blockquote>
-            </article>
+        if (localStorage.getItem('theme') === 'light') {
+            root.setAttribute('data-theme', 'light');
+            toggleBtn.innerHTML = '🌙 Modo Oscuro';
+        }
 
-            <article data-tag="<article>">
-                <h3 data-tag="<h3>">Datos en Tablas</h3>
-                <table data-tag="<table>">
-                    <tr data-tag="<tr>">
-                        <th data-tag="<th>">Elemento</th>
-                        <th data-tag="<th>">Categoría</th>
-                    </tr>
-                    <tr data-tag="<tr>">
-                        <td data-tag="<td>">&lt;main&gt;</td>
-                        <td data-tag="<td>Estructural</td>">Estructural</td>
-                    </tr>
-                </table>
-            </article>
-        </section>
-
-        <aside data-tag="<aside>">
-            <h3 data-tag="<h3>">Interacción</h3>
-            <form data-tag="<form>">
-                <label data-tag="<label>">Nombre de Usuario:</label>
-                <input type="text" placeholder="Ej: JuanPerez" data-tag="<input type='text'>">
-
-                <label data-tag="<label>">Nivel de Conocimiento:</label>
-                <select data-tag="<select>">
-                    <option data-tag="<option>">Principiante</option>
-                    <option data-tag="<option>">Intermedio</option>
-                    <option data-tag="<option>">Avanzado</option>
-                </select>
-
-                <button type="button" data-tag="<button>">Enviar Formulario</button>
-            </form>
-
-            <h3 data-tag="<h3>">Enlaces Rápidos</h3>
-            <ul data-tag="<ul>">
-                <li data-tag="<li>"><a href="diccionario.html"
-                        style="text-decoration:none; color:var(--primary); font-weight:bold;">Repositorio de Etiquetas
-                        HTML</a></li>
-                <li data-tag="<li>"><a href="https://developer.mozilla.org/es/docs/Web/HTML" target="_blank"
-                        style="text-decoration:none; color:inherit;">Documentación oficial MDN</a></li>
-                <li data-tag="<li>"><a href="https://validator.w3.org/" target="_blank"
-                        style="text-decoration:none; color:inherit;">Validador W3C</a></li>
-            </ul>
-        </aside>
-
-    </main>
-
-    <footer data-tag="<footer>">
-        <p data-tag="<p>">© 2026 German Mardones. Todos los derechos reservados.</p>
-    </footer>
-
+        toggleBtn.addEventListener('click', () => {
+            if (root.getAttribute('data-theme') === 'light') {
+                root.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'dark');
+                toggleBtn.innerHTML = '☀️ Modo Claro';
+            } else {
+                root.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                toggleBtn.innerHTML = '🌙 Modo Oscuro';
+            }
+        });
+    </script>
 </body>
-
 </html>

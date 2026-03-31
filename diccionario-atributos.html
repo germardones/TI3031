@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Referencia de Atributos | Glosario Técnico</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --accent: #10b981; /* Esmeralda para Atributos */
+            --accent-glow: rgba(16, 185, 129, 0.2);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-dim: #475569;
+            --accent: #059669;
+            --accent-glow: rgba(5, 150, 105, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            transition: var(--transition);
+            min-height: 100vh;
+        }
+
+        h1, h2, h3 { font-family: 'Outfit', sans-serif; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; }
+
+        .search-container {
+            position: sticky;
+            top: 2rem;
+            z-index: 100;
+            margin-bottom: 4rem;
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem 2rem;
+            border-radius: 100px;
+            color: var(--text-main);
+            font-size: 1.25rem;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.2);
+            outline: none;
+            backdrop-filter: blur(10px);
+        }
+
+        [data-theme="light"] .search-input {
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+        }
+
+        .attr-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2rem;
+        }
+
+        .attr-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            position: relative;
+            min-height: 280px;
+        }
+
+        .attr-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px -10px var(--accent-glow);
+        }
+
+        .attr-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .attr-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.4rem;
+            color: var(--accent);
+            font-weight: 800;
+        }
+
+        .attr-category {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-dim);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 800;
+        }
+
+        .attr-value {
+            font-size: 0.95rem;
+            color: var(--text-main);
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .attr-tags {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .attr-tags strong {
+            color: var(--accent);
+            text-transform: uppercase;
+            font-size: 0.65rem;
+        }
+
+        .attr-example {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            background: #0f172a;
+            padding: 1rem;
+            border-radius: 1rem;
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        [data-theme="light"] .attr-example {
+            background: #f8fafc;
+            color: #1e293b;
+            border-color: rgba(0, 0, 0, 0.05);
+        }
+
+        #themeToggle {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            font-weight: 700;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <button id="themeToggle">☀️ Modo Claro</button>
+
+    <div class="container">
+        <header class="mb-12">
+            <a href="index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                Volver al Hub Principal
+            </a>
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent">Referencia de Atributos</h1>
+            <p class="text-xl text-slate-400 max-w-2xl font-medium leading-relaxed">Guía técnica master de parámetros para orquestar el comportamiento de cada etiqueta HTML.</p>
+        </header>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Atributo o etiqueta (ej: href, img, global)...">
+        </div>
+
+        <div class="attr-grid" id="attrGrid">
+            <!-- Dinámico por JS -->
+        </div>
+       <script>
+        const attributes = [
+            // GLOBALES (13)
+            { name: "id", cat: "Global", desc: "Identificador único. Indispensable para anclas, CSS específico y JS.", example: "<div id='header'></div>", tags: "Todas" },
+            { name: "class", cat: "Global", desc: "Asigna una o más clases. Permite agrupar elementos bajo un mismo estilo o lógica.", example: "<p class='text-main'></p>", tags: "Todas" },
+            { name: "style", cat: "Global", desc: "Añade CSS directamente en el elemento. No se recomienda para proyectos grandes.", example: "<span style='color: blue;'></span>", tags: "Todas" },
+            { name: "title", cat: "Global", desc: "Información adicional que aparece como tooltip al posar el mouse.", example: "<a title='Más info'></a>", tags: "Todas" },
+            { name: "lang", cat: "Global", desc: "Define el idioma principal del contenido del elemento.", example: "<html lang='es'>", tags: "Todas" },
+            { name: "dir", cat: "Global", desc: "Indica la dirección del texto (ltr o rtl).", example: "<p dir='rtl'>...</p>", tags: "Todas" },
+            { name: "tabindex", cat: "Global", desc: "Controla el orden de navegación con la tecla Tab.", example: "<button tabindex='1'></button>", tags: "Todas" },
+            { name: "accesskey", cat: "Global", desc: "Define una tecla de acceso rápido para el elemento.", example: "<button accesskey='s'>Enviar</button>", tags: "Todas" },
+            { name: "contenteditable", cat: "Global", desc: "Permite al usuario editar el texto del elemento directamente.", example: "<p contenteditable='true'>Edítame</p>", tags: "Todas" },
+            { name: "spellcheck", cat: "Global", desc: "Activa o desactiva la revisión ortográfica.", example: "<textarea spellcheck='true'></textarea>", tags: "Todas" },
+            { name: "draggable", cat: "Global", desc: "Define si el elemento puede ser arrastrado (drag & drop).", example: "<div draggable='true'></div>", tags: "Todas" },
+            { name: "hidden", cat: "Global", desc: "Oculta el elemento de la vista del usuario.", example: "<p hidden>No me ves</p>", tags: "Todas" },
+            { name: "data-*", cat: "Global", desc: "Almacena datos personalizados privados de la página o aplicación.", example: "<div data-id='101'></div>", tags: "Todas" },
+            
+            // FORMULARIOS (17)
+            { name: "type", cat: "Formularios", desc: "Define el comportamiento del control (text, radio, color, date, etc).", example: "<input type='email'>", tags: "<input>, <button>" },
+            { name: "name", cat: "Formularios", desc: "Nombre del campo que llegará al servidor al enviar el formulario.", example: "<input name='correo'>", tags: "<input>, <select>, <textarea>" },
+            { name: "value", cat: "Formularios", desc: "Valor por defecto o contenido del campo.", example: "<input value='German'>", tags: "<input>, <option>" },
+            { name: "placeholder", cat: "Formularios", desc: "Texto guía que desaparece cuando el usuario escribe.", example: "<input placeholder='Escribe aquí'>", tags: "<input>, <textarea>" },
+            { name: "required", cat: "Formularios", desc: "Impide enviar el formulario si el campo está vacío.", example: "<input required>", tags: "<input>, <select>, <textarea>" },
+            { name: "disabled", cat: "Formularios", desc: "Inhabilita el control para que no sea editable ni enviado.", example: "<button disabled>Pausa</button>", tags: "Controles de formulario" },
+            { name: "readonly", cat: "Formularios", desc: "El usuario puede ver el dato pero no modificarlo.", example: "<input readonly value='Fijo'>", tags: "<input>, <textarea>" },
+            { name: "maxlength", cat: "Formularios", desc: "Límite máximo de caracteres permitidos.", example: "<input maxlength='10'>", tags: "<input>, <textarea>" },
+            { name: "minlength", cat: "Formularios", desc: "Mínimo de caracteres requeridos para validar.", example: "<input minlength='5'>", tags: "<input>, <textarea>" },
+            { name: "pattern", cat: "Formularios", desc: "Valida el contenido usando una Expresión Regular (Regex).", example: "<input pattern='[0-9]{5}'>", tags: "<input>" },
+            { name: "autocomplete", cat: "Formularios", desc: "Sugerencias basadas en el historial del navegador.", example: "<input autocomplete='off'>", tags: "<form>, <input>" },
+            { name: "autofocus", cat: "Formularios", desc: "Pone el foco automáticamente en el elemento al cargar.", example: "<input autofocus>", tags: "Elementos interactivos" },
+            { name: "min", cat: "Formularios", desc: "Valor numérico o fecha mínima permitida.", example: "<input type='number' min='1'>", tags: "<input>, <meter>" },
+            { name: "max", cat: "Formularios", desc: "Valor numérico o fecha máxima permitida.", example: "<input type='date' max='2030-12-31'>", tags: "<input>, <meter>, <progress>" },
+            { name: "step", cat: "Formularios", desc: "Intervalo de incremento para números (ej: de 2 en 2).", example: "<input type='number' step='2'>", tags: "<input>" },
+            { name: "multiple", cat: "Formularios", desc: "Permite seleccionar más de un archivo o opción.", example: "<input type='file' multiple>", tags: "<input>, <select>" },
+            { name: "form", cat: "Formularios", desc: "Vincula un control con un formulario externo por ID.", example: "<input form='mi-form'>", tags: "Controles de formulario" },
+
+            // ENLACES Y NAVEGACIÓN (7)
+            { name: "href", cat: "Enlaces", desc: "Ruta o destino del enlace (URL, ID, mailto).", example: "<a href='index.html'></a>", tags: "<a>, <link>, <area>" },
+            { name: "target", cat: "Enlaces", desc: "Contexto de apertura (_blank abre nueva pestaña).", example: "<a target='_blank'></a>", tags: "<a>, <form>, <area>" },
+            { name: "rel", cat: "Enlaces", desc: "Relación entre la página actual y el destino.", example: "<link rel='stylesheet'>", tags: "<a>, <link>, <area>" },
+            { name: "download", cat: "Enlaces", desc: "Indica que el recurso debe descargarse en vez de abrirse.", example: "<a download='cv.pdf'></a>", tags: "<a>, <area>" },
+            { name: "hreflang", cat: "Enlaces", desc: "Idioma del recurso enlazado.", example: "<a hreflang='en'></a>", tags: "<a>, <link>" },
+            { name: "type (recurso)", cat: "General", desc: "Tipo MIME del recurso vinculado.", example: "<link type='text/css'>", tags: "<link>, <script>, <style>, <embed>" },
+            { name: "media", cat: "Enlaces", desc: "Define para qué medio está optimizado el recurso (ej: responsive).", example: "<link media='(max-width: 600px)'>", tags: "<link>, <source>, <style>" },
+
+            // MULTIMEDIA Y OTROS (13)
+            { name: "src", cat: "Multimedia", desc: "Fuente del archivo multimedia.", example: "<img src='logo.png'>", tags: "<img>, <video>, <audio>, <script>, <source>" },
+            { name: "alt", cat: "Multimedia", desc: "Descripción textual para fallos de carga o ceguera.", example: "<img alt='Logo INACAP'>", tags: "<img>, <area>, <input>" },
+            { name: "width", cat: "Multimedia", desc: "Ancho explícito en píxeles.", example: "<img width='500'>", tags: "<img>, <video>, <canvas>, <embed>, <iframe>" },
+            { name: "height", cat: "Multimedia", desc: "Alto explícito en píxeles.", example: "<img height='300'>", tags: "<img>, <video>, <canvas>, <embed>, <iframe>" },
+            { name: "autoplay", cat: "Multimedia", desc: "Inicia la reproducción al cargar sin intervención humana.", example: "<video autoplay muted>", tags: "<video>, <audio>" },
+            { name: "controls", cat: "Multimedia", desc: "Muestra la barra de reproducción (play, volumen, etc).", example: "<audio controls>", tags: "<video>, <audio>" },
+            { name: "loop", cat: "Multimedia", desc: "Reinicia el contenido infinitamente.", example: "<video loop>", tags: "<video>, <audio>" },
+            { name: "poster", cat: "Multimedia", desc: "Imagen que se muestra mientas el video carga.", example: "<video poster='portada.jpg'>", tags: "<video>" },
+            { name: "muted", cat: "Multimedia", desc: "Inicia el contenido sin sonido (obligatorio para autoplay en Chrome).", example: "<video muted>", tags: "<video>, <audio>" },
+            { name: "playsinline", cat: "Multimedia", desc: "Mantiene la reproducción dentro del layout (importante en iOS).", example: "<video playsinline>", tags: "<video>" },
+            { name: "charset", cat: "Metadatos", desc: "Codificación de caracteres (siempre usar UTF-8).", example: "<meta charset='UTF-8'>", tags: "<meta>, <script>" },
+            { name: "content", cat: "Metadatos", desc: "Información asociada al nombre de un metadato.", example: "<meta name='description' content='...'>", tags: "<meta>" },
+            { name: "colspan", cat: "Tablas", desc: "Número de columnas que una celda debe abarcar.", example: "<td colspan='3'></td>", tags: "<td>, <th>" }
+        ];
+
+        const grid = document.getElementById('attrGrid');
+        const search = document.getElementById('searchInput');
+
+        function render(filter = "") {
+            grid.innerHTML = "";
+            const filtered = attributes.filter(a => 
+                a.name.toLowerCase().includes(filter.toLowerCase()) || 
+                a.cat.toLowerCase().includes(filter.toLowerCase()) ||
+                a.tags.toLowerCase().includes(filter.toLowerCase())
+            );
+
+            filtered.forEach(a => {
+                const card = document.createElement('div');
+                card.className = "attr-card";
+                card.innerHTML = `
+                    <div class="attr-header">
+                        <span class="attr-name">${a.name}</span>
+                        <span class="attr-category">${a.cat}</span>
+                    </div>
+                    <p class="attr-value">${a.desc}</p>
+                    <div class="attr-tags">
+                        <strong>Relacionado:</strong>
+                        <span>${a.tags.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</span>
+                    </div>
+                    <div class="attr-example">${a.example.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        search.addEventListener('input', (e) => render(e.target.value));
+        render();
+;
+        render();
+
+        // Theme Toggle Logic
+        const themeBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        if (localStorage.getItem('theme') === 'light') {
+            html.setAttribute('data-theme', 'light');
+            themeBtn.innerHTML = '🌙 Modo Oscuro';
+        }
+
+        themeBtn.addEventListener('click', () => {
+            if (html.getAttribute('data-theme') === 'light') {
+                html.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'dark');
+                themeBtn.innerHTML = '☀️ Modo Claro';
+            } else {
+                html.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                themeBtn.innerHTML = '🌙 Modo Oscuro';
+            }
+        });
+    </script>
+</body>
+</html>

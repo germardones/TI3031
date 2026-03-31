@@ -145,24 +145,27 @@
         }
 
         .search-wrapper {
-            position: relative;
+            position: sticky;
+            top: 2rem;
+            z-index: 100;
             width: 100%;
             max-width: 600px;
         }
 
         .search-wrapper input {
             width: 100%;
-            padding: 1rem 1.5rem;
-            padding-left: 3rem;
+            padding: 1.25rem 1.5rem;
+            padding-left: 3.5rem;
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
-            border-radius: 99px;
+            border-radius: 100px;
             color: white;
-            font-size: 1rem;
+            font-size: 1.125rem;
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             transition: var(--transition);
             outline: none;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
         }
 
         .search-wrapper input:focus {
@@ -172,7 +175,7 @@
 
         .search-icon {
             position: absolute;
-            left: 1.2rem;
+            left: 1.4rem;
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-secondary);
@@ -214,7 +217,7 @@
         /* Grid */
         .dictionary-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 1.5rem;
             animation: fadeInUp 0.8s ease-out 0.4s both;
         }
@@ -230,7 +233,7 @@
             transition: var(--transition);
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 1.25rem;
             position: relative;
             overflow: hidden;
             height: 100%;
@@ -248,43 +251,106 @@
             top: 0;
             left: 0;
             width: 4px;
-            height: 0;
-            background: var(--accent-color);
-            transition: var(--transition);
-        }
-
-        .prop-card:hover::before {
             height: 100%;
+            background: var(--accent-color);
+            opacity: 0.3;
         }
 
         .prop-category {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             color: var(--accent-color);
             margin-bottom: 0.25rem;
+            opacity: 0.8;
         }
 
         .prop-name {
-            font-size: 1.4rem;
-            font-weight: 600;
+            font-size: 1.5rem;
+            font-weight: 700;
             color: var(--text-primary);
             word-break: break-all;
+            font-family: 'JetBrains Mono', monospace;
         }
 
         .prop-desc {
             color: var(--text-secondary);
             font-size: 0.95rem;
-            line-height: 1.5;
+            line-height: 1.6;
+        }
+
+        /* Values Table */
+        .prop-values {
+            margin-top: 1rem;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .values-header {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-color);
+            padding: 0.5rem 1rem;
+            font-size: 0.7rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .value-row {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            border-bottom: 1px solid var(--glass-border);
+            transition: background 0.2s;
+        }
+
+        .value-row:last-child { border-bottom: none; }
+
+        .value-name {
+            padding: 0.5rem 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #38bdf8;
+            font-weight: 700;
+            background: rgba(56, 189, 248, 0.05);
+        }
+
+        .value-desc {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        [data-theme="light"] .prop-values { background: #f1f5f9; }
+        [data-theme="light"] .value-name { color: #0284c7; }
+
+        .prop-example {
+            margin-top: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: #7dd3fc;
+            border: 1px solid rgba(56, 189, 248, 0.1);
+        }
+
+        [data-theme="light"] .prop-example {
+            background: #f1f5f9;
+            color: #0369a1;
         }
 
         /* Stats */
         .stats {
             text-align: center;
-            margin-top: 3rem;
+            margin-top: 5rem;
             color: var(--text-secondary);
             font-size: 0.9rem;
+            font-weight: 600;
         }
 
         /* Animations */
@@ -308,16 +374,10 @@
         footer {
             margin-top: 5rem;
             text-align: center;
-            padding: 2rem;
+            padding: 4rem 2rem;
             color: var(--text-secondary);
             font-size: 0.9rem;
             border-top: 1px solid var(--glass-border);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            header h1 { font-size: 2.5rem; }
-            .dictionary-grid { grid-template-columns: 1fr; }
         }
 
         /* Theme Toggle */
@@ -392,243 +452,177 @@
         </main>
 
         <div class="stats" id="statsInfo">
-            Mostrando <span id="count">0</span> propiedades
+            Mostrando <span id="count">0</span> propiedades técnicas
         </div>
 
         <footer>
-            <p>&copy; 2026 German Mardones. Diccionario de Referencia CSS.</p>
+            <p>&copy; 2026 German Mardones. Recursos de Ingeniería Front-end.</p>
         </footer>
     </div>
 
     <script>
         const cssData = [
-            { prop: "accent-color", cat: "Interfaz", desc: "Establece el color de acento para controles de usuario." },
-            { prop: "align-content", cat: "Flexbox/Grid", desc: "Alinea las líneas de un contenedor flexible." },
-            { prop: "align-items", cat: "Flexbox/Grid", desc: "Alinea los elementos hijos en el eje secundario." },
-            { prop: "align-self", cat: "Flexbox/Grid", desc: "Permite a un elemento hijo cambiar su propia alineación." },
-            { prop: "all", cat: "General", desc: "Restablece todas las propiedades a su valor inicial." },
-            { prop: "animation", cat: "Animación", desc: "Atajo para configurar todas las propiedades de animación." },
-            { prop: "animation-delay", cat: "Animación", desc: "Tiempo de espera antes de iniciar la animación." },
-            { prop: "animation-direction", cat: "Animación", desc: "Define si la animación se reproduce hacia adelante o atrás." },
-            { prop: "animation-duration", cat: "Animación", desc: "Tiempo que tarda en completarse un ciclo de animación." },
-            { prop: "animation-fill-mode", cat: "Animación", desc: "Define qué valores se aplican antes y después de la animación." },
-            { prop: "animation-iteration-count", cat: "Animación", desc: "Número de veces que se repite la animación." },
-            { prop: "animation-name", cat: "Animación", desc: "Nombre del @keyframes que se aplicará." },
-            { prop: "animation-play-state", cat: "Animación", desc: "Permite pausar o reanudar una animación." },
-            { prop: "animation-timing-function", cat: "Animación", desc: "Curva de velocidad de la animación (ease, linear, etc)." },
-            { prop: "appearance", cat: "Interfaz", desc: "Controla la apariencia nativa de los elementos del sistema." },
-            { prop: "aspect-ratio", cat: "Caja", desc: "Establece una relación de aspecto preferida para la caja." },
-            { prop: "backdrop-filter", cat: "Efectos", desc: "Aplica filtros gráficos al área detrás de un elemento." },
-            { prop: "backface-visibility", cat: "Transformación", desc: "Define si la cara posterior de un elemento es visible." },
-            { prop: "background", cat: "Fondo", desc: "Atajo para todas las propiedades de fondo." },
-            { prop: "background-attachment", cat: "Fondo", desc: "Define si el fondo se desplaza con el scroll o queda fijo." },
-            { prop: "background-blend-mode", cat: "Fondo", desc: "Modo de mezcla entre imágenes de fondo y colores." },
-            { prop: "background-clip", cat: "Fondo", desc: "Define hasta dónde se extiende el fondo (border, padding o content)." },
-            { prop: "background-color", cat: "Fondo", desc: "Establece el color de fondo de un elemento." },
-            { prop: "background-image", cat: "Fondo", desc: "Establece una o varias imágenes de fondo." },
-            { prop: "background-origin", cat: "Fondo", desc: "Determina el área de origen de la imagen de fondo." },
-            { prop: "background-position", cat: "Fondo", desc: "Posición inicial de la imagen de fondo." },
-            { prop: "background-repeat", cat: "Fondo", desc: "Define si la imagen de fondo se repite." },
-            { prop: "background-size", cat: "Fondo", desc: "Tamaño de la imagen de fondo (cover, contain, px)." },
-            { prop: "block-size", cat: "Dimensiones", desc: "Define el tamaño lógico de bloque (altura en horizontal)." },
-            { prop: "border", cat: "Borde", desc: "Atajo para ancho, estilo y color del borde." },
-            { prop: "border-block", cat: "Borde", desc: "Atajo para los bordes en la dirección lógica de bloque." },
-            { prop: "border-bottom", cat: "Borde", desc: "Estilo del borde inferior." },
-            { prop: "border-bottom-color", cat: "Borde", desc: "Color del borde inferior." },
-            { prop: "border-bottom-left-radius", cat: "Borde", desc: "Radio de la esquina inferior izquierda." },
-            { prop: "border-bottom-right-radius", cat: "Borde", desc: "Radio de la esquina inferior derecha." },
-            { prop: "border-bottom-style", cat: "Borde", desc: "Estilo (solid, dashed, etc) del borde inferior." },
-            { prop: "border-bottom-width", cat: "Borde", desc: "Ancho del borde inferior." },
-            { prop: "border-collapse", cat: "Tablas", desc: "Define si los bordes de la tabla se colapsan en uno solo." },
-            { prop: "border-color", cat: "Borde", desc: "Establece el color de los cuatro bordes." },
-            { prop: "border-image", cat: "Borde", desc: "Permite usar una imagen como borde." },
-            { prop: "border-inline", cat: "Borde", desc: "Atajo para los bordes en la dirección lógica de línea." },
-            { prop: "border-left", cat: "Borde", desc: "Atajo para el borde izquierdo." },
-            { prop: "border-radius", cat: "Borde", desc: "Define el redondeo de las esquinas del elemento." },
-            { prop: "border-right", cat: "Borde", desc: "Atajo para el borde derecho." },
-            { prop: "border-spacing", cat: "Tablas", desc: "Espacio entre los bordes de las celdas." },
-            { prop: "border-style", cat: "Borde", desc: "Define el estilo de los cuatro bordes." },
-            { prop: "border-top", cat: "Borde", desc: "Atajo para el borde superior." },
-            { prop: "border-width", cat: "Borde", desc: "Define el grosor de los cuatro bordes." },
-            { prop: "bottom", cat: "Posicionamiento", desc: "Distancia desde el borde inferior en elementos posicionados." },
-            { prop: "box-decoration-break", cat: "Efectos", desc: "Define cómo se aplican decoraciones en elementos fragmentados." },
-            { prop: "box-shadow", cat: "Efectos", desc: "Añade efectos de sombra alrededor de la caja." },
-            { prop: "box-sizing", cat: "Caja", desc: "Define cómo se calcula el ancho y alto (content-box vs border-box)." },
-            { prop: "break-after", cat: "Layout", desc: "Define cómo ocurren los saltos de página/columna tras el elemento." },
-            { prop: "break-before", cat: "Layout", desc: "Define cómo ocurren los saltos de página/columna antes del elemento." },
-            { prop: "break-inside", cat: "Layout", desc: "Evita o permite saltos dentro del elemento." },
-            { prop: "caption-side", cat: "Tablas", desc: "Posición del título de la tabla." },
-            { prop: "caret-color", cat: "Interfaz", desc: "Color del cursor de inserción en inputs." },
-            { prop: "clear", cat: "Layout", desc: "Define si un elemento acepta flotantes a su lado." },
-            { prop: "clip-path", cat: "Efectos", desc: "Crea una máscara para mostrar solo partes del elemento." },
-            { prop: "color", cat: "Texto", desc: "Color del texto." },
-            { prop: "column-count", cat: "Columnas", desc: "Número de columnas en las que se divide el texto." },
-            { prop: "column-fill", cat: "Columnas", desc: "Cómo se distribuye el contenido entre las columnas." },
-            { prop: "column-gap", cat: "Columnas", desc: "Espacio entre columnas." },
-            { prop: "column-rule", cat: "Columnas", desc: "Línea divisoria entre columnas." },
-            { prop: "column-span", cat: "Columnas", desc: "Permite que un elemento abarque varias columnas." },
-            { prop: "column-width", cat: "Columnas", desc: "Ancho sugerido de las columnas." },
-            { prop: "columns", cat: "Columnas", desc: "Atajo para column-width y column-count." },
-            { prop: "contain", cat: "Rendimiento", desc: "Indica que el elemento es independiente para optimizar renderizado." },
-            { prop: "content", cat: "Contenido", desc: "Inserta contenido generado (usado con :before y :after)." },
-            { prop: "counter-increment", cat: "Contenido", desc: "Incrementa uno o más contadores de CSS." },
-            { prop: "counter-reset", cat: "Contenido", desc: "Crea o restablece uno o más contadores." },
-            { prop: "cursor", cat: "Interfaz", desc: "Tipo de cursor que se muestra al pasar el mouse." },
-            { prop: "direction", cat: "Texto", desc: "Dirección del texto (ltr o rtl)." },
-            { prop: "display", cat: "Layout", desc: "Define el tipo de caja de renderizado (flex, grid, block, etc)." },
-            { prop: "empty-cells", cat: "Tablas", desc: "Muestra u oculta bordes en celdas vacías." },
-            { prop: "filter", cat: "Efectos", desc: "Aplica efectos visuales (blur, brightness, contrast) al elemento." },
-            { prop: "flex", cat: "Flexbox", desc: "Atajo para flex-grow, flex-shrink y flex-basis." },
-            { prop: "flex-basis", cat: "Flexbox", desc: "Tamaño inicial de un elemento flexible." },
-            { prop: "flex-direction", cat: "Flexbox", desc: "Dirección de los elementos hijos (row, column)." },
-            { prop: "flex-flow", cat: "Flexbox", desc: "Atajo para flex-direction y flex-wrap." },
-            { prop: "flex-grow", cat: "Flexbox", desc: "Factor de crecimiento de un elemento hijo." },
-            { prop: "flex-shrink", cat: "Flexbox", desc: "Factor de contracción de un elemento hijo." },
-            { prop: "flex-wrap", cat: "Flexbox", desc: "Define si los elementos hijos saltan de línea." },
-            { prop: "float", cat: "Layout", desc: "Empuja un elemento a la izquierda o derecha de su contenedor." },
-            { prop: "font", cat: "Texto", desc: "Atajo para todas las propiedades de fuente." },
-            { prop: "font-family", cat: "Texto", desc: "Familia tipográfica a utilizar." },
-            { prop: "font-feature-settings", cat: "Texto", desc: "Controla características avanzadas de tipografías OpenType." },
-            { prop: "font-kerning", cat: "Texto", desc: "Controla el espaciado entre letras basado en la tipografía." },
-            { prop: "font-size", cat: "Texto", desc: "Tamaño de la fuente." },
-            { prop: "font-size-adjust", cat: "Texto", desc: "Ajusta el tamaño basado en la altura de la 'x'." },
-            { prop: "font-stretch", cat: "Texto", desc: "Selecciona una versión normal, condensada o expandida." },
-            { prop: "font-style", cat: "Texto", desc: "Estilo de la fuente (normal, italic, oblique)."},
-            { prop: "font-variant", cat: "Texto", desc: "Define si el texto se muestra en versalitas." },
-            { prop: "font-weight", cat: "Texto", desc: "Grosor de la letra (bold, normal, 100-900)." },
-            { prop: "gap", cat: "Flexbox/Grid", desc: "Espacio entre filas y columnas." },
-            { prop: "grid", cat: "Grid", desc: "Atajo para configurar todo el contenedor grid." },
-            { prop: "grid-area", cat: "Grid", desc: "Nombre o posición del área de un elemento en el grid." },
-            { prop: "grid-auto-columns", cat: "Grid", desc: "Tamaño automático de las columnas creadas implícitamente." },
-            { prop: "grid-auto-flow", cat: "Grid", desc: "Algoritmo de colocación automática de elementos." },
-            { prop: "grid-auto-rows", cat: "Grid", desc: "Tamaño automático de las filas creadas implícitamente." },
-            { prop: "grid-column", cat: "Grid", desc: "Atajo para grid-column-start y grid-column-end." },
-            { prop: "grid-column-gap", cat: "Grid", desc: "Espacio entre columnas de la cuadrícula." },
-            { prop: "grid-gap", cat: "Grid", desc: "Atajo para grid-row-gap y grid-column-gap." },
-            { prop: "grid-row", cat: "Grid", desc: "Atajo para grid-row-start y grid-row-end." },
-            { prop: "grid-row-gap", cat: "Grid", desc: "Espacio entre filas de la cuadrícula." },
-            { prop: "grid-template", cat: "Grid", desc: "Atajo para definir filas, columnas y áreas." },
-            { prop: "grid-template-areas", cat: "Grid", desc: "Define áreas nombradas en la cuadrícula." },
-            { prop: "grid-template-columns", cat: "Grid", desc: "Define el número y tamaño de las columnas." },
-            { prop: "grid-template-rows", cat: "Grid", desc: "Define el número y tamaño de las filas." },
-            { prop: "hanging-punctuation", cat: "Texto", desc: "Controla si la puntuación queda fuera del borde del texto." },
-            { prop: "height", cat: "Dimensiones", desc: "Altura del elemento." },
-            { prop: "hyphens", cat: "Texto", desc: "Controla la división de palabras con guiones al final de línea." },
-            { prop: "image-rendering", cat: "Imágenes", desc: "Algoritmo de escalado de imágenes (pixelated, auto)." },
-            { prop: "inline-size", cat: "Dimensiones", desc: "Tamaño lógico de línea (ancho en horizontal)." },
-            { prop: "inset", cat: "Posicionamiento", desc: "Atajo para top, right, bottom y left." },
-            { prop: "isolation", cat: "Efectos", desc: "Define si el elemento crea un nuevo contexto de apilamiento." },
-            { prop: "justify-content", cat: "Flexbox/Grid", desc: "Alinea los elementos en el eje principal." },
-            { prop: "justify-items", cat: "Grid", desc: "Alinea los elementos dentro de su área de celda." },
-            { prop: "justify-self", cat: "Grid", desc: "Alinea un elemento específico dentro de su área de celda." },
-            { prop: "left", cat: "Posicionamiento", desc: "Distancia desde el borde izquierdo." },
-            { prop: "letter-spacing", cat: "Texto", desc: "Espacio entre caracteres." },
-            { prop: "line-break", cat: "Texto", desc: "Define qué tan estrictos son los saltos de línea." },
-            { prop: "line-height", cat: "Texto", desc: "Altura de la línea de texto (interlineado)." },
-            { prop: "list-style", cat: "Listas", desc: "Atajo para tipo, posición e imagen de viñeta." },
-            { prop: "list-style-image", cat: "Listas", desc: "Usa una imagen como viñeta." },
-            { prop: "list-style-position", cat: "Listas", desc: "Define si la viñeta está dentro o fuera del flujo." },
-            { prop: "list-style-type", cat: "Listas", desc: "Tipo de viñeta (disc, circle, square, none)." },
-            { prop: "margin", cat: "Caja", desc: "Espacio exterior alrededor del borde." },
-            { prop: "margin-block", cat: "Caja", desc: "Margen lógico en la dirección de bloque." },
-            { prop: "margin-bottom", cat: "Caja", desc: "Margen inferior." },
-            { prop: "margin-inline", cat: "Caja", desc: "Margen lógico en la dirección de línea." },
-            { prop: "margin-left", cat: "Caja", desc: "Margen izquierdo." },
-            { prop: "margin-right", cat: "Caja", desc: "Margen derecho." },
-            { prop: "margin-top", cat: "Caja", desc: "Margen superior." },
-            { prop: "mask", cat: "Efectos", desc: "Atajo para aplicar máscaras de imagen." },
-            { prop: "max-block-size", cat: "Dimensiones", desc: "Altura lógica máxima." },
-            { prop: "max-height", cat: "Dimensiones", desc: "Altura máxima permitida." },
-            { prop: "max-inline-size", cat: "Dimensiones", desc: "Ancho lógico máximo." },
-            { prop: "max-width", cat: "Dimensiones", desc: "Ancho máximo permitido." },
-            { prop: "min-block-size", cat: "Dimensiones", desc: "Altura lógica mínima." },
-            { prop: "min-height", cat: "Dimensiones", desc: "Altura mínima permitida." },
-            { prop: "min-inline-size", cat: "Dimensiones", desc: "Ancho lógico mínimo." },
-            { prop: "min-width", cat: "Dimensiones", desc: "Ancho mínimo permitido." },
-            { prop: "mix-blend-mode", cat: "Efectos", desc: "Modo de mezcla con el contenido del padre." },
-            { prop: "object-fit", cat: "Imágenes", desc: "Cómo se ajusta una imagen al contenedor (cover, contain)." },
-            { prop: "object-position", cat: "Imágenes", desc: "Posición de la imagen dentro de su contenedor." },
-            { prop: "opacity", cat: "Efectos", desc: "Nivel de transparencia (0 a 1)." },
-            { prop: "order", cat: "Flexbox/Grid", desc: "Orden de visualización de los elementos hijos." },
-            { prop: "orphans", cat: "Texto", desc: "Número mínimo de líneas que pueden quedar al final de página." },
-            { prop: "outline", cat: "Borde", desc: "Atajo para la línea exterior al borde." },
-            { prop: "outline-color", cat: "Borde", desc: "Color del contorno." },
-            { prop: "outline-offset", cat: "Borde", desc: "Espacio entre el borde y el contorno." },
-            { prop: "outline-style", cat: "Borde", desc: "Estilo del contorno." },
-            { prop: "outline-width", cat: "Borde", desc: "Grosor del contorno." },
-            { prop: "overflow", cat: "Layout", desc: "Controla el contenido que desborda la caja." },
-            { prop: "overflow-anchor", cat: "Layout", desc: "Controla el ajuste de scroll al cambiar el contenido." },
-            { prop: "overflow-wrap", cat: "Texto", desc: "Permite romper palabras largas para evitar desbordamiento." },
-            { prop: "overflow-x", cat: "Layout", desc: "Control de desbordamiento horizontal." },
-            { prop: "overflow-y", cat: "Layout", desc: "Control de desbordamiento vertical." },
-            { prop: "overscroll-behavior", cat: "Interfaz", desc: "Controla qué pasa cuando llegas al límite del scroll." },
-            { prop: "padding", cat: "Caja", desc: "Espacio interior entre contenido y borde." },
-            { prop: "padding-block", cat: "Caja", desc: "Padding lógico en dirección de bloque." },
-            { prop: "padding-bottom", cat: "Caja", desc: "Espacio interior inferior." },
-            { prop: "padding-inline", cat: "Caja", desc: "Padding lógico en dirección de línea." },
-            { prop: "padding-left", cat: "Caja", desc: "Espacio interior izquierdo." },
-            { prop: "padding-right", cat: "Caja", desc: "Espacio interior derecho." },
-            { prop: "padding-top", cat: "Caja", desc: "Espacio interior superior." },
-            { prop: "page-break-after", cat: "Layout", desc: "Salto de página tras elemento (obsoleto por break-after)." },
-            { prop: "perspective", cat: "Transformación", desc: "Define la distancia de la perspectiva 3D." },
-            { prop: "perspective-origin", cat: "Transformación", desc: "Define el punto de fuga de la perspectiva 3D." },
-            { prop: "place-content", cat: "Flexbox/Grid", desc: "Atajo para align-content y justify-content." },
-            { prop: "place-items", cat: "Flexbox/Grid", desc: "Atajo para align-items y justify-items." },
-            { prop: "place-self", cat: "Flexbox/Grid", desc: "Atajo para align-self y justify-self." },
-            { prop: "pointer-events", cat: "Interfaz", desc: "Define si el elemento responde a eventos de mouse." },
-            { prop: "position", cat: "Posicionamiento", desc: "Tipo de posicionamiento (static, relative, absolute, fixed, sticky)." },
-            { prop: "quotes", cat: "Contenido", desc: "Define el tipo de comillas para el contenido generado." },
-            { prop: "resize", cat: "Interfaz", desc: "Permite al usuario redimensionar un elemento (textarea)." },
-            { prop: "right", cat: "Posicionamiento", desc: "Distancia desde el borde derecho." },
-            { prop: "row-gap", cat: "Flexbox/Grid", desc: "Espacio entre filas." },
-            { prop: "scroll-behavior", cat: "Interfaz", desc: "Controla la suavidad del desplazamiento (auto, smooth)." },
-            { prop: "scroll-margin", cat: "Interfaz", desc: "Margen del elemento al ser desplazado a la vista." },
-            { prop: "scroll-padding", cat: "Interfaz", desc: "Padding del contenedor al realizar desplazamiento." },
-            { prop: "scroll-snap-align", cat: "Interfaz", desc: "Alineación del elemento al soltar el scroll." },
-            { prop: "scroll-snap-type", cat: "Interfaz", desc: "Define la fuerza del ajuste de scroll." },
-            { prop: "shape-outside", cat: "Layout", desc: "Define una forma alrededor de la cual fluye el texto." },
-            { prop: "tab-size", cat: "Texto", desc: "Tamaño de la tabulación en caracteres." },
-            { prop: "table-layout", cat: "Tablas", desc: "Algoritmo para calcular el ancho de las celdas." },
-            { prop: "text-align", cat: "Texto", desc: "Alineación horizontal del texto." },
-            { prop: "text-align-last", cat: "Texto", desc: "Alineación de la última línea de un párrafo." },
-            { prop: "text-combine-upright", cat: "Texto", desc: "Combina caracteres en un espacio vertical (idiomas asiáticos)." },
-            { prop: "text-decoration", cat: "Texto", desc: "Añade líneas (subrayado, tachado) al texto." },
-            { prop: "text-decoration-color", cat: "Texto", desc: "Color de la decoración del texto." },
-            { prop: "text-decoration-line", cat: "Texto", desc: "Tipo de línea de decoración." },
-            { prop: "text-decoration-style", cat: "Texto", desc: "Estilo de la línea (solid, wavy, dotted)." },
-            { prop: "text-emphasis", cat: "Texto", desc: "Añade marcas de énfasis sobre los caracteres." },
-            { prop: "text-indent", cat: "Texto", desc: "Sangría de la primera línea de un párrafo." },
-            { prop: "text-justify", cat: "Texto", desc: "Define el tipo de justificación de texto." },
-            { prop: "text-orientation", cat: "Texto", desc: "Orientación de los caracteres en líneas verticales." },
-            { prop: "text-overflow", cat: "Texto", desc: "Cómo se muestra el texto que desborda (ellipsis)." },
-            { prop: "text-rendering", cat: "Texto", desc: "Optimización del renderizado del texto." },
-            { prop: "text-shadow", cat: "Texto", desc: "Sombra aplicada al texto." },
-            { prop: "text-transform", cat: "Texto", desc: "Transformación de mayúsculas y minúsculas." },
-            { prop: "text-underline-position", cat: "Texto", desc: "Posición del subrayado." },
-            { prop: "top", cat: "Posicionamiento", desc: "Distancia desde el borde superior." },
-            { prop: "touch-action", cat: "Interfaz", desc: "Define cómo responde un elemento a gestos táctiles." },
-            { prop: "transform", cat: "Transformación", desc: "Aplica rotaciones, escalas e inclinaciones." },
-            { prop: "transform-box", cat: "Transformación", desc: "Define la caja de referencia para las transformaciones." },
-            { prop: "transform-origin", cat: "Transformación", desc: "Punto base para aplicar transformaciones." },
-            { prop: "transform-style", cat: "Transformación", desc: "Define si los hijos mantienen su posición 3D." },
-            { prop: "transition", cat: "Animación", desc: "Atajo para configurar transiciones suaves." },
-            { prop: "transition-delay", cat: "Animación", desc: "Espera antes de iniciar la transición." },
-            { prop: "transition-duration", cat: "Animación", desc: "Tiempo que dura el cambio de propiedad." },
-            { prop: "transition-property", cat: "Animación", desc: "Propiedad que se va a animar." },
-            { prop: "transition-timing-function", cat: "Animación", desc: "Curva de velocidad de la transición." },
-            { prop: "unicode-bidi", cat: "Texto", desc: "Manejo de texto bidireccional." },
-            { prop: "user-select", cat: "Interfaz", desc: "Controla si el usuario puede seleccionar texto." },
-            { prop: "vertical-align", cat: "Layout", desc: "Alineación vertical en elementos de línea o celdas." },
-            { prop: "visibility", cat: "Layout", desc: "Muestra u oculta un elemento sin quitarlo del flujo." },
-            { prop: "white-space", cat: "Texto", desc: "Controla el manejo de espacios y saltos de línea." },
-            { prop: "widows", cat: "Texto", desc: "Mínimo de líneas al inicio de una nueva página." },
-            { prop: "width", cat: "Dimensiones", desc: "Ancho del elemento." },
-            { prop: "will-change", cat: "Rendimiento", desc: "Avisa al navegador sobre cambios futuros para optimizar." },
-            { prop: "word-break", cat: "Texto", desc: "Define cómo se rompen las palabras al final de línea." },
-            { prop: "word-spacing", cat: "Texto", desc: "Espacio entre palabras." },
-            { prop: "word-wrap", cat: "Texto", desc: "Permite romper palabras largas (igual que overflow-wrap)." },
-            { prop: "writing-mode", cat: "Texto", desc: "Define la dirección de escritura (horizontal, vertical)." },
-            { prop: "z-index", cat: "Posicionamiento", desc: "Orden de apilamiento en el eje Z." }
+            { 
+                prop: "accent-color", cat: "Interfaz", desc: "Establece el color de acento para controles.", example: "accent-color: #38bdf8;",
+                values: [ { val: "auto", desc: "Color por defecto del navegador." }, { val: "color", desc: "Usa un color específico (hex/rgb)." } ]
+            },
+            { 
+                prop: "align-content", cat: "Flexbox/Grid", desc: "Alinea las líneas de un contenedor flexible.", example: "align-content: space-between;",
+                values: [
+                    { val: "stretch", desc: "Líneas se estiran para ocupar espacio." },
+                    { val: "center", desc: "Líneas centradas en el eje secundario." },
+                    { val: "flex-start", desc: "Líneas al inicio." },
+                    { val: "flex-end", desc: "Líneas al final." }
+                ]
+            },
+            { 
+                prop: "align-items", cat: "Flexbox/Grid", desc: "Alinea los elementos hijos en el eje secundario.", example: "align-items: center;",
+                values: [
+                    { val: "stretch", desc: "Hijos se estiran (default)." },
+                    { val: "center", desc: "Centrado vertical/secundario." },
+                    { val: "start", desc: "Hacia el inicio del eje." },
+                    { val: "end", desc: "Hacia el final del eje." }
+                ]
+            },
+            { 
+                prop: "align-self", cat: "Flexbox/Grid", desc: "Sobrescribe la alineación para un ítem específico.", example: "align-self: flex-end;",
+                values: [ { val: "auto", desc: "Usa el valor de align-items del padre." }, { val: "center", desc: "Centrado individual." } ]
+            },
+            { prop: "all", cat: "General", desc: "Restablece todas las propiedades a su valor inicial.", example: "all: unset;" },
+            { 
+                prop: "animation", cat: "Animación", desc: "Atajo para configurar animaciones.", example: "animation: slide 2s infinite;",
+                values: [
+                    { val: "name", desc: "Nombre del keyframe." },
+                    { val: "duration", desc: "Tiempo en segundos o ms." },
+                    { val: "timing", desc: "Curva de velocidad (ease, linear)." }
+                ]
+            },
+            { prop: "animation-delay", cat: "Animación", desc: "Tiempo de espera antes de iniciar.", example: "animation-delay: 500ms;" },
+            { prop: "animation-direction", cat: "Animación", desc: "Dirección de la reproducción.", example: "animation-direction: alternate;" },
+            { prop: "animation-duration", cat: "Animación", desc: "Duración de un ciclo completo.", example: "animation-duration: 3s;" },
+            { 
+                prop: "animation-fill-mode", cat: "Animación", desc: "Define valores antes/después de animar.", example: "animation-fill-mode: forwards;",
+                values: [
+                    { val: "none", desc: "Sin cambios antes o después." },
+                    { val: "forwards", desc: "Mantiene el estado final." },
+                    { val: "backwards", desc: "Aplica el estado inicial antes de empezar." }
+                ]
+            },
+            { prop: "animation-iteration-count", cat: "Animación", desc: "Número de repeticiones.", example: "animation-iteration-count: infinite;" },
+            { prop: "animation-name", cat: "Animación", desc: "Vincula a un @keyframes específico.", example: "animation-name: fadeIn;" },
+            { prop: "animation-play-state", cat: "Animación", desc: "Pausa o reanuda la animación.", example: "animation-play-state: paused;" },
+            { prop: "animation-timing-function", cat: "Animación", desc: "Curva de velocidad.", example: "animation-timing-function: cubic-bezier(x,x,x,x);" },
+            { prop: "appearance", cat: "Interfaz", desc: "Estilo nativo del sistema operativo.", example: "appearance: none;" },
+            { prop: "aspect-ratio", cat: "Caja", desc: "Relación de aspecto (proporción).", example: "aspect-ratio: 1 / 1;" },
+            { prop: "backdrop-filter", cat: "Efectos", desc: "Filtros aplicados al fondo del elemento.", example: "backdrop-filter: blur(8px);" },
+            { prop: "backface-visibility", cat: "Transformación", desc: "Visibilidad de la parte trasera en 3D.", example: "backface-visibility: hidden;" },
+            { 
+                prop: "background", cat: "Fondo", desc: "Propiedad de conjunto para fondos.", example: "background: #000 url('...') center/cover;",
+                values: [ { val: "image", desc: "Imagen de fondo." }, { val: "repeat", desc: "Control de repetición." } ]
+            },
+            { prop: "background-attachment", cat: "Fondo", desc: "Fondo fijo o con scroll.", example: "background-attachment: fixed;" },
+            { prop: "background-blend-mode", cat: "Fondo", desc: "Mezcla entre capas de fondo.", example: "background-blend-mode: multiply;" },
+            { prop: "background-clip", cat: "Fondo", desc: "Área que cubre el fondo.", example: "background-clip: content-box;" },
+            { prop: "background-color", cat: "Fondo", desc: "Color de relleno sólido.", example: "background-color: transparent;" },
+            { prop: "background-image", cat: "Fondo", desc: "Ruta de la imagen o gradiente.", example: "background-image: linear-gradient(red, yellow);" },
+            { prop: "background-origin", cat: "Fondo", desc: "Punto de inicio de la imagen.", example: "background-origin: border-box;" },
+            { prop: "background-position", cat: "Fondo", desc: "Alineación de la imagen de fondo.", example: "background-position: center bottom;" },
+            { prop: "background-repeat", cat: "Fondo", desc: "Evita o permite el mosaico.", example: "background-repeat: no-repeat;" },
+            { prop: "background-size", cat: "Fondo", desc: "Escalado del fondo.", example: "background-size: cover;", values: [{val:"cover",desc:"Llena el área sin deformar."},{val:"contain",desc:"Ajusta para verse completa."}] },
+            { prop: "block-size", cat: "Dimensiones", desc: "Altura lógica en horizontal.", example: "block-size: min-content;" },
+            { prop: "border", cat: "Borde", desc: "Atajo de ancho, estilo y color.", example: "border: 1px solid black;", values: [{val:"width",desc:"Grosor."},{val:"style",desc:"Tipo de línea."},{val:"color",desc:"Color."}] },
+            { prop: "border-block", cat: "Borde", desc: "Bordes lógicos horizontales.", example: "border-block: 2px solid red;" },
+            { prop: "border-bottom", cat: "Borde", desc: "Línea inferior de la caja.", example: "border-bottom: 2px solid #ccc;" },
+            { prop: "border-bottom-left-radius", cat: "Borde", desc: "Curva de la esquina inferior.", example: "border-bottom-left-radius: 10px;" },
+            { prop: "border-radius", cat: "Borde", desc: "Redondeo general de esquinas.", example: "border-radius: 50%;" },
+            { prop: "border-width", cat: "Borde", desc: "Grosor de las líneas del borde.", example: "border-width: thin;" },
+            { prop: "bottom", cat: "Posicionamiento", desc: "Desplazamiento desde abajo.", example: "bottom: 2rem;" },
+            { prop: "box-shadow", cat: "Efectos", desc: "Sombras externas o internas.", example: "box-shadow: inset 0 0 10px #fff;" },
+            { 
+                prop: "box-sizing", cat: "Caja", desc: "Cálculo matemático de la caja.", example: "box-sizing: border-box;",
+                values: [ 
+                    { val: "cont-box", desc: "Ancho = Contenido (default)." },
+                    { val: "bord-box", desc: "Ancho = Contenido + Padding + Borde." }
+                ]
+            },
+            { prop: "caret-color", cat: "Interfaz", desc: "Color del cursor de inserción.", example: "caret-color: red;" },
+            { prop: "clear", cat: "Layout", desc: "Evita flotantes al lado.", example: "clear: both;" },
+            { prop: "clip-path", cat: "Efectos", desc: "Recorte geométrico del elemento.", example: "clip-path: polygon(0 0, 100% 0, 50% 100%);" },
+            { prop: "color", cat: "Texto", desc: "Color de primer plano (fuente).", example: "color: currentColor;" },
+            { prop: "column-count", cat: "Columnas", desc: "Número de columnas de texto.", example: "column-count: 2;" },
+            { prop: "column-gap", cat: "Columnas", desc: "Canal central entre columnas.", example: "column-gap: 40px;" },
+            { prop: "content", cat: "Contenido", desc: "Valor injectado por pseudo-elementos.", example: "content: attr(href);" },
+            { prop: "cursor", cat: "Interfaz", desc: "Forma del puntero del mouse.", example: "cursor: pointer;" },
+            { prop: "direction", cat: "Texto", desc: "Dirección de lectura.", example: "direction: rtl;" },
+            { 
+                prop: "display", cat: "Layout", desc: "Define el tipo de caja.", example: "display: flex;",
+                values: [
+                    { val: "flex", desc: "Contenedor flexible." },
+                    { val: "grid", desc: "Cuadrícula bidimensional." },
+                    { val: "block", desc: "Ancho completo." },
+                    { val: "inline", desc: "Anchura según contenido." },
+                    { val: "none", desc: "Desaparece el elemento." }
+                ]
+            },
+            { prop: "filter", cat: "Efectos", desc: "Manipulación de imagen (sepia, blur).", example: "filter: saturate(2);" },
+            { prop: "flex", cat: "Flexbox", desc: "Atajo de crecimiento y encogimiento.", example: "flex: 0 1 auto;" },
+            { 
+                prop: "flex-direction", cat: "Flexbox", desc: "Dirección del flujo flexible.", example: "flex-direction: column-reverse;",
+                values: [ { val: "row", desc: "Horizontal." }, { val: "column", desc: "Vertical." } ]
+            },
+            { prop: "flex-wrap", cat: "Flexbox", desc: "Multilínea en contenedores flex.", example: "flex-wrap: wrap;" },
+            { prop: "font-family", cat: "Texto", desc: "Lista de fuentes prioritarias.", example: "font-family: inherit;" },
+            { prop: "font-size", cat: "Texto", desc: "Tamaño visual de la fuente.", example: "font-size: small;" },
+            { prop: "font-weight", cat: "Texto", desc: "Intensidad de la letra (grosor).", example: "font-weight: 300;", values: [{val:"100-900",desc:"Grosor numérico."},{val:"bold",desc:"Negrita (700)."},{val:"normal",desc:"Estándar (400)."}] },
+            { prop: "gap", cat: "Flexbox/Grid", desc: "Espacio entre ítems hijos.", example: "gap: 24px;" },
+            { prop: "grid-template-columns", cat: "Grid", desc: "Columnas del sistema de cuadrícula.", example: "grid-template-columns: 1fr 2fr 1fr;" },
+            { prop: "grid-template-rows", cat: "Grid", desc: "Filas del sistema de cuadrícula.", example: "grid-template-rows: repeat(2, 1fr);" },
+            { prop: "height", cat: "Dimensiones", desc: "Dimensión vertical.", example: "height: auto;" },
+            { prop: "inset", cat: "Posicionamiento", desc: "Coordendas top/right/bottom/left.", example: "inset: 20px 0 10px 5px;" },
+            { 
+                prop: "justify-content", cat: "Flexbox/Grid", desc: "Alineación eje principal (X).", example: "justify-content: center;",
+                values: [
+                    { val: "start", desc: "Al principio." },
+                    { val: "center", desc: "Centrado." },
+                    { val: "between", desc: "Espacio intermedio." }
+                ]
+            },
+            { prop: "left", cat: "Posicionamiento", desc: "Posición desde la izquierda.", example: "left: -100px;" },
+            { prop: "letter-spacing", cat: "Texto", desc: "Tracking (espacio entre letras).", example: "letter-spacing: normal;" },
+            { prop: "line-height", cat: "Texto", desc: "Interlineado vertical.", example: "line-height: normal;" },
+            { prop: "list-style", cat: "Listas", desc: "Visual de ítems de lista.", example: "list-style: none;" },
+            { prop: "margin", cat: "Caja", desc: "Separación exterior de la caja.", example: "margin: 0;" },
+            { prop: "max-width", cat: "Dimensiones", desc: "Tope de anchura permitido.", example: "max-width: 1200px;" },
+            { prop: "min-height", cat: "Dimensiones", desc: "Altura mínima asegurada.", example: "min-height: 100vh;" },
+            { prop: "mix-blend-mode", cat: "Efectos", desc: "Efecto de mezcla (Photoshop style).", example: "mix-blend-mode: overlay;" },
+            { prop: "object-fit", cat: "Imágenes", desc: "Ajuste de archivo multimedia.", example: "object-fit: scale-down;" },
+            { prop: "opacity", cat: "Efectos", desc: "Opacidad (transparencia total).", example: "opacity: 0;" },
+            { prop: "order", cat: "Flexbox/Grid", desc: "Prioridad secuencial visual.", example: "order: 5;" },
+            { prop: "overflow", cat: "Layout", desc: "Cortes de contenido saliente.", example: "overflow: scroll;", values: [{val:"hidden",desc:"Corta el exceso."},{val:"scroll",desc:"Barra siempre."},{val:"auto",desc:"Barra si es necesario."}] },
+            { prop: "padding", cat: "Caja", desc: "Relleno interior de la caja.", example: "padding: 1.5rem;" },
+            { 
+                prop: "position", cat: "Posicionamiento", desc: "Tipo de posición.", example: "position: sticky;",
+                values: [ { val: "fixed", desc: "Inmóvil en pantalla." }, { val: "sticky", desc: "Deslizante." } ]
+            },
+            { prop: "resize", cat: "Interfaz", desc: "Control de tirador de tamaño.", example: "resize: vertical;" },
+            { prop: "right", cat: "Posicionamiento", desc: "Posición desde el borde derecho.", example: "right: 5%;" },
+            { prop: "scroll-behavior", cat: "Interfaz", desc: "Transición de scroll nativo.", example: "scroll-behavior: smooth;" },
+            { prop: "text-align", cat: "Texto", desc: "Alineación horizontal.", example: "text-align: right;", values: [{val:"left",desc:"A la izquierda."},{val:"center",desc:"Centrado."},{val:"right",desc:"A la derecha."},{val:"justify",desc:"Bloque completo."}] },
+            { prop: "text-decoration", cat: "Texto", desc: "Barras, tachados y subrayados.", example: "text-decoration: line-through;" },
+            { prop: "text-shadow", cat: "Texto", desc: "Sombras en el texto.", example: "text-shadow: 1px 1px black;" },
+            { prop: "text-transform", cat: "Texto", desc: "Tipografía de caja.", example: "text-transform: lowercase;", values: [{val:"uppercase",desc:"MAYÚSCULAS."},{val:"lowercase",desc:"minúsculas."},{val:"capitalize",desc:"Primera Mayúscula."}] },
+            { prop: "top", cat: "Posicionamiento", desc: "Distancia desde el techo.", example: "top: 0;" },
+            { prop: "transform", cat: "Transformación", desc: "Distorsión y movimiento.", example: "transform: perspective(500px) rotateY(30deg);" },
+            { prop: "transition", cat: "Animación", desc: "Curva de cambio suave.", example: "transition: transform 0.5s;" },
+            { prop: "user-select", cat: "Interfaz", desc: "Permisos de selección manual.", example: "user-select: text;" },
+            { prop: "vertical-align", cat: "Layout", desc: "Alineación vertical interna.", example: "vertical-align: baseline;" },
+            { prop: "visibility", cat: "Layout", desc: "Estado visual binario.", example: "visibility: collapse;" },
+            { prop: "white-space", cat: "Texto", desc: "Gestión de espacios en blanco.", example: "white-space: pre-wrap;" },
+            { prop: "width", cat: "Dimensiones", desc: "Anchura del elemento.", example: "width: 50%;" },
+            { prop: "word-break", cat: "Texto", desc: "Partición de palabras.", example: "word-break: keep-all;" },
+            { prop: "word-spacing", cat: "Texto", desc: "Gap entre palabras.", example: "word-spacing: normal;" },
+            { prop: "writing-mode", cat: "Texto", desc: "Dirección de escritura.", example: "writing-mode: vertical-rl;" },
+            { prop: "z-index", cat: "Posicionamiento", desc: "Prioridad de profundidad.", example: "z-index: 10;" }
         ];
 
         const grid = document.getElementById('dictionaryGrid');
@@ -639,10 +633,8 @@
         let currentCategory = 'all';
         let searchTerm = '';
 
-        // Extract unique categories
         const categories = [...new Set(cssData.map(item => item.cat))].sort();
         
-        // Render Category Buttons
         categories.forEach(cat => {
             const btn = document.createElement('button');
             btn.className = 'filter-btn';
@@ -674,10 +666,28 @@
                 const card = document.createElement('div');
                 card.className = 'prop-card';
                 card.style.animationDelay = `${index * 0.05}s`;
+                
+                let valuesHtml = '';
+                if (item.values && item.values.length > 0) {
+                    valuesHtml = `
+                        <div class="prop-values">
+                            <div class="values-header">Valores Comunes</div>
+                            ${item.values.map(v => `
+                                <div class="value-row">
+                                    <div class="value-name">${v.val}</div>
+                                    <div class="value-desc">${v.desc}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+
                 card.innerHTML = `
                     <div class="prop-category">${item.cat}</div>
                     <div class="prop-name">${item.prop}</div>
                     <div class="prop-desc">${item.desc}</div>
+                    ${valuesHtml}
+                    <div class="prop-example">Ejemplo: ${item.example}</div>
                 `;
                 grid.appendChild(card);
             });
@@ -690,10 +700,8 @@
             render();
         };
 
-        // Initial Render
         render();
 
-        // Theme Toggle Logic
         const toggleBtn = document.getElementById('themeToggle');
         const themeEmoji = document.getElementById('themeEmoji');
         const themeText = document.getElementById('themeText');
@@ -704,7 +712,6 @@
             themeText.textContent = isLight ? 'Modo Oscuro' : 'Modo Claro';
         }
 
-        // Check stored preference
         if (localStorage.getItem('theme') === 'light') {
             root.setAttribute('data-theme', 'light');
             updateThemeUI(true);

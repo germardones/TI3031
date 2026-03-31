@@ -61,10 +61,16 @@
             transition: var(--transition);
         }
 
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 4rem 2rem;
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
         header {
@@ -199,16 +205,40 @@
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
                 Regresar al Hub Principal
             </a>
-            <h1>Clase 02 Hub</h1>
-            <p class="subtitle">Dominando el diseño web con selectores avanzados, arquitectura de cascada y metodologías de estilado.</p>
+            <h1>Módulo 2: Estructura y Diseño</h1>
+            <p class="subtitle">Dominando estructuras modernas, especificidad de selectores y maquetación profesional.</p>
         </header>
 
         <main class="content-grid">
-            <!-- Box Model Lab -->
+            <!-- 1. CSS Fundamentals Lab -->
+            <a href="aplicando-css.html" class="content-card border-amber-500/20">
+                <div>
+                    <span class="card-tag">Paso 01</span>
+                    <h2 class="text-amber-500">Fundamentos y Cascada</h2>
+                    <p>Entiende la estructura de las reglas CSS y el poder de la jerarquía (Inline vs Internal vs External).</p>
+                </div>
+                <div class="card-action text-amber-500">
+                    Iniciar Fundamentos <span>&rarr;</span>
+                </div>
+            </a>
+
+            <!-- 2. Selector Battle (Specificity) -->
+            <a href="clase2-1.html" class="content-card border-sky-500/20">
+                <div>
+                    <span class="card-tag">Paso 02</span>
+                    <h2 class="text-sky-400">Especificidad CSS</h2>
+                    <p>Un simulador de combate táctico para entender la jerarquía, el peso de los selectores y la prioridad en el DOM.</p>
+                </div>
+                <div class="card-action text-sky-400">
+                    Iniciar Desafío <span>&rarr;</span>
+                </div>
+            </a>
+
+            <!-- 3. Box Model Lab -->
             <a href="modelo-de-caja.html" class="content-card">
                 <div>
-                    <span class="card-tag">Interactivos</span>
-                    <h2>Laboratorio: El Modelo de Caja</h2>
+                    <span class="card-tag">Paso 03</span>
+                    <h2>El Modelo de Caja</h2>
                     <p>Explora cómo el Padding, Border y Margin afectan el tamaño real de tus componentes en pantalla.</p>
                 </div>
                 <div class="card-action">
@@ -216,11 +246,11 @@
                 </div>
             </a>
 
-            <!-- Units Lab -->
+            <!-- 4. Units Lab -->
             <a href="unidades-de-medida.html" class="content-card">
                 <div>
-                    <span class="card-tag">Interactivos</span>
-                    <h2>Laboratorio: Unidades CSS</h2>
+                    <span class="card-tag">Paso 04</span>
+                    <h2>Unidades de Medida</h2>
                     <p>Compara px, %, rem y vh/vw en tiempo real para entender la responsividad y accesibilidad.</p>
                 </div>
                 <div class="card-action">
@@ -228,49 +258,18 @@
                 </div>
             </a>
 
-            <!-- Flexbox Lab -->
+            <!-- 5. Flexbox Lab -->
             <a href="flexbox-playground.html" class="content-card">
                 <div>
-                    <span class="card-tag">Interactivos</span>
-                    <h2>Laboratorio: Flexbox Master</h2>
-                    <p>Visualiza los ejes Main y Cross. Manipula el contenedor y sus hijos en tiempo real.</p>
+                    <span class="card-tag">Paso 05</span>
+                    <h2>Flexbox Avanzado</h2>
+                    <p>Visualiza y domina los ejes principal y secundario. Manipula el contenedor y sus hijos en un entorno controlado.</p>
                 </div>
                 <div class="card-action">
                     Dominar Flexbox <span>&rarr;</span>
                 </div>
             </a>
 
-            <!-- Selector Battle -->
-            <a href="clase2-1.html" class="content-card">
-                <div>
-                    <span class="card-tag">Interactivos</span>
-                    <h2>The CSS Specificity Battle</h2>
-                    <p>Un simulador de combate táctico para entender la jerarquía y prioridad de los selectores en el DOM.</p>
-                </div>
-                <div class="card-action">
-                    Comenzar Desafío <span>&rarr;</span>
-                </div>
-            </a>
-
-            <!-- Flexbox Soon -->
-            <div class="content-card disabled">
-                <span class="badge-soon">Próximamente</span>
-                <div>
-                    <span class="card-tag text-slate-500">Workshop</span>
-                    <h2>Flexbox Masterclass</h2>
-                    <p>Diseños flexibles y alineaciones perfectas para layouts modernos y responsivos.</p>
-                </div>
-            </div>
-
-            <!-- Grid Soon -->
-            <div class="content-card disabled">
-                <span class="badge-soon">Próximamente</span>
-                <div>
-                    <span class="card-tag text-slate-500">Frameworks</span>
-                    <h2>Grid Revolution</h2>
-                    <p>La potencia de CSS Grid para crear arquitecturas bidimensionales complejas con facilidad.</p>
-                </div>
-            </div>
         </main>
     </div>
 
