@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orquestadores de IA | Claude Code, Cursor y más</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #0f172a; --card-bg: rgba(30,41,59,0.7); --accent: #2dd4bf; --text-main: #f8fafc; }
+        [data-theme="light"] { --bg-color: #f8fafc; --card-bg: rgba(255,255,255,0.85); --text-main: #0f172a; --accent: #0d9488; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: all 0.3s ease; min-height: 100vh; }
+        .glass-panel { background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; }
+        [data-theme="light"] .glass-panel { border-color: rgba(0,0,0,0.06); box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05); }
+        #themeToggle { position: fixed; top: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); padding: 0.75rem 1.5rem; border-radius: 100px; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
+        .animate-in { animation: fadeIn 0.5s ease both; }
+        .tool-btn { transition: all 0.2s; cursor: pointer; border: 1.5px solid transparent; }
+        .tool-btn:hover { background: rgba(45,212,191,0.1); border-color: rgba(45,212,191,0.4); }
+        .tool-btn.active { background: rgba(45,212,191,0.15); border-color: #2dd4bf; }
+        .feat-pill { background: rgba(45,212,191,0.1); border: 1px solid rgba(45,212,191,0.25); color: #2dd4bf; padding: 2px 10px; border-radius: 100px; font-size: 0.72rem; font-weight: 600; display: inline-block; margin: 2px; }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+    <button id="themeToggle">☀️ Modo Claro</button>
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-12 animate-in">
+            <nav class="mb-4"><a href="fundamentos-ia.html" class="text-teal-400 hover:text-teal-300 font-semibold flex items-center gap-2 transition-colors w-fit">&larr; Volver a Fundamentos de IA</a></nav>
+            <div class="text-teal-400 text-xs font-bold uppercase tracking-widest mb-2">Módulo 09 · Herramientas</div>
+            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-teal-400 bg-clip-text text-transparent">Orquestadores de IA</h1>
+            <p class="text-slate-400 text-lg mt-3 max-w-xl">Herramientas que integran LLMs directamente en tu flujo de desarrollo para automatizar, generar y razonar sobre código.</p>
+        </header>
+        <main class="space-y-10">
+
+            <!-- QUE ES UN ORQUESTADOR -->
+            <section class="glass-panel p-8 animate-in" style="animation-delay:0.1s">
+                <h2 class="text-xl font-bold mb-4">¿Qué es un Orquestador?</h2>
+                <p class="text-slate-300 leading-relaxed">Un orquestador de IA es una herramienta que <strong class="text-teal-400">integra uno o más modelos de lenguaje en tu entorno de trabajo</strong> (terminal, editor, browser) y les da acceso a herramientas reales: leer y escribir archivos, ejecutar comandos, buscar en la web, llamar APIs. A diferencia de un chatbot simple, el orquestador <strong class="text-white">gestiona el contexto, las herramientas y el flujo de ejecución</strong> para completar tareas complejas de forma autónoma.</p>
+            </section>
+
+            <!-- COMPARATIVA -->
+            <section class="animate-in" style="animation-delay:0.15s">
+                <div class="flex flex-wrap gap-3 mb-6" id="toolBtns"></div>
+                <div id="toolDetail" class="glass-panel p-8 min-h-[280px]"></div>
+            </section>
+
+            <!-- COMPARATIVA TABLA -->
+            <section class="glass-panel p-8 animate-in" style="animation-delay:0.3s">
+                <h2 class="text-xl font-bold mb-6">Resumen Comparativo</h2>
+                <div class="overflow-x-auto text-sm">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-white/10 text-left text-xs uppercase tracking-wider text-slate-500">
+                                <th class="pb-3 pr-4">Herramienta</th>
+                                <th class="pb-3 pr-4">Tipo</th>
+                                <th class="pb-3 pr-4">Modelo</th>
+                                <th class="pb-3 pr-4">Open Source</th>
+                                <th class="pb-3">Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5 text-slate-300">
+                            <tr class="hover:bg-white/2"><td class="py-3 pr-4 font-semibold text-amber-400">Claude Code</td><td class="py-3 pr-4 text-slate-400">CLI / Terminal</td><td class="py-3 pr-4 font-mono text-xs">Claude 3.7+</td><td class="py-3 pr-4 text-red-400">No</td><td class="py-3 text-slate-400">Por token</td></tr>
+                            <tr class="hover:bg-white/2"><td class="py-3 pr-4 font-semibold text-blue-400">Cursor</td><td class="py-3 pr-4 text-slate-400">Editor (fork VS Code)</td><td class="py-3 pr-4 font-mono text-xs">Multi-modelo</td><td class="py-3 pr-4 text-red-400">No</td><td class="py-3 text-slate-400">$20/mes Pro</td></tr>
+                            <tr class="hover:bg-white/2"><td class="py-3 pr-4 font-semibold text-purple-400">Windsurf</td><td class="py-3 pr-4 text-slate-400">Editor (fork VS Code)</td><td class="py-3 pr-4 font-mono text-xs">Cascade (custom)</td><td class="py-3 pr-4 text-red-400">No</td><td class="py-3 text-slate-400">$15/mes Pro</td></tr>
+                            <tr class="hover:bg-white/2"><td class="py-3 pr-4 font-semibold text-green-400">Aider</td><td class="py-3 pr-4 text-slate-400">CLI / Terminal</td><td class="py-3 pr-4 font-mono text-xs">Multi-modelo</td><td class="py-3 pr-4 text-green-400">Si</td><td class="py-3 text-slate-400">Solo tokens API</td></tr>
+                            <tr class="hover:bg-white/2"><td class="py-3 pr-4 font-semibold text-teal-400">OpenCode</td><td class="py-3 pr-4 text-slate-400">CLI / TUI Terminal</td><td class="py-3 pr-4 font-mono text-xs">Multi-modelo</td><td class="py-3 pr-4 text-green-400">Si</td><td class="py-3 text-slate-400">Solo tokens API</td></tr>
+                            <tr class="hover:bg-white/2"><td class="py-3 pr-4 font-semibold text-slate-300">GitHub Copilot</td><td class="py-3 pr-4 text-slate-400">Plugin VS Code</td><td class="py-3 pr-4 font-mono text-xs">GPT-4o / Claude</td><td class="py-3 pr-4 text-red-400">No</td><td class="py-3 text-slate-400">$10/mes</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+    <script>
+        const tools = [
+            {
+                name: 'Claude Code', color: '#f59e0b',
+                subtitle: 'Agente de terminal de Anthropic',
+                desc: 'CLI oficial de Anthropic que convierte tu terminal en un agente de desarrollo autónomo. Puede leer y escribir código, ejecutar tests, hacer commits de Git, navegar el proyecto entero y completar tareas complejas con mínima supervisión.',
+                feats: ['Acceso completo al sistema de archivos', 'Ejecucion de bash/comandos', 'Integración nativa con Git', 'Soporte MCP nativo', 'Modo autónomo / supervisado'],
+                note: 'Es el orquestador mas poderoso para flujos de terminal. Pensado para devs avanzados.'
+            },
+            {
+                name: 'Cursor', color: '#3b82f6',
+                subtitle: 'Editor de código potenciado con IA',
+                desc: 'Fork de VS Code con IA integrada profundamente. Modo "Agent" permite al modelo editar múltiples archivos, ejecutar comandos y completar tareas de programación. Modo "Composer" para ediciones multi-archivo guiadas.',
+                feats: ['Edición multi-archivo (Composer)', 'Modo agente autónomo', 'Multi-modelo (GPT-4o, Claude, Gemini)', 'Interfaz familiar (VS Code)', 'Cursor Rules para contexto personalizado'],
+                note: 'Ideal para quienes prefieren una interfaz gráfica. La opción mas popular del mercado.'
+            },
+            {
+                name: 'Windsurf', color: '#8b5cf6',
+                subtitle: 'Editor con agente Cascade',
+                desc: 'Editor potenciado con IA (otro fork de VS Code) desarrollado por Codeium. Su diferenciador es el flujo "Cascade" que mantiene contexto de acciones pasadas y puede razonar sobre cambios a lo largo del tiempo.',
+                feats: ['Agente Cascade con memoria de acciones', 'Vista de diff integrada', 'Multi-archivo con coherencia', 'Plugins de VS Code compatibles', 'Indexacion profunda del codebase'],
+                note: 'Compite directamente con Cursor. Mejor en coherencia de ediciones largas.'
+            },
+            {
+                name: 'Aider', color: '#22c55e',
+                subtitle: 'CLI open source multi-modelo',
+                desc: 'Herramienta de terminal open source que permite editar código con cualquier LLM (GPT-4, Claude, Gemini, modelos locales). Se integra con Git automáticamente y hace commits por cada cambio. Usado via terminal, muy ligero.',
+                feats: ['100% open source (MIT)', 'Compatible con modelos locales (Ollama)', 'Commits automaticos de Git', 'Modo voz (habla con tu código)', 'Sin suscripciones, solo pagas tokens'],
+                note: 'Mejor para devs que quieren control total y no depender de herramientas propietarias.'
+            },
+            {
+                name: 'OpenCode', color: '#2dd4bf',
+                subtitle: 'Agente TUI open source',
+                desc: 'Agente de terminal open source con interfaz TUI (Text User Interface) completa. Compite con Claude Code pero completamente abierto. Soporta múltiples proveedores de LLM y permite extender con herramientas propias.',
+                feats: ['Open source (Apache 2.0)', 'Interfaz TUI completa', 'Multi-proveedor (Anthropic, OpenAI, Ollama...)', 'Extensible con herramientas custom', 'Sin vendor lock-in'],
+                note: 'Alternativa open source a Claude Code. Ideal para uso offline con modelos locales.'
+            }
+        ];
+
+        const btnContainer = document.getElementById('toolBtns');
+        tools.forEach((t, i) => {
+            const b = document.createElement('button');
+            b.className = `tool-btn rounded-xl px-4 py-2 text-sm font-semibold${i === 0 ? ' active' : ''}`;
+            b.style.color = t.color;
+            b.textContent = t.name;
+            b.onclick = () => { document.querySelectorAll('.tool-btn').forEach(x => x.classList.remove('active')); b.classList.add('active'); showTool(t); };
+            btnContainer.appendChild(b);
+        });
+
+        function showTool(t) {
+            document.getElementById('toolDetail').innerHTML = `
+                <div class="flex items-start justify-between gap-4 mb-4 flex-wrap">
+                    <div>
+                        <h2 class="text-2xl font-bold" style="color:${t.color}">${t.name}</h2>
+                        <p class="text-slate-500 text-sm">${t.subtitle}</p>
+                    </div>
+                </div>
+                <p class="text-slate-300 text-sm leading-relaxed mb-4">${t.desc}</p>
+                <div class="flex flex-wrap gap-1 mb-4">${t.feats.map(f => `<span class="feat-pill">${f}</span>`).join('')}</div>
+                <div class="bg-slate-800/50 rounded-xl px-4 py-3 text-sm text-slate-400 border border-white/5">${t.note}</div>`;
+        }
+
+        showTool(tools[0]);
+
+        const themeBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        themeBtn.addEventListener('click', () => {
+            if (html.getAttribute('data-theme') === 'light') { html.removeAttribute('data-theme'); localStorage.setItem('theme', 'dark'); themeBtn.innerHTML = '☀️ Modo Claro'; }
+            else { html.setAttribute('data-theme', 'light'); localStorage.setItem('theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parámetros del Modelo | Temperature, Top-P y más</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #0f172a; --card-bg: rgba(30,41,59,0.7); --accent: #2dd4bf; --text-main: #f8fafc; }
+        [data-theme="light"] { --bg-color: #f8fafc; --card-bg: rgba(255,255,255,0.85); --text-main: #0f172a; --accent: #0d9488; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: all 0.3s ease; min-height: 100vh; }
+        .glass-panel { background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; }
+        [data-theme="light"] .glass-panel { border-color: rgba(0,0,0,0.06); box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05); }
+        #themeToggle { position: fixed; top: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); padding: 0.75rem 1.5rem; border-radius: 100px; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
+        .animate-in { animation: fadeIn 0.5s ease both; }
+        input[type=range] { accent-color: #2dd4bf; cursor: pointer; width: 100%; }
+        .param-label { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #2dd4bf; }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+    <button id="themeToggle">☀️ Modo Claro</button>
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-12 animate-in">
+            <nav class="mb-4"><a href="fundamentos-ia.html" class="text-teal-400 hover:text-teal-300 font-semibold flex items-center gap-2 transition-colors w-fit">&larr; Volver a Fundamentos de IA</a></nav>
+            <div class="text-teal-400 text-xs font-bold uppercase tracking-widest mb-2">Módulo 04 · Configuración</div>
+            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-teal-400 bg-clip-text text-transparent">Parámetros del Modelo</h1>
+            <p class="text-slate-400 text-lg mt-3 max-w-xl">Controla cómo responde una IA ajustando sus parámetros. Cada uno afecta la creatividad, coherencia y longitud de la salida.</p>
+        </header>
+        <main class="space-y-10">
+
+            <!-- SIMULADOR -->
+            <section class="glass-panel p-8 animate-in" style="animation-delay:0.1s">
+                <h2 class="text-xl font-bold mb-6">Simulador de Parámetros</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="space-y-7">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-semibold text-sm">Temperature</span>
+                                <span class="param-label" id="tempVal">0.7</span>
+                            </div>
+                            <input type="range" min="0" max="2" step="0.1" value="0.7" id="tempSlider" oninput="updateSim()">
+                            <p class="text-slate-500 text-xs mt-1">0 = determinista y repetible · 2 = muy creativo/caótico</p>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-semibold text-sm">Top-P (Nucleus Sampling)</span>
+                                <span class="param-label" id="topPVal">0.9</span>
+                            </div>
+                            <input type="range" min="0" max="1" step="0.05" value="0.9" id="topPSlider" oninput="updateSim()">
+                            <p class="text-slate-500 text-xs mt-1">Considera solo los tokens que suman el P% de probabilidad</p>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-semibold text-sm">Max Tokens</span>
+                                <span class="param-label" id="maxTokVal">256</span>
+                            </div>
+                            <input type="range" min="32" max="4096" step="32" value="256" id="maxTokSlider" oninput="updateSim()">
+                            <p class="text-slate-500 text-xs mt-1">Límite máximo de tokens en la respuesta generada</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/70 rounded-xl p-5 border border-white/5">
+                        <div class="text-xs text-slate-500 uppercase tracking-wider mb-3">Efecto esperado</div>
+                        <div id="simEffect" class="space-y-3 text-sm"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- REFERENCIA -->
+            <section class="animate-in" style="animation-delay:0.2s">
+                <h2 class="text-2xl font-bold mb-6 flex items-center gap-4">Referencia Rápida <div class="h-px flex-grow bg-white/10"></div></h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div class="glass-panel p-6">
+                        <h3 class="font-bold text-teal-400 mb-3 font-mono">temperature</h3>
+                        <p class="text-slate-400 mb-3">Controla la aleatoriedad de la selección de tokens. Afecta la distribución de probabilidad antes de muestrear.</p>
+                        <div class="space-y-1 text-xs font-mono">
+                            <div><span class="text-teal-400">0.0–0.3</span> <span class="text-slate-500">→ Respuestas precisas, factual, código</span></div>
+                            <div><span class="text-teal-400">0.4–0.8</span> <span class="text-slate-500">→ Balance creatividad/coherencia</span></div>
+                            <div><span class="text-teal-400">0.9–2.0</span> <span class="text-slate-500">→ Creativo, variado, impredecible</span></div>
+                        </div>
+                    </div>
+                    <div class="glass-panel p-6">
+                        <h3 class="font-bold text-teal-400 mb-3 font-mono">top_p</h3>
+                        <p class="text-slate-400 mb-3">En cada paso solo considera los tokens cuyas probabilidades acumuladas llegan al valor P. Reduce tokens de baja probabilidad.</p>
+                        <div class="space-y-1 text-xs font-mono">
+                            <div><span class="text-teal-400">0.5</span> <span class="text-slate-500">→ Solo los tokens más probables</span></div>
+                            <div><span class="text-teal-400">0.9</span> <span class="text-slate-500">→ Buen balance (valor recomendado)</span></div>
+                            <div><span class="text-teal-400">1.0</span> <span class="text-slate-500">→ Considera todos los tokens</span></div>
+                        </div>
+                    </div>
+                    <div class="glass-panel p-6">
+                        <h3 class="font-bold text-teal-400 mb-3 font-mono">max_tokens</h3>
+                        <p class="text-slate-400 mb-3">Longitud máxima de la respuesta en tokens. Si el modelo termina antes, se detiene. No afecta calidad, solo longitud.</p>
+                        <div class="text-xs font-mono text-slate-500">512 = carta corta · 2048 = artículo · 4096 = documento largo</div>
+                    </div>
+                    <div class="glass-panel p-6">
+                        <h3 class="font-bold text-teal-400 mb-3 font-mono">frequency_penalty</h3>
+                        <p class="text-slate-400 mb-3">Penaliza tokens que ya aparecieron en la respuesta. Reduce la repetición de palabras y frases. Valores entre 0 y 2.</p>
+                        <div class="text-xs font-mono text-slate-500">0 = sin penalización · 1.5 = muy poco repetitivo</div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+    <script>
+        function updateSim() {
+            const temp = parseFloat(document.getElementById('tempSlider').value);
+            const topP = parseFloat(document.getElementById('topPSlider').value);
+            const maxTok = parseInt(document.getElementById('maxTokSlider').value);
+            document.getElementById('tempVal').textContent = temp.toFixed(1);
+            document.getElementById('topPVal').textContent = topP.toFixed(2);
+            document.getElementById('maxTokVal').textContent = maxTok;
+
+            let tempDesc = temp < 0.4 ? ['text-green-400', 'Respuestas predecibles y exactas. Ideal para código y datos.'] :
+                           temp < 1.0 ? ['text-yellow-400', 'Balance entre creatividad y coherencia. Buen default.'] :
+                           ['text-red-400', 'Salidas muy creativas, a veces incoherentes o impredecibles.'];
+            let topDesc = topP < 0.4 ? 'Solo los tokens más probables — respuestas muy conservadoras.' :
+                          topP < 0.8 ? 'Balance moderado de vocabulario y variedad.' :
+                          'Vocabulario amplio, respuestas más diversas.';
+            let tokDesc = maxTok < 128 ? 'Respuesta muy corta — solo frases breves.' :
+                          maxTok < 512 ? 'Párrafo corto o respuesta concisa.' :
+                          maxTok < 1500 ? 'Artículo breve o explicación mediana.' :
+                          'Documento largo, análisis completo posible.';
+
+            document.getElementById('simEffect').innerHTML = `
+                <div class="flex items-start gap-3"><span class="font-mono text-xs text-slate-500 w-24 flex-shrink-0">temperature</span><span class="${tempDesc[0]} font-medium">${tempDesc[1]}</span></div>
+                <div class="flex items-start gap-3"><span class="font-mono text-xs text-slate-500 w-24 flex-shrink-0">top_p</span><span class="text-slate-300">${topDesc}</span></div>
+                <div class="flex items-start gap-3"><span class="font-mono text-xs text-slate-500 w-24 flex-shrink-0">max_tokens</span><span class="text-slate-300">${tokDesc}</span></div>`;
+        }
+        updateSim();
+        const themeBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        themeBtn.addEventListener('click', () => {
+            if (html.getAttribute('data-theme') === 'light') { html.removeAttribute('data-theme'); localStorage.setItem('theme', 'dark'); themeBtn.innerHTML = '☀️ Modo Claro'; }
+            else { html.setAttribute('data-theme', 'light'); localStorage.setItem('theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        });
+    </script>
+</body>
+</html>

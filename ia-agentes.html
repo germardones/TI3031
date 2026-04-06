@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentes de IA | Razonamiento Autónomo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #0f172a; --card-bg: rgba(30,41,59,0.7); --accent: #2dd4bf; --text-main: #f8fafc; }
+        [data-theme="light"] { --bg-color: #f8fafc; --card-bg: rgba(255,255,255,0.85); --text-main: #0f172a; --accent: #0d9488; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: all 0.3s ease; min-height: 100vh; }
+        .glass-panel { background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; }
+        [data-theme="light"] .glass-panel { border-color: rgba(0,0,0,0.06); box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05); }
+        #themeToggle { position: fixed; top: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); padding: 0.75rem 1.5rem; border-radius: 100px; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
+        .animate-in { animation: fadeIn 0.5s ease both; }
+        @keyframes pulse-step { 0%,100%{box-shadow:0 0 0 0 rgba(45,212,191,0);} 50%{box-shadow:0 0 0 6px rgba(45,212,191,0.2);} }
+        .react-step.active { border-color: #2dd4bf; animation: pulse-step 1.5s ease infinite; }
+        .react-step { transition: all 0.4s; cursor: pointer; border: 2px solid transparent; }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+    <button id="themeToggle">☀️ Modo Claro</button>
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-12 animate-in">
+            <nav class="mb-4"><a href="fundamentos-ia.html" class="text-teal-400 hover:text-teal-300 font-semibold flex items-center gap-2 transition-colors w-fit">&larr; Volver a Fundamentos de IA</a></nav>
+            <div class="text-teal-400 text-xs font-bold uppercase tracking-widest mb-2">Módulo 07 · Automatización</div>
+            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-teal-400 bg-clip-text text-transparent">Agentes de IA</h1>
+            <p class="text-slate-400 text-lg mt-3 max-w-xl">Un agente no solo responde — razona, planifica, usa herramientas y actúa para completar tareas complejas.</p>
+        </header>
+        <main class="space-y-10">
+
+            <!-- CHATBOT vs AGENTE -->
+            <section class="animate-in" style="animation-delay:0.1s">
+                <h2 class="text-2xl font-bold mb-6">Chatbot vs Agente</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="glass-panel p-6 border-l-4 border-slate-500">
+                        <h3 class="font-bold text-slate-400 mb-4">Chatbot / Modelo base</h3>
+                        <ul class="space-y-2 text-sm text-slate-400">
+                            <li>Recibe un mensaje, genera una respuesta, termina.</li>
+                            <li>No puede acceder a internet, archivos ni APIs.</li>
+                            <li>No recuerda conversaciones anteriores por defecto.</li>
+                            <li>No puede ejecutar código ni realizar acciones.</li>
+                            <li>Ejemplo: ChatGPT sin plugins, Claude sin herramientas.</li>
+                        </ul>
+                    </div>
+                    <div class="glass-panel p-6 border-l-4 border-teal-400">
+                        <h3 class="font-bold text-teal-400 mb-4">Agente de IA</h3>
+                        <ul class="space-y-2 text-sm text-slate-400">
+                            <li>Recibe un objetivo y trabaja iterativamente para alcanzarlo.</li>
+                            <li>Puede usar herramientas: búsqueda web, ejecutar código, escritura de archivos.</li>
+                            <li>Mantiene estado y memoria entre pasos.</li>
+                            <li>Decide qué hacer en cada paso según el resultado anterior.</li>
+                            <li>Ejemplo: Claude Code, Cursor Agent, GitHub Copilot Workspace.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CICLO REACT -->
+            <section class="glass-panel p-8 animate-in" style="animation-delay:0.2s">
+                <h2 class="text-xl font-bold mb-2">El Ciclo ReAct</h2>
+                <p class="text-slate-400 text-sm mb-6">El patrón más común de agentes: <strong class="text-white">Re</strong>asoning + <strong class="text-white">Act</strong>ing. Haz clic en cada fase para ver el detalle:</p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                    <div class="react-step glass-panel p-4 text-center rounded-xl" onclick="showReact(0)">
+                        <div class="text-teal-400 font-bold text-xs uppercase tracking-wider mb-2">Fase 1</div>
+                        <div class="font-bold">Pensar</div>
+                        <div class="text-slate-500 text-xs mt-1">Thought</div>
+                    </div>
+                    <div class="react-step glass-panel p-4 text-center rounded-xl" onclick="showReact(1)">
+                        <div class="text-teal-400 font-bold text-xs uppercase tracking-wider mb-2">Fase 2</div>
+                        <div class="font-bold">Actuar</div>
+                        <div class="text-slate-500 text-xs mt-1">Action</div>
+                    </div>
+                    <div class="react-step glass-panel p-4 text-center rounded-xl" onclick="showReact(2)">
+                        <div class="text-teal-400 font-bold text-xs uppercase tracking-wider mb-2">Fase 3</div>
+                        <div class="font-bold">Observar</div>
+                        <div class="text-slate-500 text-xs mt-1">Observation</div>
+                    </div>
+                    <div class="react-step glass-panel p-4 text-center rounded-xl" onclick="showReact(3)">
+                        <div class="text-teal-400 font-bold text-xs uppercase tracking-wider mb-2">Fase 4</div>
+                        <div class="font-bold">Responder</div>
+                        <div class="text-slate-500 text-xs mt-1">Response</div>
+                    </div>
+                </div>
+                <div id="reactDetail" class="bg-slate-900/60 rounded-xl p-5 border border-white/5 min-h-[80px]">
+                    <p class="text-slate-500 text-sm text-center">Haz clic en una fase para ver el detalle.</p>
+                </div>
+            </section>
+
+            <!-- HERRAMIENTAS -->
+            <section class="animate-in" style="animation-delay:0.3s">
+                <h2 class="text-2xl font-bold mb-6 flex items-center gap-4">Herramientas Comunes <div class="h-px flex-grow bg-white/10"></div></h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm text-center">
+                    <div class="glass-panel p-4 rounded-xl"><div class="font-bold text-teal-400 mb-1">Búsqueda Web</div><p class="text-slate-500 text-xs">Consultar info actualizada de internet</p></div>
+                    <div class="glass-panel p-4 rounded-xl"><div class="font-bold text-teal-400 mb-1">Ejecucion de Código</div><p class="text-slate-500 text-xs">Correr Python, JS para cálculos o datos</p></div>
+                    <div class="glass-panel p-4 rounded-xl"><div class="font-bold text-teal-400 mb-1">Lectura de Archivos</div><p class="text-slate-500 text-xs">Leer PDFs, imágenes, csvs, código</p></div>
+                    <div class="glass-panel p-4 rounded-xl"><div class="font-bold text-teal-400 mb-1">Escritura de Archivos</div><p class="text-slate-500 text-xs">Crear y modificar archivos en disco</p></div>
+                    <div class="glass-panel p-4 rounded-xl"><div class="font-bold text-teal-400 mb-1">APIs Externas</div><p class="text-slate-500 text-xs">Llamar servicios como GitHub, Notion, etc.</p></div>
+                    <div class="glass-panel p-4 rounded-xl"><div class="font-bold text-teal-400 mb-1">Memoria</div><p class="text-slate-500 text-xs">Guardar y recuperar información persistente</p></div>
+                    <div class="glass-panel p-4 rounded-xl"><div class="font-bold text-teal-400 mb-1">Sub-agentes</div><p class="text-slate-500 text-xs">Delegar tareas a agentes especializados</p></div>
+                    <div class="glass-panel p-4 rounded-xl"><div class="font-bold text-teal-400 mb-1">Terminal</div><p class="text-slate-500 text-xs">Ejecutar comandos del sistema operativo</p></div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script>
+        const reactSteps = [
+            { label: 'Pensar (Thought)', desc: 'El agente analiza el objetivo y decide cuál es el siguiente paso lógico. No actúa aún. Escribe internamente algo como: "Para responder esto necesito buscar en internet la fecha actual..."' },
+            { label: 'Actuar (Action)', desc: 'El agente llama a una herramienta con parámetros específicos. Por ejemplo: search("última version de Node.js 2025"). Puede hacer múltiples acciones encadenadas.' },
+            { label: 'Observar (Observation)', desc: 'El agente recibe el resultado de la herramienta y lo incorpora a su contexto. "La búsqueda retornó: Node.js 22 LTS — lanzado octubre 2024." Ahora tiene nueva información.' },
+            { label: 'Responder (Response)', desc: 'Si el agente tiene suficiente información para completar el objetivo, genera la respuesta final. Si no, vuelve a la fase de Pensar e inicia otro ciclo.' }
+        ];
+        function showReact(idx) {
+            document.querySelectorAll('.react-step').forEach((el, i) => el.classList.toggle('active', i === idx));
+            const s = reactSteps[idx];
+            document.getElementById('reactDetail').innerHTML = `<h3 class="font-bold text-teal-400 mb-2">${s.label}</h3><p class="text-slate-300 text-sm leading-relaxed">${s.desc}</p>`;
+        }
+        const themeBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        themeBtn.addEventListener('click', () => {
+            if (html.getAttribute('data-theme') === 'light') { html.removeAttribute('data-theme'); localStorage.setItem('theme', 'dark'); themeBtn.innerHTML = '☀️ Modo Claro'; }
+            else { html.setAttribute('data-theme', 'light'); localStorage.setItem('theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        });
+    </script>
+</body>
+</html>
