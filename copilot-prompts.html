@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Engineering | Comunicación con IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #0f172a; --card-bg: rgba(30,41,59,0.7); --accent: #818cf8; --text-main: #f8fafc; --transition: all 0.3s ease; }
+        [data-theme="light"] { --bg-color: #f8fafc; --card-bg: rgba(255,255,255,0.85); --text-main: #0f172a; --accent: #4f46e5; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); min-height: 100vh; }
+        .glass-panel { background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; }
+        [data-theme="light"] .glass-panel { border-color: rgba(0,0,0,0.06); box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05); }
+        #themeToggle { position: fixed; top: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); padding: 0.75rem 1.5rem; border-radius: 100px; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; }
+        .case-btn { transition: all 0.2s; cursor: pointer; border: 1.5px solid transparent; }
+        .case-btn:hover { background: rgba(129,140,248,0.1); border-color: rgba(129,140,248,0.4); }
+        .case-btn.active { background: rgba(129,140,248,0.15); border-color: #818cf8; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
+        .animate-in { animation: fadeIn 0.5s ease both; }
+        .score-bar { height:8px; border-radius:100px; background: rgba(255,255,255,0.05); overflow: hidden; }
+        .score-fill { height: 100%; border-radius: 100px; transition: width 0.6s ease; }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+
+    <button id="themeToggle">☀️ Modo Claro</button>
+
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-12 animate-in">
+            <nav class="mb-4">
+                <a href="github-copilot-ia.html" class="text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-2 transition-colors w-fit">
+                    &larr; Volver a Clase 3.2 — IA
+                </a>
+            </nav>
+            <div class="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-2">Paso 04 · Comunicación</div>
+            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-indigo-400 bg-clip-text text-transparent">
+                Prompt Engineering
+            </h1>
+            <p class="text-slate-400 text-lg mt-3 max-w-xl">La calidad de la respuesta de la IA depende directamente de cómo haces la pregunta. Aprende a comunicarte mejor.</p>
+        </header>
+
+        <main class="space-y-10">
+
+            <!-- COMPARADOR -->
+            <section class="animate-in" style="animation-delay:0.1s">
+                <h2 class="text-2xl font-bold mb-2 flex items-center gap-3">
+                    <span class="p-2 bg-indigo-500/20 rounded-lg text-indigo-400"></span>
+                    Comparador de Prompts
+                </h2>
+                <p class="text-slate-400 mb-6 text-sm">Selecciona un caso y compara el prompt malo vs el prompt bien estructurado:</p>
+
+                <div class="flex flex-wrap gap-3 mb-6">
+                    <button class="case-btn rounded-xl px-4 py-2 text-sm font-semibold active" onclick="showCase(0)">Caso 1: Navbar</button>
+                    <button class="case-btn rounded-xl px-4 py-2 text-sm font-semibold" onclick="showCase(1)">Caso 2: Función JS</button>
+                    <button class="case-btn rounded-xl px-4 py-2 text-sm font-semibold" onclick="showCase(2)">Caso 3: Debug</button>
+                    <button class="case-btn rounded-xl px-4 py-2 text-sm font-semibold" onclick="showCase(3)">Caso 4: CSS</button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="glass-panel p-6 border-l-4 border-red-400">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="text-red-400 font-bold text-sm">Prompt mal estructurado</span>
+                        </div>
+                        <div class="bg-red-500/10 border border-red-500/20 rounded-xl p-4 font-mono text-sm text-red-300 mb-4 min-h-[80px]" id="badPrompt"></div>
+                        <div>
+                            <div class="text-xs text-slate-500 mb-1 uppercase tracking-wider">Calidad</div>
+                            <div class="score-bar"><div class="score-fill bg-red-500" id="badScore" style="width:15%"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-6 border-l-4 border-green-400">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="text-green-400 font-bold text-sm">Prompt bien estructurado</span>
+                        </div>
+                        <div class="bg-green-500/10 border border-green-500/20 rounded-xl p-4 font-mono text-sm text-green-300 mb-4 min-h-[80px]" id="goodPrompt"></div>
+                        <div>
+                            <div class="text-xs text-slate-500 mb-1 uppercase tracking-wider">Calidad</div>
+                            <div class="score-bar"><div class="score-fill bg-green-500" id="goodScore" style="width:90%"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="caseExplanation" class="glass-panel p-5 mt-4 border border-indigo-400/30">
+                    <p class="text-slate-400 text-sm leading-relaxed"></p>
+                </div>
+            </section>
+
+            <!-- PRINCIPIOS -->
+            <section class="animate-in" style="animation-delay:0.2s">
+                <div class="flex items-center gap-4 mb-6">
+                    <h2 class="text-2xl font-bold">Los 5 Principios del Buen Prompt</h2>
+                    <div class="h-px flex-grow bg-white/10"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+                    <div class="glass-panel p-5 text-center">
+
+                        <h3 class="font-bold text-indigo-400 text-sm mb-1">Específico</h3>
+                        <p class="text-slate-500 text-xs">Describe exactamente qué quieres. No asumas que la IA adivina.</p>
+                    </div>
+                    <div class="glass-panel p-5 text-center">
+
+                        <h3 class="font-bold text-indigo-400 text-sm mb-1">Con contexto</h3>
+                        <p class="text-slate-500 text-xs">Menciona el lenguaje, tecnología o restricciones del proyecto.</p>
+                    </div>
+                    <div class="glass-panel p-5 text-center">
+
+                        <h3 class="font-bold text-indigo-400 text-sm mb-1">Con formato</h3>
+                        <p class="text-slate-500 text-xs">Pide el formato exacto: "solo código", "con comentarios", "lista de pasos".</p>
+                    </div>
+                    <div class="glass-panel p-5 text-center">
+
+                        <h3 class="font-bold text-indigo-400 text-sm mb-1">Iterativo</h3>
+                        <p class="text-slate-500 text-xs">Refina: "Ahora hazlo más simple" o "Agrega manejo de errores".</p>
+                    </div>
+                    <div class="glass-panel p-5 text-center">
+
+                        <h3 class="font-bold text-indigo-400 text-sm mb-1">Verificable</h3>
+                        <p class="text-slate-500 text-xs">Siempre revisa y prueba el resultado. La IA comete errores.</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        const cases = [
+            {
+                bad: '"Hazme un navbar"',
+                good: '"Crea una barra de navegación horizontal en HTML y CSS puro. Debe tener el logo a la izquierda, 4 links al centro, y debe ser responsive (menú hamburguesa en móvil). Estilo: fondo oscuro #1e293b, texto blanco. Sin JavaScript frameworks."',
+                tip: 'El prompt malo da margen a muchas interpretaciones. El bueno especifica: tecnologías, layout, comportamiento responsive, estilo, restricciones. Copilot genera código que se puede usar directamente.'
+            },
+            {
+                bad: '"Función de descuento"',
+                good: '"Escribe una función JavaScript llamada calcularDescuento(precio, porcentaje) que reciba el precio original y un porcentaje (0-100), valide que los valores sean números positivos, y retorne el precio con el descuento aplicado. Incluye JSDoc."',
+                tip: 'La función bien especificada incluye: nombre exacto, parámetros, tipos esperados, validaciones y documentación. El resultado será código listo para usar en producción.'
+            },
+            {
+                bad: '"Hay un error en mi código"',
+                good: '"Este código CSS no centra el div verticalmente en la pantalla. Uso height: 100vh en el body con flexbox. El div hijo tiene height: 200px. ¿Qué propiedad le falta al contenedor padre? Muestra solo el CSS correcto."',
+                tip: 'Para debugging, proporciona: el problema específico, el código actual, qué esperabas y qué obtienes. Pide el resultado en un formato concreto.'
+            },
+            {
+                bad: '"CSS para botón"',
+                good: '"Crea el CSS para un botón de acción primario: fondo gradiente de #6366f1 a #8b5cf6, texto blanco, padding 12px 24px, border-radius 8px, con efecto hover que aumente el brillo y una transición de 0.3s. Añade un estado disabled con opacidad 50%."',
+                tip: 'Describir los valores exactos de colores, espaciados y comportamientos en hover/disabled evita múltiples rondas de corrección. Más detalles = menos iteraciones.'
+            }
+        ];
+
+        function showCase(idx) {
+            document.querySelectorAll('.case-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+            const c = cases[idx];
+            document.getElementById('badPrompt').textContent = c.bad;
+            document.getElementById('goodPrompt').textContent = c.good;
+            document.getElementById('caseExplanation').querySelector('p').textContent = c.tip;
+
+            // Reset and animate bars
+            document.getElementById('badScore').style.width = '5%';
+            document.getElementById('goodScore').style.width = '5%';
+            setTimeout(() => {
+                document.getElementById('badScore').style.width = '20%';
+                document.getElementById('goodScore').style.width = '92%';
+            }, 100);
+        }
+
+        showCase(0);
+
+        const themeBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        themeBtn.addEventListener('click', () => {
+            if (html.getAttribute('data-theme') === 'light') { html.removeAttribute('data-theme'); localStorage.setItem('theme', 'dark'); themeBtn.innerHTML = '☀️ Modo Claro'; }
+            else { html.setAttribute('data-theme', 'light'); localStorage.setItem('theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        });
+    </script>
+</body>
+</html>
