@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anatomía y Cascada | Laboratorio CSS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --accent: #38bdf8;
+            --accent-pink: #f472b6;
+            --accent-amber: #fbbf24;
+            --text-main: #f8fafc;
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --text-main: #0f172a;
+            --accent: #0284c7;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            transition: var(--transition);
+            min-height: 100vh;
+        }
+
+        .glass-panel {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            transition: var(--transition);
+        }
+
+        [data-theme="light"] .glass-panel {
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+        }
+
+        .code-block {
+            font-family: 'JetBrains Mono', monospace;
+            background: #0f172a;
+            padding: 2rem;
+            border-radius: 1rem;
+            font-size: 1.25rem;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        .token {
+            position: relative;
+            cursor: help;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .token:hover { background: rgba(255, 255, 255, 0.1); }
+        [data-theme="light"] .token:hover { background: rgba(0, 0, 0, 0.05); }
+
+        .token-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            background: var(--accent);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.8rem;
+            font-family: 'Outfit', sans-serif;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 100;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        .token:hover .token-tooltip {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-15px);
+        }
+
+        /* Colores de tokens */
+        .selector { color: var(--accent-amber); font-weight: 700; }
+        .property { color: var(--accent); }
+        .value { color: var(--accent-pink); }
+        .punct { color: #94a3b8; }
+
+        .method-card {
+            border: 2px solid transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .method-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .cascade-result {
+            width: 150px;
+            height: 150px;
+            border: 4px solid white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            text-transform: uppercase;
+            border-radius: 20px;
+            transition: all 0.5s ease;
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+            transition: all 0.3s;
+        }
+
+        .ranking-item.winner {
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid var(--accent);
+            transform: scale(1.05);
+        }
+
+        .error-tab {
+            cursor: pointer;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .error-tab.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        #themeToggle {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            font-weight: 600;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+        }
+
+    </style>
+</head>
+<body class="p-6 md:p-12">
+
+    <button id="themeToggle">☀️ Modo Claro</button>
+
+    <div class="max-w-6xl mx-auto">
+        <header class="mb-12">
+            <nav class="mb-4">
+                <a href="../index.html" class="text-sky-400 hover:text-sky-300 font-semibold flex items-center gap-2 transition-colors">
+                    &larr; Volver al Módulo 2
+                </a>
+            </nav>
+            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-sky-400 bg-clip-text text-transparent">
+                Anatomía y Cascada CSS
+            </h1>
+            <p class="text-slate-400 text-lg mt-2 font-medium">Entiende la estructura de tus reglas y la jerarquía de poder en el navegador.</p>
+        </header>
+
+        <main class="space-y-12">
+            
+            <!-- SECCIÓN 1: ANATOMÍA -->
+            <section class="glass-panel p-8 md:p-12">
+                <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                    <span class="p-2 bg-amber-500/20 rounded-lg text-amber-500">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    </span>
+                    1. Anatomía de la Regla (El DNI del estilo)
+                </h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                    <div>
+                        <p class="text-slate-400 mb-6 text-lg leading-relaxed">
+                            Una regla CSS es una instrucción que le indica al navegador qué elementos debe modificar y cómo deben lucir. Pasa el mouse por cada parte para descubrir su rol.
+                        </p>
+                        <div class="code-block shadow-2xl">
+                            <span class="token selector">h1<span class="token-tooltip">Selector: ¿A quién quiero cambiar?</span></span> <span class="punct">{</span><br>
+                            &nbsp;&nbsp;<span class="token property">color<span class="token-tooltip">Propiedad: ¿Qué atributo voy a modificar?</span></span><span class="punct">:</span> <span class="token value">blue<span class="token-tooltip">Valor: ¿Cómo quiero que luzca?</span></span><span class="punct">;<span class="token-tooltip">Punto y coma: El punto final de la instrucción</span></span><br>
+                            <span class="punct">}</span>
+                        </div>
+                    </div>
+                    <div class="bg-sky-500/5 rounded-2xl p-8 border border-sky-400/20">
+                        <h4 class="font-bold text-sky-400 mb-4 uppercase tracking-wider text-sm">Resumen Técnico</h4>
+                        <ul class="space-y-4 text-sm text-slate-400">
+                            <li><strong>Selector:</strong> Apunta al elemento HTML (Etiqueta, Clase o ID).</li>
+                            <li><strong>Bloque de Declaración:</strong> Todo lo que va entre llaves <code>{ }</code>.</li>
+                            <li><strong>Declaración:</strong> La combinación de Propiedad + Valor.</li>
+                            <li><strong>Separador:</strong> Los <code>:</code> dividen la propiedad del valor.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 2: LAS 3 VÍAS -->
+            <section>
+                <div class="flex items-center gap-4 mb-8">
+                    <h2 class="text-2xl font-bold">2. Las 3 Vías de Implementación</h2>
+                    <div class="h-[1px] flex-grow bg-white/10"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Inline -->
+                    <div class="glass-panel p-8 method-card">
+                        <div class="text-amber-500 font-bold text-xs uppercase mb-2">Método Inline</div>
+                        <h3 class="text-xl font-bold mb-4">"El Parche Directo"</h3>
+                        <p class="text-sm text-slate-400 mb-6">Se escribe directamente dentro de la etiqueta HTML usando el atributo style.</p>
+                        <div class="bg-black/30 rounded-lg p-3 font-mono text-[0.7rem] mb-6 text-slate-300">
+                            &lt;h1 style="color: red"&gt;...&lt;/h1&gt;
+                        </div>
+                        <div class="text-xs">
+                            <strong class="text-sky-400">¿Cuándo usar?</strong> Casos únicos o pruebas flash.
+                        </div>
+                    </div>
+
+                    <!-- Internal -->
+                    <div class="glass-panel p-8 method-card">
+                        <div class="text-sky-400 font-bold text-xs uppercase mb-2">Método Internal</div>
+                        <h3 class="text-xl font-bold mb-4">"Instrucciones Locales"</h3>
+                        <p class="text-sm text-slate-400 mb-6">Se escribe dentro de la etiqueta &lt;style&gt; en el head del documento.</p>
+                        <div class="bg-black/30 rounded-lg p-3 font-mono text-[0.7rem] mb-6 text-slate-300">
+                            &lt;style&gt;<br>&nbsp;&nbsp;h1 { color: blue; }<br>&lt;/style&gt;
+                        </div>
+                        <div class="text-xs">
+                            <strong class="text-sky-400">¿Cuándo usar?</strong> Landing pages de un solo archivo.
+                        </div>
+                    </div>
+
+                    <!-- External -->
+                    <div class="glass-panel p-8 method-card">
+                        <div class="text-pink-400 font-bold text-xs uppercase mb-2">Método External</div>
+                        <h3 class="text-xl font-bold mb-4">"El Manual Global"</h3>
+                        <p class="text-sm text-slate-400 mb-6">Archivo .css independiente vinculado con la etiqueta &lt;link&gt;.</p>
+                        <div class="bg-black/30 rounded-lg p-3 font-mono text-[0.7rem] mb-6 text-slate-300">
+                            &lt;link rel="stylesheet" href="style.css"&gt;
+                        </div>
+                        <div class="text-xs">
+                            <strong class="text-sky-400">¿Cuándo usar?</strong> El estándar profesional para proyectos.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 3: SIMULADOR DE CASCADA -->
+            <section class="glass-panel p-8 md:p-12 border-l-4 border-sky-400">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-6">3. Simulador de "Cascada"</h2>
+                        <p class="text-slate-400 mb-8">
+                            ¿Por qué se llama Hojas de Estilo en <strong>Cascada</strong>? Porque cuando hay conflictos, existe una jerarquía de poder. Escribe colores en los 3 métodos y observa quién "gana".
+                        </p>
+                        
+                        <div class="space-y-6">
+                            <!-- Inline Input -->
+                            <div class="space-y-2">
+                                <label class="text-sm font-bold flex justify-between">
+                                    <span>Color Inline ( style="..." )</span>
+                                    <span class="text-xs text-amber-500">Prioridad: ALTA (3)</span>
+                                </label>
+                                <input type="text" id="inlineVal" placeholder="ej. red, #ff0000" class="w-full bg-white/5 border border-white/10 p-3 rounded-lg outline-none focus:border-amber-500 transition-all">
+                            </div>
+
+                            <!-- Internal Input -->
+                            <div class="space-y-2">
+                                <label class="text-sm font-bold flex justify-between">
+                                    <span>Color Internal ( &lt;style&gt; )</span>
+                                    <span class="text-xs text-sky-400">Prioridad: MEDIA (2)</span>
+                                </label>
+                                <input type="text" id="internalVal" placeholder="ej. blue" class="w-full bg-white/5 border border-white/10 p-3 rounded-lg outline-none focus:border-sky-400 transition-all">
+                            </div>
+
+                            <!-- External Input -->
+                            <div class="space-y-2">
+                                <label class="text-sm font-bold flex justify-between">
+                                    <span>Color External ( .css )</span>
+                                    <span class="text-xs text-pink-400">Prioridad: BASE (1)</span>
+                                </label>
+                                <input type="text" id="externalVal" placeholder="ej. grey" class="w-full bg-white/5 border border-white/10 p-3 rounded-lg outline-none focus:border-pink-400 transition-all">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center">
+                        <div id="boxResult" class="cascade-result mb-10" style="background-color: #334155;">
+                            ITEM
+                        </div>
+
+                        <div class="w-full space-y-3">
+                            <div id="rankInline" class="ranking-item">
+                                <span class="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center font-bold text-white text-xs">3</span>
+                                <span class="flex-grow text-sm">Método Inline</span>
+                                <span id="statusInline" class="text-[0.6rem] uppercase font-bold text-slate-500">Ignorado</span>
+                            </div>
+                            <div id="rankInternal" class="ranking-item">
+                                <span class="w-8 h-8 rounded-full bg-sky-500 flex items-center justify-center font-bold text-white text-xs">2</span>
+                                <span class="flex-grow text-sm">Método Internal</span>
+                                <span id="statusInternal" class="text-[0.6rem] uppercase font-bold text-slate-500">Ignorado</span>
+                            </div>
+                            <div id="rankExternal" class="ranking-item">
+                                <span class="w-8 h-8 rounded-full bg-pink-500 flex items-center justify-center font-bold text-white text-xs">1</span>
+                                <span class="flex-grow text-sm">Método External</span>
+                                <span id="statusExternal" class="text-[0.6rem] uppercase font-bold text-slate-500">Ignorado</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIÓN 4: ERRORES COMUNES -->
+            <section class="glass-panel p-8">
+                <h2 class="text-2xl font-bold mb-8 text-center uppercase tracking-widest text-slate-500">4. Consola de Diagnóstico</h2>
+                
+                <div class="flex justify-center gap-4 mb-8">
+                    <button class="error-tab active" onclick="switchError(0)">Caso: El Punto y Coma</button>
+                    <button class="error-tab" onclick="switchError(1)">Caso: Las Llaves</button>
+                    <button class="error-tab" onclick="switchError(2)">Caso: El Lenguaje</button>
+                </div>
+
+                <div id="errorContent" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Dinámico por JS -->
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="mt-20 py-10 border-t border-white/5 text-center text-slate-500 text-sm">
+            &copy; 2026 Laboratorio Interactivo de CSS - Diseñado para Estudiantes de Ingeniería.
+        </footer>
+    </div>
+
+    <script>
+        // Theme Persistence
+        const themeToggle = document.getElementById('themeToggle');
+        const root = document.documentElement;
+        
+        if (localStorage.getItem('theme') === 'light') {
+            root.setAttribute('data-theme', 'light');
+            themeToggle.innerHTML = '🌙 Modo Oscuro';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (root.getAttribute('data-theme') === 'light') {
+                root.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'dark');
+                themeToggle.innerHTML = '☀️ Modo Claro';
+            } else {
+                root.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                themeToggle.innerHTML = '🌙 Modo Oscuro';
+            }
+        });
+
+        // Cascade Simulator Logic
+        const inline = document.getElementById('inlineVal');
+        const internal = document.getElementById('internalVal');
+        const external = document.getElementById('externalVal');
+        const box = document.getElementById('boxResult');
+
+        const rankItems = {
+            inline: { row: document.getElementById('rankInline'), status: document.getElementById('statusInline') },
+            internal: { row: document.getElementById('rankInternal'), status: document.getElementById('statusInternal') },
+            external: { row: document.getElementById('rankExternal'), status: document.getElementById('statusExternal') }
+        };
+
+        function updateCascade() {
+            const vInline = inline.value.trim();
+            const vInternal = internal.value.trim();
+            const vExternal = external.value.trim();
+
+            let finalColor = '#334155';
+            let winner = null;
+
+            // Reset statuses
+            Object.values(rankItems).forEach(item => {
+                item.row.classList.remove('winner');
+                item.status.textContent = 'Sin valor';
+                item.status.className = 'text-[0.6rem] uppercase font-bold text-slate-500';
+            });
+
+            if (vExternal) {
+                finalColor = vExternal;
+                winner = 'external';
+                rankItems.external.status.textContent = 'ACTIVO (Base)';
+                rankItems.external.status.className = 'text-[0.6rem] uppercase font-bold text-pink-400';
+            }
+
+            if (vInternal) {
+                finalColor = vInternal;
+                winner = 'internal';
+                if (vExternal) {
+                    rankItems.external.status.textContent = 'SOBRESCRITO';
+                    rankItems.external.status.className = 'text-[0.6rem] uppercase font-bold text-slate-600';
+                }
+                rankItems.internal.status.textContent = 'ACTIVO (Gana)';
+                rankItems.internal.status.className = 'text-[0.6rem] uppercase font-bold text-sky-400';
+            }
+
+            if (vInline) {
+                finalColor = vInline;
+                winner = 'inline';
+                if (vExternal) {
+                    rankItems.external.status.textContent = 'SOBRESCRITO';
+                    rankItems.external.status.className = 'text-[0.6rem] uppercase font-bold text-slate-600';
+                }
+                if (vInternal) {
+                    rankItems.internal.status.textContent = 'SOBRESCRITO';
+                    rankItems.internal.status.className = 'text-[0.6rem] uppercase font-bold text-slate-600';
+                }
+                rankItems.inline.status.textContent = 'GANADOR (Inline)';
+                rankItems.inline.status.className = 'text-[0.6rem] uppercase font-bold text-amber-500';
+            }
+
+            if (winner) {
+                rankItems[winner].row.classList.add('winner');
+                box.style.backgroundColor = finalColor;
+                box.style.borderColor = 'white';
+            } else {
+                box.style.backgroundColor = '#334155';
+                box.style.borderColor = 'rgba(255,255,255,0.1)';
+            }
+        }
+
+        [inline, internal, external].forEach(input => input.addEventListener('input', updateCascade));
+
+        // Error Console Logic
+        const errors = [
+            {
+                title: "Falta del Punto y Coma",
+                bad: "h1 {\n  color: red\n  font-size: 20px\n}",
+                good: "h1 {\n  color: red;\n  font-size: 20px;\n}",
+                desc: "El navegador no sabe dónde termina una instrucción. La siguiente línea será ignorada."
+            },
+            {
+                title: "Llaves sin cerrar",
+                bad: "h2 {\n  color: blue;",
+                good: "h2 {\n  color: blue;\n}",
+                desc: "Si no cierras la llave, el navegador creerá que todo el código siguiente es parte del mismo bloque."
+            },
+            {
+                title: "Propiedad mal escrita",
+                bad: "p {\n  colour: green;\n}",
+                good: "p {\n  color: green;\n}",
+                desc: "CSS está en inglés técnico. 'Colour' (inglés británico) no existe para el navegador; debe ser 'color'."
+            }
+        ];
+
+        function switchError(index) {
+            const tabs = document.querySelectorAll('.error-tab');
+            tabs.forEach((t, i) => t.classList.toggle('active', i === index));
+            
+            const content = document.getElementById('errorContent');
+            const e = errors[index];
+            
+            content.innerHTML = `
+                <div class="space-y-4">
+                    <div class="text-sm font-bold text-red-500 flex items-center gap-2">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Código Mal Escrito
+                    </div>
+                    <pre class="bg-red-500/5 border border-red-500/20 p-6 rounded-xl font-mono text-sm text-red-200">${e.bad}</pre>
+                    <p class="text-xs text-slate-500 italic">${e.desc}</p>
+                </div>
+                <div class="space-y-4">
+                    <div class="text-sm font-bold text-green-500 flex items-center gap-2">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Código Saludable
+                    </div>
+                    <pre class="bg-green-500/5 border border-green-500/20 p-6 rounded-xl font-mono text-sm text-green-200">${e.good}</pre>
+                    <p class="text-xs text-slate-500 italic uppercase tracking-wider">¡Manual de buenas prácticas!</p>
+                </div>
+            `;
+        }
+
+        // Initialize first error
+        switchError(0);
+    </script>
+</body>
+</html>

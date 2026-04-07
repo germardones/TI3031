@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 02 | CSS Avanzado y Frameworks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.2);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-dim: #475569;
+            --accent: #0284c7;
+            --accent-glow: rgba(2, 132, 199, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+        h1, h2, h3 {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        #themeToggle {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            padding: 0.75rem 1.25rem;
+            border-radius: 100px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        header {
+            margin-bottom: 4rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .back-link:hover {
+            transform: translateX(-5px);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(to right, var(--text-main), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            max-width: 600px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .content-card {
+            background-color: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .content-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px -15px var(--accent-glow);
+        }
+
+        .card-tag {
+            background: var(--accent-glow);
+            color: var(--accent);
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-card h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-card p {
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+            flex-grow: 1;
+        }
+
+        .card-action {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .content-card.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            filter: grayscale(0.5);
+        }
+
+        .content-card.disabled:hover {
+            transform: none;
+            border-color: rgba(255, 255, 255, 0.05);
+            box-shadow: none;
+        }
+
+        .badge-soon {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .container { padding: 2rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <button id="themeToggle">☀️ Modo Claro</button>
+
+    <div class="container">
+        <header>
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                Regresar al Hub Principal
+            </a>
+            <h1>Módulo 2: Estructura y Diseño</h1>
+            <p class="subtitle">Dominando estructuras modernas, especificidad de selectores y maquetación profesional.</p>
+        </header>
+
+        <main class="content-grid">
+            <!-- 1. CSS Fundamentals Lab -->
+            <a href="css/aplicando-css.html" class="content-card border-amber-500/20">
+                <div>
+                    <span class="card-tag">Paso 01</span>
+                    <h2 class="text-amber-500">Fundamentos y Cascada</h2>
+                    <p>Entiende la estructura de las reglas CSS y el poder de la jerarquía (Inline vs Internal vs External).</p>
+                </div>
+                <div class="card-action text-amber-500">
+                    Iniciar Fundamentos <span>&rarr;</span>
+                </div>
+            </a>
+
+            <!-- 2. Selector Battle (Specificity) -->
+            <a href="clase2-1.html" class="content-card border-sky-500/20">
+                <div>
+                    <span class="card-tag">Paso 02</span>
+                    <h2 class="text-sky-400">Especificidad CSS</h2>
+                    <p>Un simulador de combate táctico para entender la jerarquía, el peso de los selectores y la prioridad en el DOM.</p>
+                </div>
+                <div class="card-action text-sky-400">
+                    Iniciar Desafío <span>&rarr;</span>
+                </div>
+            </a>
+
+            <!-- 3. Box Model Lab -->
+            <a href="css/modelo-de-caja.html" class="content-card">
+                <div>
+                    <span class="card-tag">Paso 03</span>
+                    <h2>El Modelo de Caja</h2>
+                    <p>Explora cómo el Padding, Border y Margin afectan el tamaño real de tus componentes en pantalla.</p>
+                </div>
+                <div class="card-action">
+                    Iniciar Experimento <span>&rarr;</span>
+                </div>
+            </a>
+
+            <!-- 4. Units Lab -->
+            <a href="css/unidades-de-medida.html" class="content-card">
+                <div>
+                    <span class="card-tag">Paso 04</span>
+                    <h2>Unidades de Medida</h2>
+                    <p>Compara px, %, rem y vh/vw en tiempo real para entender la responsividad y accesibilidad.</p>
+                </div>
+                <div class="card-action">
+                    Ver Comparativa <span>&rarr;</span>
+                </div>
+            </a>
+
+            <!-- 5. Flexbox Lab -->
+            <a href="css/flexbox-playground.html" class="content-card">
+                <div>
+                    <span class="card-tag">Paso 05</span>
+                    <h2>Flexbox Avanzado</h2>
+                    <p>Visualiza y domina los ejes principal y secundario. Manipula el contenedor y sus hijos en un entorno controlado.</p>
+                </div>
+                <div class="card-action">
+                    Dominar Flexbox <span>&rarr;</span>
+                </div>
+            </a>
+
+        </main>
+    </div>
+
+    <script>
+        const toggleBtn = document.getElementById('themeToggle');
+        const root = document.documentElement;
+
+        // Persistencia del tema
+        if (localStorage.getItem('theme') === 'light') {
+            root.setAttribute('data-theme', 'light');
+            toggleBtn.innerHTML = '🌙 Modo Oscuro';
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            if (root.getAttribute('data-theme') === 'light') {
+                root.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'dark');
+                toggleBtn.innerHTML = '☀️ Modo Claro';
+            } else {
+                root.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                toggleBtn.innerHTML = '🌙 Modo Oscuro';
+            }
+        });
+    </script>
+</body>
+</html>

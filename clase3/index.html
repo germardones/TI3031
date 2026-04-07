@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 3 | Flujos de Trabajo e IA</title>
+    <meta name="description" content="Aprende control de versiones con Git y cómo integrar GitHub Copilot en tu flujo de desarrollo web.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --accent: #a78bfa;
+            --accent-glow: rgba(167, 139, 250, 0.2);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-dim: #475569;
+            --accent: #7c3aed;
+            --accent-glow: rgba(124, 58, 237, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+        h1, h2, h3 { font-family: 'Outfit', sans-serif; }
+
+        #themeToggle {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            padding: 0.75rem 1.25rem;
+            border-radius: 100px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        header { margin-bottom: 4rem; }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .back-link:hover { transform: translateX(-5px); }
+
+        h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(to right, var(--text-main), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            max-width: 600px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .content-card {
+            background-color: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .content-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px -15px var(--accent-glow);
+        }
+
+        .card-tag {
+            background: var(--accent-glow);
+            color: var(--accent);
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-card h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-card p {
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+            flex-grow: 1;
+        }
+
+        .card-topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .topic-pill {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 100px;
+            padding: 0.2rem 0.7rem;
+            font-size: 0.72rem;
+            color: var(--text-dim);
+        }
+
+        [data-theme="light"] .topic-pill {
+            background: rgba(0,0,0,0.04);
+            border-color: rgba(0,0,0,0.08);
+        }
+
+        .card-action {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--accent);
+            transition: gap 0.3s;
+        }
+
+        .content-card:hover .card-action { gap: 0.9rem; }
+
+        /* Overrides por tarjeta */
+        .card-git {
+            --accent: #f97316;
+            --accent-glow: rgba(249, 115, 22, 0.18);
+        }
+
+        .card-copilot {
+            --accent: #818cf8;
+            --accent-glow: rgba(129, 140, 248, 0.18);
+        }
+
+        [data-theme="light"] h1 {
+            background-image: linear-gradient(to right, #0f172a, #7c3aed) !important;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .container { padding: 2rem 1.5rem; }
+            .content-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <button id="themeToggle">☀️ Modo Claro</button>
+
+    <div class="container">
+        <header>
+            <a href="../index.html" class="back-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                Regresar al Hub Principal
+            </a>
+            <h1>Módulo 3: Flujos de Trabajo e IA</h1>
+            <p class="subtitle">Domina las herramientas que usan los desarrolladores profesionales: control de versiones con Git y la aceleración del desarrollo con Inteligencia Artificial.</p>
+        </header>
+
+        <main class="content-grid">
+            <!-- Git -->
+            <a href="git/index.html" class="content-card card-git">
+                <div>
+                    <span class="card-tag">Clase 3.1</span>
+                    <h2 style="color:#f97316;">Herramienta de Control de Versiones Git</h2>
+                    <p>Aprende a gestionar el historial de tu código, trabajar con ramas, resolver conflictos y colaborar con equipos usando el estándar de la industria.</p>
+                    <div class="card-topics">
+                        <span class="topic-pill">git init</span>
+                        <span class="topic-pill">Commits</span>
+                        <span class="topic-pill">Branches</span>
+                        <span class="topic-pill">Merge</span>
+                        <span class="topic-pill">GitHub</span>
+                    </div>
+                </div>
+                <div class="card-action" style="color:#f97316;">
+                    Comenzar con Git <span>&rarr;</span>
+                </div>
+            </a>
+
+            <!-- Copilot -->
+            <a href="copilot/index.html" class="content-card card-copilot">
+                <div>
+                    <span class="card-tag" style="background:rgba(129,140,248,0.15); color:#818cf8;">Clase 3.2</span>
+                    <h2 style="color:#818cf8;">Introducción al uso de IA en el Desarrollo Web</h2>
+                    <p>Descubre cómo GitHub Copilot transforma tu flujo de trabajo: acepta sugerencias, genera código desde comentarios y aprende a comunicarte eficientemente con la IA.</p>
+                    <div class="card-topics">
+                        <span class="topic-pill">GitHub Copilot</span>
+                        <span class="topic-pill">Prompt Engineering</span>
+                        <span class="topic-pill">Chat IA</span>
+                        <span class="topic-pill">Atajos</span>
+                    </div>
+                </div>
+                <div class="card-action" style="color:#818cf8;">
+                    Explorar con Copilot <span>&rarr;</span>
+                </div>
+            </a>
+
+            <!-- Fundamentos IA -->
+            <a href="fundamentos-ia/index.html" class="content-card card-ia-fund">
+                <div>
+                    <span class="card-tag" style="background:rgba(45,212,191,0.15); color:#2dd4bf;">Clase 3.3</span>
+                    <h2 style="color:#2dd4bf;">Fundamentos de Inteligencia Artificial</h2>
+                    <p>Comprende cómo funcionan los modelos de lenguaje, qué son los tokens, los agentes, el protocolo MCP, las alucinaciones y cómo orquestar herramientas de IA en tu flujo de trabajo.</p>
+                    <div class="card-topics">
+                        <span class="topic-pill">LLM</span>
+                        <span class="topic-pill">Tokens</span>
+                        <span class="topic-pill">MCP</span>
+                        <span class="topic-pill">Agentes</span>
+                        <span class="topic-pill">Alucinaciones</span>
+                        <span class="topic-pill">Orquestadores</span>
+                    </div>
+                </div>
+                <div class="card-action" style="color:#2dd4bf;">
+                    Explorar Fundamentos <span>&rarr;</span>
+                </div>
+            </a>
+        </main>
+    </div>
+
+    <script>
+        const toggleBtn = document.getElementById('themeToggle');
+        const root = document.documentElement;
+
+        if (localStorage.getItem('theme') === 'light') {
+            root.setAttribute('data-theme', 'light');
+            toggleBtn.innerHTML = '🌙 Modo Oscuro';
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            if (root.getAttribute('data-theme') === 'light') {
+                root.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'dark');
+                toggleBtn.innerHTML = '☀️ Modo Claro';
+            } else {
+                root.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                toggleBtn.innerHTML = '🌙 Modo Oscuro';
+            }
+        });
+    </script>
+</body>
+</html>

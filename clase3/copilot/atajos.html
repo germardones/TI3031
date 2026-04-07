@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atajos de Teclado Copilot | Referencia Visual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #0f172a; --card-bg: rgba(30,41,59,0.7); --accent: #818cf8; --text-main: #f8fafc; --transition: all 0.3s ease; }
+        [data-theme="light"] { --bg-color: #f8fafc; --card-bg: rgba(255,255,255,0.85); --text-main: #0f172a; --accent: #4f46e5; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); min-height: 100vh; }
+        .glass-panel { background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; }
+        [data-theme="light"] .glass-panel { border-color: rgba(0,0,0,0.06); box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05); }
+        #themeToggle { position: fixed; top: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); padding: 0.75rem 1.5rem; border-radius: 100px; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; }
+        .kbd { background: rgba(255,255,255,0.07); border: 1.5px solid rgba(255,255,255,0.15); border-bottom-width: 3px; border-radius: 7px; padding: 4px 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 600; color: #818cf8; display: inline-block; transition: all 0.15s; }
+        [data-theme="light"] .kbd { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.18); }
+        .shortcut-row { transition: all 0.2s; }
+        .shortcut-row:hover { background: rgba(129,140,248,0.07); }
+        .shortcut-row:hover .kbd { background: rgba(129,140,248,0.2); border-color: rgba(129,140,248,0.5); transform: translateY(-1px); }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
+        .animate-in { animation: fadeIn 0.5s ease both; }
+        .prog-item { cursor: pointer; transition: all 0.2s; }
+        .prog-item:hover { background: rgba(129,140,248,0.08); border-radius: 12px; }
+        .prog-item.done .check { opacity:1; }
+        .check { opacity:0; transition: opacity 0.3s; color: #34d399; }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+
+    <button id="themeToggle">☀️ Modo Claro</button>
+
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-12 animate-in">
+            <nav class="mb-4">
+                <a href="index.html" class="text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-2 transition-colors w-fit">
+                    &larr; Volver a Clase 3.2 — IA
+                </a>
+            </nav>
+            <div class="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-2">Paso 05 · Productividad</div>
+            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-indigo-400 bg-clip-text text-transparent">
+                Atajos de Teclado
+            </h1>
+            <p class="text-slate-400 text-lg mt-3 max-w-xl">Memoriza estos atajos para trabajar con GitHub Copilot sin interrumpir tu flujo. Haz clic en los que ya dominas.</p>
+        </header>
+
+        <main class="space-y-10">
+
+            <!-- PROGRESO -->
+            <section class="glass-panel p-6 animate-in" style="animation-delay:0.05s">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm font-semibold text-slate-400">Atajos aprendidos</span>
+                    <span id="progressLabel" class="text-sm font-bold text-indigo-400">0 / 8</span>
+                </div>
+                <div class="h-2.5 bg-white/5 rounded-full overflow-hidden">
+                    <div id="progressBar" class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-500" style="width:0%"></div>
+                </div>
+            </section>
+
+            <!-- ATAJOS SUGERENCIAS -->
+            <section class="animate-in" style="animation-delay:0.1s">
+                <h2 class="text-xl font-bold mb-4 text-indigo-400">Gestión de Sugerencias</h2>
+                <div class="glass-panel overflow-hidden">
+                    <div id="shortcutList1" class="divide-y divide-white/5"></div>
+                </div>
+            </section>
+
+            <!-- ATAJOS CHAT -->
+            <section class="animate-in" style="animation-delay:0.2s">
+                <h2 class="text-xl font-bold mb-4 text-purple-400">Chat y Edición con IA</h2>
+                <div class="glass-panel overflow-hidden">
+                    <div id="shortcutList2" class="divide-y divide-white/5"></div>
+                </div>
+            </section>
+
+            <!-- EXTRA: COMANDOS SLASH -->
+            <section class="glass-panel p-8 animate-in" style="animation-delay:0.3s">
+                <h2 class="text-xl font-bold mb-4">Comandos Slash en el Chat</h2>
+                <p class="text-slate-400 text-sm mb-5">Dentro del panel de chat de Copilot puedes escribir comandos especiales que activan acciones predefinidas:</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div class="bg-slate-800/50 rounded-xl p-4 flex items-start gap-3">
+                        <code class="text-indigo-400 font-mono font-bold text-sm bg-indigo-400/10 px-2 py-0.5 rounded">/explain</code>
+                        <p class="text-slate-400 text-sm">Explica el código seleccionado en detalle</p>
+                    </div>
+                    <div class="bg-slate-800/50 rounded-xl p-4 flex items-start gap-3">
+                        <code class="text-indigo-400 font-mono font-bold text-sm bg-indigo-400/10 px-2 py-0.5 rounded">/fix</code>
+                        <p class="text-slate-400 text-sm">Detecta y corrige errores en el código seleccionado</p>
+                    </div>
+                    <div class="bg-slate-800/50 rounded-xl p-4 flex items-start gap-3">
+                        <code class="text-indigo-400 font-mono font-bold text-sm bg-indigo-400/10 px-2 py-0.5 rounded">/tests</code>
+                        <p class="text-slate-400 text-sm">Genera casos de prueba para la función seleccionada</p>
+                    </div>
+                    <div class="bg-slate-800/50 rounded-xl p-4 flex items-start gap-3">
+                        <code class="text-indigo-400 font-mono font-bold text-sm bg-indigo-400/10 px-2 py-0.5 rounded">/doc</code>
+                        <p class="text-slate-400 text-sm">Agrega documentación JSDoc al código seleccionado</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        const shortcuts1 = [
+            { desc: 'Aceptar sugerencia completa', keys: ['Tab'] },
+            { desc: 'Rechazar sugerencia', keys: ['Esc'] },
+            { desc: 'Aceptar palabra a palabra', keys: ['Ctrl', '→'] },
+            { desc: 'Ver sugerencia siguiente', keys: ['Alt', ']'] },
+            { desc: 'Ver sugerencia anterior', keys: ['Alt', '['] },
+            { desc: 'Ver todas las alternativas', keys: ['Ctrl', 'Enter'] },
+        ];
+
+        const shortcuts2 = [
+            { desc: 'Abrir panel de Chat (Copilot)', keys: ['Ctrl', 'Shift', 'I'] },
+            { desc: 'Edición en línea con prompt', keys: ['Ctrl', 'I'] },
+        ];
+
+        let learned = new Set();
+        const total = shortcuts1.length + shortcuts2.length;
+
+        function renderShortcuts(list, targetId) {
+            const container = document.getElementById(targetId);
+            list.forEach((s, i) => {
+                const id = `${targetId}-${i}`;
+                const row = document.createElement('div');
+                row.className = 'shortcut-row prog-item flex items-center justify-between px-6 py-4';
+                row.id = id;
+                row.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="check text-lg font-bold">+</span>
+                        <span class="text-sm text-slate-300">${s.desc}</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        ${s.keys.map(k => `<span class="kbd">${k}</span>`).join('<span class="text-slate-600 text-xs">+</span>')}
+                    </div>`;
+                row.onclick = () => {
+                    row.classList.toggle('done');
+                    if (row.classList.contains('done')) learned.add(id);
+                    else learned.delete(id);
+                    updateProgress();
+                };
+                container.appendChild(row);
+            });
+        }
+
+        function updateProgress() {
+            const pct = Math.round((learned.size / total) * 100);
+            document.getElementById('progressBar').style.width = pct + '%';
+            document.getElementById('progressLabel').textContent = `${learned.size} / ${total}`;
+        }
+
+        renderShortcuts(shortcuts1, 'shortcutList1');
+        renderShortcuts(shortcuts2, 'shortcutList2');
+
+        const themeBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        themeBtn.addEventListener('click', () => {
+            if (html.getAttribute('data-theme') === 'light') { html.removeAttribute('data-theme'); localStorage.setItem('theme', 'dark'); themeBtn.innerHTML = '☀️ Modo Claro'; }
+            else { html.setAttribute('data-theme', 'light'); localStorage.setItem('theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        });
+    </script>
+</body>
+</html>

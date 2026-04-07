@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ramas y Branching | Git Visual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #0f172a; --card-bg: rgba(30,41,59,0.7); --accent: #f97316; --text-main: #f8fafc; --transition: all 0.3s ease; }
+        [data-theme="light"] { --bg-color: #f8fafc; --card-bg: rgba(255,255,255,0.85); --text-main: #0f172a; --accent: #ea580c; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); min-height: 100vh; }
+        .glass-panel { background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; }
+        [data-theme="light"] .glass-panel { border-color: rgba(0,0,0,0.06); box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05); }
+        #themeToggle { position: fixed; top: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); padding: 0.75rem 1.5rem; border-radius: 100px; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; }
+        .commit-node { width: 20px; height: 20px; border-radius: 50%; border: 2.5px solid; cursor: pointer; transition: all 0.25s; flex-shrink: 0; position: relative; display: flex; align-items: center; justify-content: center; }
+        .commit-node:hover { transform: scale(1.4); }
+        .commit-node .tip { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: #1e293b; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 4px 10px; font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; color: #f8fafc; z-index: 10; }
+        .commit-node:hover .tip { opacity: 1; }
+        .branch-line { height: 2.5px; flex: 1; min-width: 20px; }
+        .branch-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; padding: 2px 10px; border-radius: 100px; font-weight: 700; flex-shrink: 0; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
+        .animate-in { animation: fadeIn 0.5s ease both; }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+
+    <button id="themeToggle">☀️ Modo Claro</button>
+
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-12 animate-in">
+            <nav class="mb-4">
+                <a href="index.html" class="text-orange-400 hover:text-orange-300 font-semibold flex items-center gap-2 transition-colors w-fit">
+                    &larr; Volver a Clase 3.1 — Git
+                </a>
+            </nav>
+            <div class="text-orange-500 text-xs font-bold uppercase tracking-widest mb-2">Paso 04 · Ramas</div>
+            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-orange-400 bg-clip-text text-transparent">
+                Ramas y Branching
+            </h1>
+            <p class="text-slate-400 text-lg mt-3 max-w-xl">Las ramas permiten trabajar en paralelo sin tocar el código estable. Pasa el cursor sobre cada commit.</p>
+        </header>
+
+        <main class="space-y-10">
+
+            <!-- CONCEPTO -->
+            <section class="glass-panel p-8 animate-in" style="animation-delay:0.1s">
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                    <span class="p-2 bg-orange-500/20 rounded-lg text-orange-400"></span>
+                    ¿Por qué usar ramas?
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                    <div class="bg-green-500/5 border border-green-500/20 rounded-xl p-4">
+                        <h3 class="text-green-400 font-bold mb-2">Con Ramas</h3>
+                        <ul class="space-y-1 text-slate-400">
+                            <li>• El código en <code class="text-green-400 bg-green-400/10 px-1 rounded">main</code> siempre funciona</li>
+                            <li>• Experimenta sin miedo</li>
+                            <li>• Trabaja en múltiples features</li>
+                            <li>• Revisión antes de fusionar</li>
+                        </ul>
+                    </div>
+                    <div class="bg-red-500/5 border border-red-500/20 rounded-xl p-4">
+                        <h3 class="text-red-400 font-bold mb-2">Sin Ramas</h3>
+                        <ul class="space-y-1 text-slate-400">
+                            <li>• Código roto en producción</li>
+                            <li>• No puedes probar ideas</li>
+                            <li>• Conflictos constantes en equipo</li>
+                            <li>• Todo o nada al subir cambios</li>
+                        </ul>
+                    </div>
+                    <div class="bg-orange-500/5 border border-orange-500/20 rounded-xl p-4">
+                        <h3 class="text-orange-400 font-bold mb-2">Flujo Típico</h3>
+                        <ul class="space-y-1 text-slate-400">
+                            <li>1. Crea rama <code class="text-orange-400 bg-orange-400/10 px-1 rounded">feature/x</code></li>
+                            <li>2. Trabaja y haz commits</li>
+                            <li>3. Abre Pull Request</li>
+                            <li>4. Revisión → Merge a main</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VISUALIZADOR -->
+            <section class="glass-panel p-8 animate-in" style="animation-delay:0.2s">
+                <h2 class="text-2xl font-bold mb-6">Historial Visual de Ramas</h2>
+                <div class="bg-slate-900 rounded-xl p-6 overflow-x-auto border border-white/5">
+
+                    <!-- main -->
+                    <div class="flex items-center gap-0 mb-4">
+                        <div class="commit-node border-green-400 bg-slate-900"><div class="tip">init: proyecto inicial</div></div>
+                        <div class="branch-line bg-green-400"></div>
+                        <div class="commit-node border-green-400 bg-slate-900"><div class="tip">feat: estructura base HTML</div></div>
+                        <div class="branch-line bg-green-400"></div>
+                        <div class="commit-node border-green-400 bg-slate-900"><div class="tip">merge: feature/navbar -&gt; main (OK)</div></div>
+                        <div class="branch-line bg-green-400"></div>
+                        <div class="commit-node border-green-400 bg-slate-900"><div class="tip">merge: feature/footer -&gt; main (OK)</div></div>
+                        <div class="branch-line bg-green-400"></div>
+                        <div class="commit-node border-green-400 bg-green-400/20"><div class="tip">chore: deploy v1.0</div></div>
+                        <div class="branch-line bg-green-400/30"></div>
+                        <span class="branch-tag bg-green-400/15 text-green-400 border border-green-400/30">main</span>
+                    </div>
+
+                    <!-- feature/navbar -->
+                    <div class="flex items-center gap-0 mb-4" style="padding-left: 78px;">
+                        <div class="commit-node border-blue-400 bg-slate-900"><div class="tip">feat: crea componente navbar</div></div>
+                        <div class="branch-line bg-blue-400"></div>
+                        <div class="commit-node border-blue-400 bg-slate-900"><div class="tip">style: responsive en móvil</div></div>
+                        <div class="branch-line bg-blue-400/30" style="flex:2;"></div>
+                        <span class="branch-tag bg-blue-400/15 text-blue-400 border border-blue-400/30">feature/navbar</span>
+                    </div>
+
+                    <!-- feature/footer -->
+                    <div class="flex items-center gap-0" style="padding-left: 178px;">
+                        <div class="commit-node border-purple-400 bg-slate-900"><div class="tip">feat: footer con links sociales</div></div>
+                        <div class="branch-line bg-purple-400"></div>
+                        <div class="commit-node border-purple-400 bg-slate-900"><div class="tip">fix: corrige email en footer</div></div>
+                        <div class="branch-line bg-purple-400/30" style="flex:1;"></div>
+                        <span class="branch-tag bg-purple-400/15 text-purple-400 border border-purple-400/30">feature/footer</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- COMANDOS DE RAMAS -->
+            <section class="animate-in" style="animation-delay:0.3s">
+                <h2 class="text-2xl font-bold mb-6 flex items-center gap-4">
+                    Comandos de Ramas
+                    <div class="h-px flex-grow bg-white/10"></div>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="glass-panel p-6 space-y-3 font-mono text-sm">
+                        <div class="text-xs font-sans font-bold text-orange-400 uppercase tracking-wider mb-4">Crear y Navegar</div>
+                        <div><span class="text-green-400">$</span> <span class="text-white">git branch</span> <span class="text-slate-500"># listar ramas</span></div>
+                        <div><span class="text-green-400">$</span> <span class="text-white">git branch</span> <span class="text-yellow-400">feature/login</span> <span class="text-slate-500"># crear</span></div>
+                        <div><span class="text-green-400">$</span> <span class="text-white">git checkout</span> <span class="text-yellow-400">feature/login</span> <span class="text-slate-500"># cambiar</span></div>
+                        <div><span class="text-green-400">$</span> <span class="text-white">git checkout</span> <span class="text-blue-400">-b</span> <span class="text-yellow-400">feature/x</span> <span class="text-slate-500"># crear+cambiar</span></div>
+                    </div>
+                    <div class="glass-panel p-6 space-y-3 font-mono text-sm">
+                        <div class="text-xs font-sans font-bold text-orange-400 uppercase tracking-wider mb-4">Fusionar y Eliminar</div>
+                        <div><span class="text-green-400">$</span> <span class="text-white">git checkout</span> <span class="text-yellow-400">main</span> <span class="text-slate-500"># volver a main</span></div>
+                        <div><span class="text-green-400">$</span> <span class="text-white">git merge</span> <span class="text-yellow-400">feature/login</span> <span class="text-slate-500"># fusionar</span></div>
+                        <div><span class="text-green-400">$</span> <span class="text-white">git branch</span> <span class="text-blue-400">-d</span> <span class="text-yellow-400">feature/login</span> <span class="text-slate-500"># eliminar</span></div>
+                        <div><span class="text-green-400">$</span> <span class="text-white">git branch</span> <span class="text-blue-400">-a</span> <span class="text-slate-500"># ver todas (locales+remotas)</span></div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        const themeBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        themeBtn.addEventListener('click', () => {
+            if (html.getAttribute('data-theme') === 'light') { html.removeAttribute('data-theme'); localStorage.setItem('theme', 'dark'); themeBtn.innerHTML = '☀️ Modo Claro'; }
+            else { html.setAttribute('data-theme', 'light'); localStorage.setItem('theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        });
+    </script>
+</body>
+</html>

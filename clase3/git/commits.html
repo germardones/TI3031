@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conventional Commits | Estándar Profesional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #0f172a; --card-bg: rgba(30,41,59,0.7); --accent: #f97316; --text-main: #f8fafc; --transition: all 0.3s ease; }
+        [data-theme="light"] { --bg-color: #f8fafc; --card-bg: rgba(255,255,255,0.85); --text-main: #0f172a; --accent: #ea580c; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); min-height: 100vh; }
+        .glass-panel { background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; }
+        [data-theme="light"] .glass-panel { border-color: rgba(0,0,0,0.06); box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05); }
+        #themeToggle { position: fixed; top: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); padding: 0.75rem 1.5rem; border-radius: 100px; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; }
+        .type-btn { transition: all 0.2s; cursor: pointer; border: 2px solid transparent; }
+        .type-btn:hover { transform: translateY(-2px); }
+        .type-btn.selected { transform: scale(1.05); }
+        .commit-preview { font-family: 'JetBrains Mono', monospace; }
+        input.commit-input { background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); color: white; font-family: 'JetBrains Mono', monospace; transition: all 0.2s; }
+        input.commit-input:focus { outline: none; border-color: #f97316; box-shadow: 0 0 0 3px rgba(249,115,22,0.15); }
+        [data-theme="light"] input.commit-input { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.1); color: #0f172a; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
+        .animate-in { animation: fadeIn 0.5s ease both; }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+
+    <button id="themeToggle">☀️ Modo Claro</button>
+
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-12 animate-in">
+            <nav class="mb-4">
+                <a href="index.html" class="text-orange-400 hover:text-orange-300 font-semibold flex items-center gap-2 transition-colors w-fit">
+                    &larr; Volver a Clase 3.1 — Git
+                </a>
+            </nav>
+            <div class="text-orange-500 text-xs font-bold uppercase tracking-widest mb-2">Paso 05 · Buenas Prácticas</div>
+            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-orange-400 bg-clip-text text-transparent">
+                Conventional Commits
+            </h1>
+            <p class="text-slate-400 text-lg mt-3 max-w-xl">El estándar que hace tu historial legible para humanos y máquinas. Construye un commit perfecto paso a paso.</p>
+        </header>
+
+        <main class="space-y-10">
+
+            <!-- CONSTRUCTROR -->
+            <section class="glass-panel p-8 animate-in" style="animation-delay:0.1s">
+                <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                    <span class="p-2 bg-orange-500/20 rounded-lg text-orange-400"></span>
+                    Constructor de Commits
+                </h2>
+
+                <!-- Tipos -->
+                <div class="mb-6">
+                    <label class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 block">1. Elige el tipo</label>
+                    <div class="grid grid-cols-3 md:grid-cols-6 gap-2" id="typeGrid"></div>
+                </div>
+
+                <!-- Scope y descripción -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 block">2. Scope (opcional)</label>
+                        <input id="scopeInput" type="text" placeholder="navbar, footer, auth..." class="commit-input w-full px-4 py-2.5 rounded-lg text-sm" oninput="updatePreview()">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 block">3. Descripción corta</label>
+                        <input id="descInput" type="text" placeholder="agrega formulario de contacto" class="commit-input w-full px-4 py-2.5 rounded-lg text-sm" oninput="updatePreview()">
+                    </div>
+                </div>
+
+                <!-- Preview -->
+                <div class="bg-slate-900 rounded-xl p-5 border border-orange-400/20">
+                    <div class="text-xs text-slate-500 mb-2 uppercase tracking-widest">Previsualización del commit</div>
+                    <div class="commit-preview text-sm">
+                        <span class="text-green-400">$ </span>
+                        <span class="text-white">git commit -m "</span>
+                        <span id="previewType" class="text-orange-400">feat</span>
+                        <span id="previewScope" class="text-yellow-400"></span>
+                        <span class="text-white">: </span>
+                        <span id="previewDesc" class="text-slate-300">tu descripción aquí</span>
+                        <span class="text-white">"</span>
+                    </div>
+                </div>
+
+                <!-- Validación -->
+                <div id="validation" class="mt-3 text-xs text-slate-500"></div>
+            </section>
+
+            <!-- TABLA DE TIPOS -->
+            <section class="glass-panel p-8 animate-in" style="animation-delay:0.2s">
+                <h2 class="text-xl font-bold mb-6">Referencia de Tipos</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-white/10">
+                                <th class="text-left py-3 px-4 text-xs uppercase tracking-wider text-slate-500 font-bold">Tipo</th>
+                                <th class="text-left py-3 px-4 text-xs uppercase tracking-wider text-slate-500 font-bold">Cuándo usarlo</th>
+                                <th class="text-left py-3 px-4 text-xs uppercase tracking-wider text-slate-500 font-bold">Ejemplo</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5">
+                            <tr class="hover:bg-white/2 transition-colors"><td class="py-3 px-4 font-mono text-green-400 font-bold">feat:</td><td class="py-3 px-4 text-slate-400">Nueva funcionalidad visible al usuario</td><td class="py-3 px-4 font-mono text-xs text-slate-500">feat(auth): agrega login con Google</td></tr>
+                            <tr class="hover:bg-white/2 transition-colors"><td class="py-3 px-4 font-mono text-red-400 font-bold">fix:</td><td class="py-3 px-4 text-slate-400">Corrección de un bug</td><td class="py-3 px-4 font-mono text-xs text-slate-500">fix(navbar): corrige link roto en mobile</td></tr>
+                            <tr class="hover:bg-white/2 transition-colors"><td class="py-3 px-4 font-mono text-blue-400 font-bold">style:</td><td class="py-3 px-4 text-slate-400">CSS/formato, sin cambio funcional</td><td class="py-3 px-4 font-mono text-xs text-slate-500">style: aplica dark mode al header</td></tr>
+                            <tr class="hover:bg-white/2 transition-colors"><td class="py-3 px-4 font-mono text-yellow-400 font-bold">docs:</td><td class="py-3 px-4 text-slate-400">Documentación únicamente</td><td class="py-3 px-4 font-mono text-xs text-slate-500">docs: actualiza instrucciones en README</td></tr>
+                            <tr class="hover:bg-white/2 transition-colors"><td class="py-3 px-4 font-mono text-purple-400 font-bold">refactor:</td><td class="py-3 px-4 text-slate-400">Reestructura sin cambiar comportamiento</td><td class="py-3 px-4 font-mono text-xs text-slate-500">refactor: extrae lógica de validación</td></tr>
+                            <tr class="hover:bg-white/2 transition-colors"><td class="py-3 px-4 font-mono text-pink-400 font-bold">test:</td><td class="py-3 px-4 text-slate-400">Agrega o modifica pruebas</td><td class="py-3 px-4 font-mono text-xs text-slate-500">test: agrega pruebas para formulario</td></tr>
+                            <tr class="hover:bg-white/2 transition-colors"><td class="py-3 px-4 font-mono text-slate-400 font-bold">chore:</td><td class="py-3 px-4 text-slate-400">Mantenimiento del proyecto</td><td class="py-3 px-4 font-mono text-xs text-slate-500">chore: actualiza dependencias npm</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- MALOS vs BUENOS -->
+            <section class="animate-in" style="animation-delay:0.3s">
+                <div class="flex items-center gap-4 mb-6">
+                    <h2 class="text-2xl font-bold">Buenos vs Malos Commits</h2>
+                    <div class="h-px flex-grow bg-white/10"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="glass-panel p-6 border-l-4 border-red-400">
+                        <h3 class="text-red-400 font-bold mb-4">Commits a Evitar</h3>
+                        <div class="space-y-2 font-mono text-sm">
+                            <div class="bg-red-400/10 rounded-lg px-3 py-2 text-red-300">"arregle cosas"</div>
+                            <div class="bg-red-400/10 rounded-lg px-3 py-2 text-red-300">"WIP"</div>
+                            <div class="bg-red-400/10 rounded-lg px-3 py-2 text-red-300">"no sé qué hice"</div>
+                            <div class="bg-red-400/10 rounded-lg px-3 py-2 text-red-300">"cambios"</div>
+                            <div class="bg-red-400/10 rounded-lg px-3 py-2 text-red-300">"actualice todo el navbar y el footer y el css y arrgle bugs"</div>
+                        </div>
+                    </div>
+                    <div class="glass-panel p-6 border-l-4 border-green-400">
+                        <h3 class="text-green-400 font-bold mb-4">Commits Profesionales</h3>
+                        <div class="space-y-2 font-mono text-sm">
+                            <div class="bg-green-400/10 rounded-lg px-3 py-2 text-green-300">feat(navbar): agrega menú hamburguesa</div>
+                            <div class="bg-green-400/10 rounded-lg px-3 py-2 text-green-300">fix: corrige desborde en pantallas &lt;375px</div>
+                            <div class="bg-green-400/10 rounded-lg px-3 py-2 text-green-300">style(footer): actualiza tipografía</div>
+                            <div class="bg-green-400/10 rounded-lg px-3 py-2 text-green-300">docs: agrega instrucciones de despliegue</div>
+                            <div class="bg-green-400/10 rounded-lg px-3 py-2 text-green-300">chore: actualiza dependencias a v3.2</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        const types = [
+            { label: 'feat', color: '#22c55e', bg: 'rgba(34,197,94,0.15)', desc: 'Nueva función' },
+            { label: 'fix', color: '#f87171', bg: 'rgba(248,113,113,0.15)', desc: 'Corrección' },
+            { label: 'style', color: '#60a5fa', bg: 'rgba(96,165,250,0.15)', desc: 'Estilo visual' },
+            { label: 'docs', color: '#fbbf24', bg: 'rgba(251,191,36,0.15)', desc: 'Documentación' },
+            { label: 'refactor', color: '#c084fc', bg: 'rgba(192,132,252,0.15)', desc: 'Reestructura' },
+            { label: 'chore', color: '#94a3b8', bg: 'rgba(148,163,184,0.15)', desc: 'Mantenimiento' },
+        ];
+
+        let selectedType = 'feat';
+        const typeGrid = document.getElementById('typeGrid');
+
+        types.forEach(t => {
+            const btn = document.createElement('div');
+            btn.className = `type-btn rounded-xl p-3 text-center`;
+            btn.style.cssText = `background:${t.bg}; border: 2px solid ${t.color}30;`;
+            btn.innerHTML = `<div class="font-mono font-bold text-sm" style="color:${t.color}">${t.label}</div><div class="text-xs text-slate-500 mt-1">${t.desc}</div>`;
+            if (t.label === 'feat') { btn.classList.add('selected'); btn.style.borderColor = t.color; }
+            btn.onclick = () => {
+                document.querySelectorAll('.type-btn').forEach((b, i) => { b.classList.remove('selected'); b.style.borderColor = types[i].color + '30'; });
+                btn.classList.add('selected');
+                btn.style.borderColor = t.color;
+                selectedType = t.label;
+                updatePreview();
+            };
+            typeGrid.appendChild(btn);
+        });
+
+        function updatePreview() {
+            const scope = document.getElementById('scopeInput').value.trim();
+            const desc = document.getElementById('descInput').value.trim();
+            document.getElementById('previewType').textContent = selectedType;
+            document.getElementById('previewScope').textContent = scope ? `(${scope})` : '';
+            document.getElementById('previewDesc').textContent = desc || 'tu descripción aquí';
+
+            const chars = (selectedType + (scope ? `(${scope})` : '') + ': ' + desc).length;
+            const val = document.getElementById('validation');
+            if (!desc) { val.innerHTML = ''; return; }
+            if (chars > 72) { val.innerHTML = `<span class="text-red-400">El mensaje es demasiado largo (${chars} chars). Idealmente &lt; 72.</span>`; }
+            else if (desc[0] === desc[0].toUpperCase() && desc[0] !== desc[0].toLowerCase()) { val.innerHTML = `<span class="text-yellow-400">Empieza la descripción con minúscula, es la convención.</span>`; }
+            else { val.innerHTML = `<span class="text-green-400">Buen commit! (${chars} caracteres)</span>`; }
+        }
+
+        const themeBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        themeBtn.addEventListener('click', () => {
+            if (html.getAttribute('data-theme') === 'light') { html.removeAttribute('data-theme'); localStorage.setItem('theme', 'dark'); themeBtn.innerHTML = '☀️ Modo Claro'; }
+            else { html.setAttribute('data-theme', 'light'); localStorage.setItem('theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Cómo funciona la IA? | Fundamentos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #0f172a; --card-bg: rgba(30,41,59,0.7); --accent: #2dd4bf; --text-main: #f8fafc; --transition: all 0.3s ease; }
+        [data-theme="light"] { --bg-color: #f8fafc; --card-bg: rgba(255,255,255,0.85); --text-main: #0f172a; --accent: #0d9488; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); min-height: 100vh; }
+        .glass-panel { background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; }
+        [data-theme="light"] .glass-panel { border-color: rgba(0,0,0,0.06); box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05); }
+        #themeToggle { position: fixed; top: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); padding: 0.75rem 1.5rem; border-radius: 100px; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
+        .animate-in { animation: fadeIn 0.5s ease both; }
+        .step-btn { cursor: pointer; transition: all 0.25s; border: 1.5px solid rgba(45,212,191,0.2); }
+        .step-btn:hover { background: rgba(45,212,191,0.1); border-color: rgba(45,212,191,0.5); }
+        .step-btn.active { background: rgba(45,212,191,0.15); border-color: #2dd4bf; }
+        .neuron { width: 18px; height: 18px; border-radius: 50%; background: rgba(45,212,191,0.3); border: 2px solid #2dd4bf; flex-shrink: 0; }
+        .neuron.active { background: #2dd4bf; box-shadow: 0 0 10px rgba(45,212,191,0.6); }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+    <button id="themeToggle">☀️ Modo Claro</button>
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-12 animate-in">
+            <nav class="mb-4">
+                <a href="index.html" class="text-teal-400 hover:text-teal-300 font-semibold flex items-center gap-2 transition-colors w-fit">&larr; Volver a Fundamentos de IA</a>
+            </nav>
+            <div class="text-teal-400 text-xs font-bold uppercase tracking-widest mb-2">Módulo 01 · Fundamentos</div>
+            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-teal-400 bg-clip-text text-transparent">Cómo funciona la IA</h1>
+            <p class="text-slate-400 text-lg mt-3 max-w-xl">De las neuronas biológicas a los transformers: el camino que llevó a los modelos modernos de lenguaje.</p>
+        </header>
+        <main class="space-y-10">
+
+            <!-- PASOS INTERACTIVOS -->
+            <section class="animate-in" style="animation-delay:0.1s">
+                <div class="flex flex-wrap gap-3 mb-6">
+                    <button class="step-btn active rounded-xl px-4 py-2 text-sm font-semibold" onclick="showStep(0)">Redes Neuronales</button>
+                    <button class="step-btn rounded-xl px-4 py-2 text-sm font-semibold" onclick="showStep(1)">Entrenamiento</button>
+                    <button class="step-btn rounded-xl px-4 py-2 text-sm font-semibold" onclick="showStep(2)">Transformer</button>
+                    <button class="step-btn rounded-xl px-4 py-2 text-sm font-semibold" onclick="showStep(3)">Prediccion de texto</button>
+                </div>
+                <div id="stepContent" class="glass-panel p-8 min-h-[240px]"></div>
+            </section>
+
+            <!-- ANALOGIA -->
+            <section class="glass-panel p-8 border-l-4 border-teal-400 animate-in" style="animation-delay:0.2s">
+                <h2 class="text-xl font-bold mb-4 text-teal-400">La Analogia del Autocomplete</h2>
+                <p class="text-slate-400 leading-relaxed">Piensa en el autocomplete de tu celular: aprende cómo escribes y sugiere la siguiente palabra. Un LLM es exactamente eso, pero entrenado con todo el texto de internet y con infinitamente más parámetros. <strong class="text-white">No tiene conciencia, no sabe nada, solo sabe predecir.</strong> Todo lo demás — respuestas coherentes, razonamiento aparente — emergen de predecir tokens de forma muy efectiva.</p>
+            </section>
+
+            <!-- CAPAS -->
+            <section class="animate-in" style="animation-delay:0.3s">
+                <h2 class="text-2xl font-bold mb-6 flex items-center gap-4">Capas de una Red Neuronal <div class="h-px flex-grow bg-white/10"></div></h2>
+                <div class="glass-panel p-6">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-6 text-center text-sm">
+                        <div class="flex-1">
+                            <div class="font-bold text-teal-400 text-xs uppercase tracking-wider mb-3">Entrada</div>
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="neuron active"></div>
+                                <div class="neuron active"></div>
+                                <div class="neuron active"></div>
+                            </div>
+                            <p class="text-slate-500 text-xs mt-3">Tokens del texto</p>
+                        </div>
+                        <div class="text-teal-400 text-xl hidden md:block">&rarr;</div>
+                        <div class="flex-1">
+                            <div class="font-bold text-slate-400 text-xs uppercase tracking-wider mb-3">Capas Ocultas</div>
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="neuron"></div>
+                                <div class="neuron"></div>
+                                <div class="neuron"></div>
+                                <div class="neuron"></div>
+                                <div class="neuron"></div>
+                            </div>
+                            <p class="text-slate-500 text-xs mt-3">Miles de millones de conexiones</p>
+                        </div>
+                        <div class="text-teal-400 text-xl hidden md:block">&rarr;</div>
+                        <div class="flex-1">
+                            <div class="font-bold text-slate-400 text-xs uppercase tracking-wider mb-3">Atención</div>
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="neuron"></div>
+                                <div class="neuron"></div>
+                                <div class="neuron"></div>
+                                <div class="neuron"></div>
+                            </div>
+                            <p class="text-slate-500 text-xs mt-3">Mecanismo Transformer</p>
+                        </div>
+                        <div class="text-teal-400 text-xl hidden md:block">&rarr;</div>
+                        <div class="flex-1">
+                            <div class="font-bold text-teal-400 text-xs uppercase tracking-wider mb-3">Salida</div>
+                            <div class="flex flex-col items-center gap-2">
+                                <div class="neuron active"></div>
+                                <div class="neuron active"></div>
+                            </div>
+                            <p class="text-slate-500 text-xs mt-3">Distribución de probabilidad</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script>
+        const steps = [
+            { title: 'Redes Neuronales', body: 'Las redes neuronales artificiales se inspiran en el cerebro biológico. Consisten en capas de nodos (neuronas) conectados entre sí con pesos numéricos. Cuando entra un dato, cada neurona lo transforma aplicando una función matemática y lo pasa a la siguiente capa. El comportamiento emerge de millones de esos pesos ajustados durante el entrenamiento.' },
+            { title: 'Entrenamiento', body: 'Durante el entrenamiento, el modelo ve miles de millones de ejemplos de texto. Para cada predicción que hace, compara su respuesta con la respuesta correcta y ajusta sus pesos internos para reducir el error. Este proceso — llamado backpropagation con descenso de gradiente — se repite durante semanas en miles de GPUs hasta que el modelo predice bien.' },
+            { title: 'Arquitectura Transformer', body: 'Presentada por Google en 2017 ("Attention is All You Need"), la arquitectura Transformer revolucionó la IA. Su componente clave es el mecanismo de Atención: permite que el modelo considere TODAS las palabras de una oración al mismo tiempo para entender el contexto, en lugar de procesarla palabra por palabra como los modelos anteriores.' },
+            { title: 'Prediccion de Texto', body: 'Un LLM no genera texto de golpe. Lo genera token por token: dado el texto anterior, predice una distribución de probabilidad sobre todos los posibles tokens siguientes y elige uno. Ese token se agrega al contexto y el proceso se repite. Esta es la razón por la que los modelos pueden alucinar: eligen el token "estadísticamente probable" aunque sea factualmente incorrecto.' }
+        ];
+        function showStep(idx) {
+            document.querySelectorAll('.step-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+            const s = steps[idx];
+            document.getElementById('stepContent').innerHTML = `<h3 class="text-xl font-bold text-teal-400 mb-4">${s.title}</h3><p class="text-slate-300 leading-relaxed">${s.body}</p>`;
+        }
+        showStep(0);
+        const themeBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        themeBtn.addEventListener('click', () => {
+            if (html.getAttribute('data-theme') === 'light') { html.removeAttribute('data-theme'); localStorage.setItem('theme', 'dark'); themeBtn.innerHTML = '☀️ Modo Claro'; }
+            else { html.setAttribute('data-theme', 'light'); localStorage.setItem('theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        });
+    </script>
+</body>
+</html>

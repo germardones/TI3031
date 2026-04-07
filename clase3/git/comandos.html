@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comandos Git Esenciales | Terminal Interactiva</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #0f172a; --card-bg: rgba(30,41,59,0.7); --accent: #f97316; --text-main: #f8fafc; --transition: all 0.3s ease; }
+        [data-theme="light"] { --bg-color: #f8fafc; --card-bg: rgba(255,255,255,0.85); --text-main: #0f172a; --accent: #ea580c; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); min-height: 100vh; }
+        .glass-panel { background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; }
+        [data-theme="light"] .glass-panel { border-color: rgba(0,0,0,0.06); box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05); }
+        #themeToggle { position: fixed; top: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); padding: 0.75rem 1.5rem; border-radius: 100px; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; }
+        .cmd-btn { transition: all 0.2s; cursor: pointer; border: 1px solid rgba(249,115,22,0.2); }
+        .cmd-btn:hover { background: rgba(249,115,22,0.15); border-color: rgba(249,115,22,0.5); transform: translateX(3px); }
+        .cmd-btn.active { background: rgba(249,115,22,0.2); border-color: #f97316; }
+        .terminal-line { font-family: 'JetBrains Mono', monospace; }
+        .t-prompt { color: #22c55e; }
+        .t-cmd { color: #f8fafc; }
+        .t-flag { color: #60a5fa; }
+        .t-out { color: #64748b; }
+        .t-file { color: #fbbf24; }
+        .output-line { animation: lineIn 0.3s ease both; }
+        @keyframes lineIn { from{opacity:0; transform:translateX(-8px);} to{opacity:1; transform:translateX(0);} }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
+        .animate-in { animation: fadeIn 0.5s ease both; }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+
+    <button id="themeToggle">☀️ Modo Claro</button>
+
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-12 animate-in">
+            <nav class="mb-4">
+                <a href="index.html" class="text-orange-400 hover:text-orange-300 font-semibold flex items-center gap-2 transition-colors w-fit">
+                    &larr; Volver a Clase 3.1 — Git
+                </a>
+            </nav>
+            <div class="text-orange-500 text-xs font-bold uppercase tracking-widest mb-2">Paso 03 · Práctica</div>
+            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-orange-400 bg-clip-text text-transparent">
+                Comandos Esenciales
+            </h1>
+            <p class="text-slate-400 text-lg mt-3 max-w-xl">Selecciona un comando para ver su función, sintaxis y resultado simulado en la terminal.</p>
+        </header>
+
+        <main class="space-y-8">
+
+            <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-in" style="animation-delay:0.1s">
+                <!-- Listado de comandos -->
+                <div class="glass-panel p-6 space-y-2">
+                    <h2 class="text-lg font-bold mb-4 text-orange-400">Biblioteca de Comandos</h2>
+                    <div id="cmdList" class="space-y-2"></div>
+                </div>
+
+                <!-- Terminal simulada -->
+                <div>
+                    <div class="bg-slate-900 rounded-xl overflow-hidden border border-white/5 h-full">
+                        <div class="bg-slate-800 px-4 py-2 border-b border-white/5 flex items-center gap-2">
+                            <div class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+                            <span class="ml-3 text-xs text-slate-400 font-mono">bash — /mi-proyecto</span>
+                        </div>
+                        <div id="termOutput" class="p-5 font-mono text-sm space-y-1 min-h-[300px]">
+                            <div class="t-out text-xs">Selecciona un comando de la lista →</div>
+                        </div>
+                    </div>
+
+                    <!-- Info del comando -->
+                    <div id="cmdInfo" class="glass-panel p-5 mt-4">
+                        <p class="text-slate-500 text-sm text-center">La explicación del comando aparecerá aquí.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tabla rápida -->
+            <section class="glass-panel p-8 animate-in" style="animation-delay:0.2s">
+                <h2 class="text-xl font-bold mb-6">Mapa de Comandos por Categoría</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                    <div class="bg-red-500/5 border border-red-500/20 rounded-xl p-4">
+                        <h3 class="text-red-400 font-bold uppercase tracking-wider text-xs mb-3">Configurar</h3>
+                        <ul class="space-y-1 font-mono text-slate-300 text-xs">
+                            <li>git config --global user.name</li>
+                            <li>git config --global user.email</li>
+                            <li>git init</li>
+                            <li>git clone &lt;url&gt;</li>
+                        </ul>
+                    </div>
+                    <div class="bg-amber-500/5 border border-amber-500/20 rounded-xl p-4">
+                        <h3 class="text-amber-400 font-bold uppercase tracking-wider text-xs mb-3">Gestionar Cambios</h3>
+                        <ul class="space-y-1 font-mono text-slate-300 text-xs">
+                            <li>git status</li>
+                            <li>git add .</li>
+                            <li>git commit -m ""</li>
+                            <li>git diff</li>
+                            <li>git log --oneline</li>
+                        </ul>
+                    </div>
+                    <div class="bg-blue-500/5 border border-blue-500/20 rounded-xl p-4">
+                        <h3 class="text-blue-400 font-bold uppercase tracking-wider text-xs mb-3">Remoto y Ramas</h3>
+                        <ul class="space-y-1 font-mono text-slate-300 text-xs">
+                            <li>git push origin main</li>
+                            <li>git pull origin main</li>
+                            <li>git branch</li>
+                            <li>git checkout -b rama</li>
+                            <li>git merge</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        const commands = [
+            { cmd: 'git status', cat: 'Estado', desc: 'Muestra el estado actual de tu área de trabajo: qué archivos han cambiado, cuáles están en staging y cuáles no están siendo rastreados.', output: ['On branch main', 'Changes not staged for commit:', '  (use "git add <file>..." to update what will be committed)', '', '\tmodified:   index.html', '\tmodified:   style.css', '', 'Untracked files:', '\tnueva-pagina.html', '', 'no changes added to commit'] },
+            { cmd: 'git add .', cat: 'Staging', desc: 'Agrega TODOS los archivos modificados y nuevos al Staging Area. El punto (.) significa "todo en el directorio actual".', output: ['(No output on success)', '# Tip: usa "git status" para verificar'] },
+            { cmd: 'git commit -m "mensaje"', cat: 'Commit', desc: 'Crea un nuevo commit (snapshot) con todos los archivos que están en el Staging Area. El flag -m permite escribir el mensaje directamente.', output: ['[main a1b2c3d] feat: agrega sección de contacto', ' 2 files changed, 45 insertions(+), 3 deletions(-)', ' create mode 100644 contacto.html'] },
+            { cmd: 'git log --oneline', cat: 'Historial', desc: 'Muestra el historial de commits en formato compacto: un commit por línea con su hash y mensaje. Ideal para navegar el historial rápidamente.', output: ['a1b2c3d (HEAD -> main) feat: agrega contacto', 'f4e5d6c style: mejora responsive del navbar', 'b7c8d9e fix: corrige link roto en footer', '1a2b3c4 feat: estructura HTML inicial', '0f1e2d3 init: proyecto inicial'] },
+            { cmd: 'git diff', cat: 'Diferencias', desc: 'Muestra las diferencias entre los archivos modificados en Working Directory vs el último commit. Las líneas en verde son adiciones, en rojo son eliminaciones.', output: ['diff --git a/style.css b/style.css', '--- a/style.css', '+++ b/style.css', '@@ -12,7 +12,7 @@', ' body {', '-  background: #1a1a1a;', '+  background: #0f172a;', '   color: white;', ' }'] },
+            { cmd: 'git push origin main', cat: 'Remoto', desc: 'Envía los commits locales al repositorio remoto (GitHub). "origin" es el nombre del servidor remoto, "main" es el nombre de la rama.', output: ['Enumerating objects: 5, done.', 'Counting objects: 100% (5/5), done.', 'Delta compression using up to 8 threads', 'Compressing objects: 100% (3/3), done.', 'Writing objects: 100% (3/3), 789 bytes | done.', 'To github.com:usuario/proyecto.git', '   b7c8d9e..a1b2c3d  main -> main'] },
+            { cmd: 'git pull origin main', cat: 'Remoto', desc: 'Descarga y fusiona los cambios del repositorio remoto a tu rama local. Combina git fetch + git merge en un solo comando.', output: ['remote: Enumerating objects: 3, done.', 'remote: Counting objects: 100% (3/3), done.', 'Unpacking objects: 100% (3/3), done.', 'From github.com:usuario/proyecto', '   a1b2c3d..z9y8x7w  main -> origin/main', 'Updating a1b2c3d..z9y8x7w', 'Fast-forward', ' README.md | 5 +++++', ' 1 file changed, 5 insertions(+)'] },
+        ];
+
+        const listEl = document.getElementById('cmdList');
+        const termEl = document.getElementById('termOutput');
+        const infoEl = document.getElementById('cmdInfo');
+
+        commands.forEach((c, i) => {
+            const btn = document.createElement('div');
+            btn.className = 'cmd-btn rounded-lg px-4 py-3 flex items-center justify-between';
+            btn.innerHTML = `<code class="font-mono text-sm text-orange-300">${c.cmd}</code><span class="text-xs text-slate-500 bg-slate-800 px-2 py-0.5 rounded-full">${c.cat}</span>`;
+            btn.onclick = () => {
+                document.querySelectorAll('.cmd-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                showCommand(c);
+            };
+            listEl.appendChild(btn);
+        });
+
+        function showCommand(c) {
+            termEl.innerHTML = '';
+            const promptLine = document.createElement('div');
+            promptLine.className = 'terminal-line output-line flex gap-2';
+            promptLine.innerHTML = `<span class="t-prompt">$</span><span class="t-cmd">${c.cmd}</span>`;
+            termEl.appendChild(promptLine);
+
+            c.output.forEach((line, i) => {
+                setTimeout(() => {
+                    const l = document.createElement('div');
+                    l.className = 'terminal-line output-line t-out';
+                    l.style.animationDelay = `${i * 0.05}s`;
+                    l.textContent = line;
+                    termEl.appendChild(l);
+                }, i * 60);
+            });
+
+            infoEl.innerHTML = `<h3 class="font-bold text-orange-400 mb-2">${c.cmd}</h3><p class="text-slate-400 text-sm leading-relaxed">${c.desc}</p>`;
+        }
+
+        const themeBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        themeBtn.addEventListener('click', () => {
+            if (html.getAttribute('data-theme') === 'light') { html.removeAttribute('data-theme'); localStorage.setItem('theme', 'dark'); themeBtn.innerHTML = '☀️ Modo Claro'; }
+            else { html.setAttribute('data-theme', 'light'); localStorage.setItem('theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        });
+    </script>
+</body>
+</html>

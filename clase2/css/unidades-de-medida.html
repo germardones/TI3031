@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio Unidades CSS | px vs % vs rem vs vh/vw</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --surface: #1e293b;
+            --accent: #38bdf8;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        [data-theme="light"] {
+            --bg-color: #f1f5f9;
+            --surface: #ffffff;
+            --accent: #0284c7;
+        }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: #f8fafc; min-height: 100vh; overflow-x: hidden; transition: var(--transition); }
+        [data-theme="light"] body { color: #1e293b; }
+        .glass-panel { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1.5rem; }
+        [data-theme="light"] .glass-panel { background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(0, 0, 0, 0.05); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1); }
+        input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; background: transparent; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; cursor: pointer; background: #334155; border-radius: 3px; }
+        input[type=range]::-webkit-slider-thumb { height: 18px; width: 18px; border-radius: 50%; background: var(--accent); cursor: pointer; -webkit-appearance: none; margin-top: -6px; box-shadow: 0 0 10px var(--accent); }
+        #labFrame { width: 100%; height: 500px; border: none; background: transparent; border-radius: 1.5rem; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        [data-theme="light"] .text-slate-400 { color: #64748b; }
+    </style>
+</head>
+<body class="p-6 md:p-10">
+
+    <button class="fixed top-8 right-8 z-[1000] bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-full font-semibold hover:bg-white/20 transition-all text-sm shadow-xl" id="themeToggle">☀️ Modo Claro</button>
+
+    <div class="max-w-7xl mx-auto">
+        <header class="mb-10 text-left">
+            <nav class="mb-4"><a href="../index.html" class="text-sky-400 hover:text-sky-300 font-semibold flex items-center gap-2 transition-colors">&larr; Volver al Hub Clase 2</a></nav>
+            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-sky-400 bg-clip-text text-transparent">Laboratorio de Unidades CSS</h1>
+            <p class="text-slate-400 text-lg mt-2 font-medium">Visualiza la diferencia entre unidades estáticas y relativas.</p>
+        </header>
+
+        <main class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <aside class="space-y-8">
+                <div class="glass-panel p-8">
+                    <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                        Simulador Dinámico
+                    </h2>
+                    <div class="space-y-10">
+                        <div class="p-6 bg-sky-500/5 rounded-2xl border border-sky-400/10">
+                            <div class="flex justify-between items-center mb-4">
+                                <div>
+                                    <h3 class="font-bold text-sky-400 text-sm italic">1. Fuente Raíz (rem)</h3>
+                                    <p class="text-[11px] text-slate-500 mt-1">Define el tamaño base del sitio. <strong>1rem</strong> equivale a este valor.</p>
+                                </div>
+                                <span id="rootVal" class="text-2xl font-bold text-sky-400 mono">16px</span>
+                            </div>
+                            <input type="range" id="rootSlider" min="8" max="48" value="16">
+                        </div>
+                        <div class="p-6 bg-green-500/5 rounded-2xl border border-green-400/10">
+                            <div class="flex justify-between items-center mb-4">
+                                <div>
+                                    <h3 class="font-bold text-green-400 text-sm italic">2. Ancho Padre (%)</h3>
+                                    <p class="text-[11px] text-slate-500 mt-1">Las unidades <strong>%</strong> se calculan respecto a este ancho padre.</p>
+                                </div>
+                                <span id="parentVal" class="text-2xl font-bold text-green-400 mono">100%</span>
+                            </div>
+                            <input type="range" id="parentSlider" min="20" max="100" value="100">
+                        </div>
+                        <div class="p-6 bg-yellow-500/5 rounded-2xl border border-yellow-400/10">
+                            <div class="flex justify-between items-center mb-4">
+                                <div>
+                                    <h3 class="font-bold text-yellow-400 text-sm italic">3. Sim. Viewport (vw)</h3>
+                                    <p class="text-[11px] text-slate-500 mt-1"><strong>1vw</strong> es siempre el 1% del ancho total de la pantalla.</p>
+                                </div>
+                                <span id="vwVal" class="text-2xl font-bold text-yellow-400 mono">100%</span>
+                            </div>
+                            <input type="range" id="vwSlider" min="10" max="100" value="100">
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-panel p-8 bg-sky-500/5 border-sky-400/20">
+                    <h3 class="text-xl font-bold mb-4 text-sky-400">Consejo del Profesor German</h3>
+                    <p class="italic text-slate-400 text-lg leading-relaxed">"Usa <strong class="text-red-400">px</strong> para bordes, <strong class="text-green-400">%</strong> para layouts y <strong class="text-blue-400">rem</strong> para texto si buscas accesibilidad real."</p>
+                </div>
+            </aside>
+
+            <section class="glass-panel p-2 flex flex-col min-h-[550px]">
+                <h2 class="text-sm font-bold text-slate-500 uppercase tracking-widest m-6">Visualizador de Unidades</h2>
+                <div id="wrapper" class="flex-grow">
+                    <!-- IFrame is injected via script below -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Template for the IFrame content to avoid string escaping issues -->
+    <template id="labTemplate">
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&family=JetBrains+Mono:wght@600&display=swap" rel="stylesheet">
+            <style>
+                html { font-size: 16px; transition: font-size 0.3s ease; }
+                body { margin:0; padding:20px; font-family:'Outfit',sans-serif; background:transparent; color:white; overflow:hidden; }
+                .box { height:55px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:800; color:white; transition:width 0.3s ease; position:relative; margin-bottom:2.5rem; box-shadow:0 4px 6px rgba(0,0,0,0.3); }
+                .px { background:#ef4444; width:150px; }
+                .pct { background:#22c55e; width:50%; }
+                .rem { background:#3b82f6; width:10rem; }
+                .vw { background:#f59e0b; width:20vw; }
+                .label { position:absolute; bottom:-1.8rem; left:0; font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:#0284c7; font-weight:600; text-shadow:0 1px 2px rgba(0,0,0,0.5); }
+                #sim { border:2px dashed #475569; padding:2.5rem 1.5rem; position:relative; background:rgba(255,255,255,0.05); border-radius:12px; transition:width 0.4s ease; margin-top:1rem; }
+                .tag { position:absolute; top:4px; right:8px; font-size:10px; color:#f59e0b; font-weight:bold; opacity:0.7; }
+                [data-theme="light"] body { color:#1e293b; }
+                [data-theme="light"] #sim { background:rgba(0,0,0,0.05); }
+                [data-theme="dark"] .label { color: #38bdf8; }
+            </style>
+        </head>
+        <body>
+            <div id="c" style="transition:width 0.3s ease; margin:0 auto; padding:20px; border-radius:20px; background:rgba(0,0,0,0.1);">
+                <div class="box px" id="b1">150px <span class="label"></span></div>
+                <div class="box pct" id="b2">50% <span class="label"></span></div>
+                <div class="box rem" id="b3">10rem <span class="label"></span></div>
+                <div id="sim"><div class="tag">Viewport Sim</div><div class="box vw" id="b4" style="margin-bottom:0">20vw <span class="label"></span></div></div>
+            </div>
+            <script>
+                function uL() {
+                    ['b1','b2','b3','b4'].forEach(id => {
+                        const el = document.getElementById(id);
+                        const w = window.getComputedStyle(el).width;
+                        el.querySelector('.label').textContent = 'Resultado: ' + Math.round(parseFloat(w)) + 'px';
+                    });
+                }
+                window.uS = (fs, pW, vwS, t) => {
+                    document.documentElement.style.fontSize = fs + 'px';
+                    document.getElementById('c').style.width = pW + '%';
+                    document.getElementById('sim').style.width = vwS + '%';
+                    document.documentElement.setAttribute('data-theme', t);
+                    setTimeout(uL, 50);
+                };
+                window.onload = uL;
+                window.onresize = uL;
+            </script>
+        </body>
+        </html>
+    </template>
+
+    <script>
+        const sliders = { root: document.getElementById('rootSlider'), parent: document.getElementById('parentSlider'), vw: document.getElementById('vwSlider') };
+        const labels = { root: document.getElementById('rootVal'), parent: document.getElementById('parentVal'), vw: document.getElementById('vwVal') };
+        const wrapper = document.getElementById('wrapper');
+        const template = document.getElementById('labTemplate');
+
+        // Create the iframe
+        const iframe = document.createElement('iframe');
+        iframe.id = 'labFrame';
+        wrapper.appendChild(iframe);
+
+        // Inject content from template
+        const doc = iframe.contentWindow.document;
+        doc.open();
+        doc.write(template.innerHTML);
+        doc.close();
+
+        function update() {
+            if (!iframe.contentWindow || !iframe.contentWindow.uS) {
+                setTimeout(update, 100);
+                return;
+            }
+            const fs = sliders.root.value;
+            const pw = sliders.parent.value;
+            const vw = sliders.vw.value;
+            const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+
+            labels.root.textContent = fs + 'px';
+            labels.parent.textContent = pw + '%';
+            labels.vw.textContent = vw + '%';
+
+            iframe.contentWindow.uS(fs, pw, vw, theme);
+        }
+
+        Object.values(sliders).forEach(s => s.addEventListener('input', update));
+
+        const toggleBtn = document.getElementById('themeToggle');
+        function toggleTheme(isInit = false) {
+            const root = document.documentElement;
+            let target = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            if (isInit) target = localStorage.getItem('theme') || 'dark';
+
+            root.setAttribute('data-theme', target);
+            localStorage.setItem('theme', target);
+            toggleBtn.innerHTML = target === 'light' ? '🌙 Modo Oscuro' : '☀️ Modo Claro';
+            update();
+        }
+
+        toggleBtn.addEventListener('click', () => toggleTheme());
+
+        // Wait for iframe content to be ready
+        window.addEventListener('load', () => {
+            toggleTheme(true);
+            setTimeout(update, 200);
+        });
+
+        // Backup update on iframe load
+        iframe.onload = update;
+    </script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat con Copilot | Conversaciones Técnicas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #0f172a; --card-bg: rgba(30,41,59,0.7); --accent: #818cf8; --text-main: #f8fafc; --transition: all 0.3s ease; }
+        [data-theme="light"] { --bg-color: #f8fafc; --card-bg: rgba(255,255,255,0.85); --text-main: #0f172a; --accent: #4f46e5; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); min-height: 100vh; }
+        .glass-panel { background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; }
+        [data-theme="light"] .glass-panel { border-color: rgba(0,0,0,0.06); box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05); }
+        #themeToggle { position: fixed; top: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); padding: 0.75rem 1.5rem; border-radius: 100px; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; }
+        .chat-bubble { opacity: 0; transform: translateY(10px); transition: all 0.4s ease; }
+        .chat-bubble.show { opacity: 1; transform: translateY(0); }
+        .suggestion-btn { transition: all 0.2s; cursor: pointer; border: 1.5px solid rgba(129,140,248,0.25); }
+        .suggestion-btn:hover { background: rgba(129,140,248,0.15); border-color: rgba(129,140,248,0.6); transform: translateX(3px); }
+        @keyframes typing { 0%,80%,100%{opacity:0;transform:scale(0.8);} 40%{opacity:1;transform:scale(1);} }
+        .typing-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #818cf8; animation: typing 1.4s ease infinite; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
+        .animate-in { animation: fadeIn 0.5s ease both; }
+        code { font-family: 'JetBrains Mono', monospace; background: rgba(129,140,248,0.12); color: #818cf8; padding: 1px 6px; border-radius: 5px; font-size: 0.85em; }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+
+    <button id="themeToggle">☀️ Modo Claro</button>
+
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-12 animate-in">
+            <nav class="mb-4">
+                <a href="index.html" class="text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-2 transition-colors w-fit">
+                    &larr; Volver a Clase 3.2 — IA
+                </a>
+            </nav>
+            <div class="text-indigo-400 text-xs font-bold uppercase tracking-widest mb-2">Paso 03 · Chat</div>
+            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-indigo-400 bg-clip-text text-transparent">
+                Chat con Copilot
+            </h1>
+            <p class="text-slate-400 text-lg mt-3 max-w-xl">Practica conversaciones técnicas con Copilot. Selecciona una pregunta para simular la respuesta de la IA.</p>
+        </header>
+
+        <main class="space-y-8">
+
+            <section class="grid grid-cols-1 lg:grid-cols-5 gap-6 animate-in" style="animation-delay:0.1s">
+                <!-- Preguntas sugeridas -->
+                <div class="lg:col-span-2 space-y-3">
+                    <h2 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Preguntas de Ejemplo</h2>
+                    <div id="suggestions"></div>
+                </div>
+
+                <!-- Chat window -->
+                <div class="lg:col-span-3">
+                    <div class="glass-panel overflow-hidden">
+                        <!-- Header chat -->
+                        <div class="bg-slate-800/50 px-5 py-3 flex items-center gap-3 border-b border-white/5">
+                            <div class="w-2.5 h-2.5 rounded-full bg-indigo-400 animate-pulse"></div>
+                            <span class="font-semibold text-sm">GitHub Copilot Chat</span>
+                            <span class="ml-auto text-xs text-slate-500">VS Code</span>
+                        </div>
+
+                        <!-- Messages -->
+                        <div id="chatBody" class="p-5 space-y-4 min-h-[400px] max-h-[500px] overflow-y-auto">
+                            <div class="text-slate-500 text-sm text-center py-8">
+                                Selecciona una pregunta para comenzar la conversación
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Casos de uso -->
+            <section class="glass-panel p-8 animate-in" style="animation-delay:0.3s">
+                <h2 class="text-xl font-bold mb-6">¿Para qué usar el Chat de Copilot?</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-center">
+                    <div class="bg-indigo-500/5 border border-indigo-500/20 rounded-xl p-4">
+
+                        <h3 class="font-bold text-indigo-400 mb-1">Explicar código</h3>
+                        <p class="text-slate-500 text-xs">"Explica qué hace esta función línea por línea"</p>
+                    </div>
+                    <div class="bg-indigo-500/5 border border-indigo-500/20 rounded-xl p-4">
+
+                        <h3 class="font-bold text-indigo-400 mb-1">Corregir bugs</h3>
+                        <p class="text-slate-500 text-xs">"¿Por qué este código no funciona correctamente?"</p>
+                    </div>
+                    <div class="bg-indigo-500/5 border border-indigo-500/20 rounded-xl p-4">
+
+                        <h3 class="font-bold text-indigo-400 mb-1">Refactorizar</h3>
+                        <p class="text-slate-500 text-xs">"Mejora este código para que sea más legible"</p>
+                    </div>
+                    <div class="bg-indigo-500/5 border border-indigo-500/20 rounded-xl p-4">
+
+                        <h3 class="font-bold text-indigo-400 mb-1">Aprender</h3>
+                        <p class="text-slate-500 text-xs">"¿Cuándo usar Flexbox vs Grid en CSS?"</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        const conversations = [
+            {
+                q: "¿Cómo funciona Flexbox?",
+                user: "¿Puedes explicarme cómo funciona Flexbox y darme un ejemplo básico?",
+                ai: "¡Claro! <strong>Flexbox</strong> es un modelo de diseño CSS que distribuye elementos en un eje principal. Funciona así:<br><br>• <code>display: flex</code> activa el contenedor flex<br>• <code>justify-content</code> controla el eje horizontal (main axis)<br>• <code>align-items</code> controla el eje vertical (cross axis)<br><br>Ejemplo básico de navbar:<br><pre class='bg-slate-900 rounded-lg p-3 mt-2 font-mono text-xs text-green-300'>.navbar {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 1rem 2rem;\n}</pre>¿Quieres que profundice en alguna propiedad específica?"
+            },
+            {
+                q: "Explica este código",
+                user: "¿Qué hace este código? const arr = [1,2,3].map(x => x * 2).filter(x => x > 2)",
+                ai: "Este código aplica dos transformaciones al array <code>[1, 2, 3]</code>:<br><br>1. <strong>.map(x => x * 2)</strong> — Multiplica cada elemento por 2. Resultado: <code>[2, 4, 6]</code><br><br>2. <strong>.filter(x => x > 2)</strong> — Filtra los elementos mayores a 2. Resultado final: <code>[4, 6]</code><br><br>También se puede escribir así sin encadenamiento:<br><pre class='bg-slate-900 rounded-lg p-3 mt-2 font-mono text-xs text-yellow-300'>const doubled = [1,2,3].map(x => x * 2);\nconst result = doubled.filter(x => x > 2);\n// result = [4, 6]</pre>"
+            },
+            {
+                q: "¿Cómo usar Git en equipo?",
+                user: "Somos 3 personas en un proyecto. ¿Cuál es el flujo de trabajo recomendado con Git?",
+                ai: "Para un equipo de 3 personas recomiendo el <strong>Feature Branch Workflow</strong>:<br><br>1. Nunca trabajen directamente en <code>main</code> — es el código estable<br>2. Cada persona crea su propia rama: <code>git checkout -b feature/tu-tarea</code><br>3. Al terminar, abran un <strong>Pull Request</strong> en GitHub<br>4. Los otros dos deben revisar y aprobar antes del merge<br>5. Después del merge, eliminen la rama<br><br><strong>Consejo clave:</strong> Hagan <code>git pull origin main</code> al inicio de cada día de trabajo para tener los últimos cambios del equipo y evitar conflictos grandes."
+            }
+        ];
+
+        const suggestEl = document.getElementById('suggestions');
+        conversations.forEach((c, i) => {
+            const btn = document.createElement('div');
+            btn.className = 'suggestion-btn rounded-xl px-4 py-3 text-sm font-medium flex items-center gap-2';
+            btn.innerHTML = `<span class="text-indigo-400">→</span> ${c.q}`;
+            btn.onclick = () => loadConversation(c);
+            suggestEl.appendChild(btn);
+        });
+
+        function loadConversation(c) {
+            const chatBody = document.getElementById('chatBody');
+            chatBody.innerHTML = '';
+
+            // User bubble
+            const uBubble = createBubble('user', 'Tú', c.user);
+            chatBody.appendChild(uBubble);
+            setTimeout(() => uBubble.classList.add('show'), 50);
+
+            // Typing indicator
+            const typing = document.createElement('div');
+            typing.className = 'chat-bubble show flex items-start gap-3';
+            typing.innerHTML = `<div class="w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-sm flex-shrink-0 font-bold text-indigo-400">AI</div><div class="bg-slate-800/60 border border-white/5 rounded-2xl rounded-tl-none px-4 py-3"><span class="typing-dot" style="animation-delay:0s"></span><span class="typing-dot ml-1" style="animation-delay:0.2s"></span><span class="typing-dot ml-1" style="animation-delay:0.4s"></span></div>`;
+            chatBody.appendChild(typing);
+
+            setTimeout(() => {
+                chatBody.removeChild(typing);
+                const aiBubble = createBubble('ai', 'Copilot', c.ai);
+                chatBody.appendChild(aiBubble);
+                setTimeout(() => aiBubble.classList.add('show'), 50);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }, 1500);
+        }
+
+        function createBubble(type, role, text) {
+            const wrap = document.createElement('div');
+            wrap.className = 'chat-bubble flex items-start gap-3' + (type === 'user' ? ' flex-row-reverse' : '');
+            const avatar = type === 'user' ? 'Tú' : 'AI';
+            const bgClass = type === 'user' ? 'bg-indigo-500/15 border-indigo-400/20 rounded-tr-none' : 'bg-slate-800/60 border-white/5 rounded-tl-none';
+            wrap.innerHTML = `
+                <div class="w-8 h-8 rounded-full bg-${type === 'user' ? 'indigo' : 'slate'}-500/20 flex items-center justify-center text-sm flex-shrink-0">${avatar}</div>
+                <div class="max-w-[80%] border ${bgClass} rounded-2xl px-4 py-3">
+                    <div class="text-xs font-bold text-slate-500 mb-1 uppercase tracking-wider">${role}</div>
+                    <div class="text-sm leading-relaxed">${text}</div>
+                </div>`;
+            return wrap;
+        }
+
+        const themeBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        themeBtn.addEventListener('click', () => {
+            if (html.getAttribute('data-theme') === 'light') { html.removeAttribute('data-theme'); localStorage.setItem('theme', 'dark'); themeBtn.innerHTML = '☀️ Modo Claro'; }
+            else { html.setAttribute('data-theme', 'light'); localStorage.setItem('theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        });
+    </script>
+</body>
+</html>

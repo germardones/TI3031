@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Qué es un LLM? | Large Language Models</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #0f172a; --card-bg: rgba(30,41,59,0.7); --accent: #2dd4bf; --text-main: #f8fafc; }
+        [data-theme="light"] { --bg-color: #f8fafc; --card-bg: rgba(255,255,255,0.85); --text-main: #0f172a; --accent: #0d9488; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: all 0.3s ease; min-height: 100vh; }
+        .glass-panel { background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; }
+        [data-theme="light"] .glass-panel { border-color: rgba(0,0,0,0.06); box-shadow: 0 10px 30px -5px rgba(0,0,0,0.05); }
+        #themeToggle { position: fixed; top: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); padding: 0.75rem 1.5rem; border-radius: 100px; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
+        .animate-in { animation: fadeIn 0.5s ease both; }
+        .token-chip { background: rgba(45,212,191,0.15); border: 1px solid rgba(45,212,191,0.4); color: #2dd4bf; padding: 2px 10px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; display: inline-block; margin: 2px; }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+    <button id="themeToggle">☀️ Modo Claro</button>
+    <div class="max-w-5xl mx-auto">
+        <header class="mb-12 animate-in">
+            <nav class="mb-4"><a href="index.html" class="text-teal-400 hover:text-teal-300 font-semibold flex items-center gap-2 transition-colors w-fit">&larr; Volver a Fundamentos de IA</a></nav>
+            <div class="text-teal-400 text-xs font-bold uppercase tracking-widest mb-2">Módulo 02 · Modelos</div>
+            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-teal-400 bg-clip-text text-transparent">¿Qué es un LLM?</h1>
+            <p class="text-slate-400 text-lg mt-3 max-w-xl">Large Language Model: el tipo de modelo de IA detrás de ChatGPT, Claude y Gemini.</p>
+        </header>
+        <main class="space-y-10">
+
+            <!-- DEFINICION -->
+            <section class="glass-panel p-8 animate-in" style="animation-delay:0.1s">
+                <h2 class="text-2xl font-bold mb-4">Definicion</h2>
+                <p class="text-slate-300 leading-relaxed mb-6">Un <strong class="text-teal-400">LLM (Large Language Model)</strong> es un modelo de red neuronal entrenado sobre cantidades masivas de texto con el objetivo de predecir la siguiente palabra (token) dado un contexto. "Large" se refiere tanto al tamaño del dataset de entrenamiento como a la cantidad de parámetros del modelo — que van desde millones hasta cientos de miles de millones.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                    <div class="bg-teal-500/5 border border-teal-500/20 rounded-xl p-4 text-center">
+                        <div class="text-3xl font-bold text-teal-400 mb-1">L</div>
+                        <div class="font-bold mb-1">Large</div>
+                        <p class="text-slate-500 text-xs">Miles de millones de parámetros. GPT-4 se estima en +1 billón.</p>
+                    </div>
+                    <div class="bg-teal-500/5 border border-teal-500/20 rounded-xl p-4 text-center">
+                        <div class="text-3xl font-bold text-teal-400 mb-1">L</div>
+                        <div class="font-bold mb-1">Language</div>
+                        <p class="text-slate-500 text-xs">Entrenado exclusivamente en datos de texto: libros, web, código.</p>
+                    </div>
+                    <div class="bg-teal-500/5 border border-teal-500/20 rounded-xl p-4 text-center">
+                        <div class="text-3xl font-bold text-teal-400 mb-1">M</div>
+                        <div class="font-bold mb-1">Model</div>
+                        <p class="text-slate-500 text-xs">Una función matemática que mapea texto de entrada a texto de salida.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TOKENIZACION DEMO -->
+            <section class="glass-panel p-8 animate-in" style="animation-delay:0.2s">
+                <h2 class="text-xl font-bold mb-2">Tokenizacion en vivo</h2>
+                <p class="text-slate-400 text-sm mb-4">Los LLMs no leen palabras, leen tokens. Escribe algo para ver cómo lo divide:</p>
+                <input id="tokenInput" type="text" value="Hola mundo, soy un LLM."
+                    class="w-full bg-slate-800/60 border border-white/10 rounded-xl px-4 py-3 text-sm font-mono mb-4 text-white focus:outline-none focus:border-teal-400"
+                    oninput="tokenize(this.value)">
+                <div id="tokenDisplay" class="flex flex-wrap gap-1 mb-3 min-h-[36px]"></div>
+                <div class="text-xs text-slate-500">Tokens: <span id="tokenCount" class="text-teal-400 font-bold">0</span> &nbsp;·&nbsp; Esta es una tokenización aproximada basada en espacios/signos.</div>
+            </section>
+
+            <!-- ENTRENAMIENTO -->
+            <section class="animate-in" style="animation-delay:0.3s">
+                <h2 class="text-2xl font-bold mb-6 flex items-center gap-4">Fases de Entrenamiento <div class="h-px flex-grow bg-white/10"></div></h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="glass-panel p-6">
+                        <div class="font-mono font-bold text-teal-400 text-xs uppercase tracking-wider mb-2">Fase 1</div>
+                        <h3 class="font-bold text-lg mb-2">Pre-entrenamiento</h3>
+                        <p class="text-slate-400 text-sm">El modelo aprende a predecir el siguiente token sobre billones de palabras de internet, libros y código. Sin instrucciones, solo texto crudo. Dura semanas en miles de GPUs.</p>
+                    </div>
+                    <div class="glass-panel p-6">
+                        <div class="font-mono font-bold text-teal-400 text-xs uppercase tracking-wider mb-2">Fase 2</div>
+                        <h3 class="font-bold text-lg mb-2">Fine-tuning (SFT)</h3>
+                        <p class="text-slate-400 text-sm">Se ajusta con ejemplos de pares pregunta-respuesta de alta calidad escritos por humanos. El modelo aprende a responder de forma útil y coherente, no solo a completar texto.</p>
+                    </div>
+                    <div class="glass-panel p-6">
+                        <div class="font-mono font-bold text-teal-400 text-xs uppercase tracking-wider mb-2">Fase 3</div>
+                        <h3 class="font-bold text-lg mb-2">RLHF / DPO</h3>
+                        <p class="text-slate-400 text-sm">Reinforcement Learning from Human Feedback. Humanos califican pares de respuestas y el modelo aprende a preferir las respuestas mejor valoradas. Esto da alineación y seguridad.</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+    <script>
+        function tokenize(text) {
+            if (!text.trim()) { document.getElementById('tokenDisplay').innerHTML=''; document.getElementById('tokenCount').textContent='0'; return; }
+            const rough = text.match(/\b\w+\b|[^\w\s]|\s+/g) || [];
+            const tokens = rough.filter(t => t.trim());
+            document.getElementById('tokenDisplay').innerHTML = tokens.map(t => `<span class="token-chip">${t}</span>`).join('');
+            document.getElementById('tokenCount').textContent = tokens.length;
+        }
+        tokenize(document.getElementById('tokenInput').value);
+        const themeBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        themeBtn.addEventListener('click', () => {
+            if (html.getAttribute('data-theme') === 'light') { html.removeAttribute('data-theme'); localStorage.setItem('theme', 'dark'); themeBtn.innerHTML = '☀️ Modo Claro'; }
+            else { html.setAttribute('data-theme', 'light'); localStorage.setItem('theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        });
+    </script>
+</body>
+</html>
