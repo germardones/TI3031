@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navbar | Componentes Comunes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: rgba(30,41,59,0.8);
+            --accent: #10b981;
+            --accent-dim: rgba(16,185,129,0.15);
+            --text: #f8fafc;
+            --dim: #94a3b8;
+            --border: rgba(255,255,255,0.08);
+        }
+        [data-theme="light"] {
+            --bg: #f8fafc;
+            --card: rgba(255,255,255,0.9);
+            --accent: #059669;
+            --accent-dim: rgba(5,150,105,0.1);
+            --text: #0f172a;
+            --dim: #475569;
+            --border: rgba(0,0,0,0.07);
+        }
+        body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); transition:background 0.3s,color 0.3s; min-height:100vh; }
+        h1,h2,h3,h4 { font-family:'Outfit',sans-serif; }
+        code, pre { font-family:'JetBrains Mono',monospace; }
+
+        /* ---- glass panel ---- */
+        .glass { background:var(--card); backdrop-filter:blur(12px); border:1px solid var(--border); border-radius:1.25rem; }
+
+        /* ---- theme toggle ---- */
+        #themeToggle { position:fixed; top:1.5rem; right:1.5rem; z-index:999; background:var(--card); border:1px solid var(--border); color:var(--text); padding:0.6rem 1.1rem; border-radius:100px; font-weight:600; font-family:'Inter',sans-serif; cursor:pointer; font-size:0.85rem; }
+
+        /* ---- section title ---- */
+        .sec-label { color:var(--accent); font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.5rem; }
+
+        /* ---- code block ---- */
+        .code-wrap { background:#0d1117; border:1px solid rgba(255,255,255,0.07); border-radius:0.875rem; overflow:hidden; }
+        .code-header { background:rgba(255,255,255,0.04); padding:0.6rem 1.2rem; display:flex; align-items:center; gap:0.5rem; }
+        .dot { width:12px; height:12px; border-radius:50%; }
+        .dot-r { background:#ff5f57; } .dot-y { background:#febc2e; } .dot-g { background:#28c840; }
+        .code-body { padding:1.25rem 1.5rem; overflow-x:auto; }
+        .code-body pre { margin:0; font-size:0.82rem; line-height:1.7; color:#e2e8f0; white-space:pre; }
+        /* Pseudo syntax colors */
+        .t { color:#7dd3fc; } /* tag */
+        .a { color:#fbbf24; } /* attribute */
+        .v { color:#86efac; } /* value */
+        .c { color:#6b7280; font-style:italic; } /* comment */
+        .p { color:#c084fc; } /* property */
+        .pv { color:#f9a8d4; } /* prop value */
+
+        /* ---- explanation item ---- */
+        .exp-list { display:flex; flex-direction:column; gap:0.875rem; margin-top:1.5rem; }
+        .exp-item { display:flex; gap:1rem; align-items:flex-start; }
+        .exp-num { background:var(--accent-dim); color:var(--accent); font-family:'JetBrains Mono',monospace; font-size:0.7rem; font-weight:700; padding:0.2rem 0.55rem; border-radius:6px; flex-shrink:0; margin-top:0.15rem; }
+        .exp-tag { background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:5px; padding:0.1rem 0.5rem; font-size:0.72rem; font-family:'JetBrains Mono',monospace; color:#7dd3fc; margin-right:0.4rem; }
+        [data-theme="light"] .exp-tag { background:rgba(0,0,0,0.04); color:#0369a1; }
+        .exp-desc { color:var(--dim); font-size:0.875rem; line-height:1.55; }
+        .exp-desc strong { color:var(--text); font-weight:600; }
+
+        /* ---- live demo navbar ---- */
+        .demo-navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: #0f172a;
+            position: relative;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        [data-theme="light"] .demo-navbar { background: #1e293b; }
+        .demo-logo { font-family:'Outfit',sans-serif; font-size:1.3rem; font-weight:700; color:#10b981; text-decoration:none; }
+        .demo-links { display:flex; list-style:none; gap:1.75rem; margin:0; padding:0; }
+        .demo-links a { color:#94a3b8; text-decoration:none; font-weight:500; font-size:0.9rem; transition:color 0.25s; }
+        .demo-links a:hover { color:#f8fafc; }
+        .demo-cta { background:#10b981; color:#fff; padding:0.5rem 1.25rem; border-radius:100px; text-decoration:none; font-weight:600; font-size:0.875rem; transition:all 0.3s; display:inline-block; }
+        .demo-cta:hover { background:#059669; transform:translateY(-2px); box-shadow:0 8px 20px rgba(16,185,129,0.4); }
+        @media(max-width:640px){ .demo-links { display:none; } }
+
+        @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+        .fade-up { animation:fadeUp 0.5s ease both; }
+    </style>
+</head>
+<body class="p-5 md:p-10">
+
+    <button id="themeToggle">☀️ Modo Claro</button>
+
+    <div class="max-w-4xl mx-auto">
+
+        <!-- HEADER -->
+        <header class="mb-12 fade-up">
+            <nav class="mb-5">
+                <a href="index.html" style="color:var(--accent);font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-size:0.9rem;">
+                    &larr; Volver a Componentes Comunes
+                </a>
+            </nav>
+            <p class="sec-label">Paso 01 · Navegación</p>
+            <h1 class="text-4xl md:text-5xl font-bold mb-3" style="background:linear-gradient(to right,var(--text),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">
+                Barra de Navegación
+            </h1>
+            <p style="color:var(--dim);font-size:1.05rem;max-width:560px;">El componente que ancla todo sitio web. Aprende su estructura HTML semántica y cada propiedad CSS que lo hace funcionar.</p>
+        </header>
+
+        <!-- DEMO EN VIVO -->
+        <section class="mb-12 fade-up" style="animation-delay:0.1s">
+            <p class="sec-label">Demo en Vivo</p>
+            <h2 class="text-2xl font-bold mb-5">Así se ve el componente</h2>
+            <div class="glass p-1">
+                <nav class="demo-navbar">
+                    <a href="#" class="demo-logo">MiSitio</a>
+                    <ul class="demo-links">
+                        <li><a href="#">Inicio</a></li>
+                        <li><a href="#">Sobre</a></li>
+                        <li><a href="#">Proyectos</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                    <a href="#" class="demo-cta">Contratar</a>
+                </nav>
+            </div>
+            <p style="color:var(--dim);font-size:0.82rem;margin-top:0.75rem;">⬆ Pasa el cursor sobre los links y el botón para ver las transiciones en acción.</p>
+        </section>
+
+        <!-- CÓDIGO HTML -->
+        <section class="mb-12 fade-up" style="animation-delay:0.15s">
+            <p class="sec-label">Código HTML — Línea a Línea</p>
+            <h2 class="text-2xl font-bold mb-5">Estructura del Navbar</h2>
+            <div class="code-wrap mb-6">
+                <div class="code-header">
+                    <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+                    <span style="color:#6b7280;font-size:0.75rem;margin-left:0.5rem;">navbar.html</span>
+                </div>
+                <div class="code-body">
+<pre><span class="c"><!-- 1. Elemento semántico que indica "zona de navegación" --></span>
+<span class="t">&lt;nav</span> <span class="a">class</span>=<span class="v">"navbar"</span><span class="t">&gt;</span>
+
+  <span class="c"><!-- 2. Marca / Logotipo del sitio --></span>
+  <span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"index.html"</span> <span class="a">class</span>=<span class="v">"logo"</span><span class="t">&gt;</span>MiSitio<span class="t">&lt;/a&gt;</span>
+
+  <span class="c"><!-- 3. Lista de links de navegación --></span>
+  <span class="t">&lt;ul</span> <span class="a">class</span>=<span class="v">"navbar-links"</span><span class="t">&gt;</span>
+    <span class="t">&lt;li&gt;&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span><span class="t">&gt;</span>Inicio<span class="t">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="t">&lt;li&gt;&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span><span class="t">&gt;</span>Sobre<span class="t">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="t">&lt;li&gt;&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span><span class="t">&gt;</span>Proyectos<span class="t">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="t">&lt;li&gt;&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span><span class="t">&gt;</span>Blog<span class="t">&lt;/a&gt;&lt;/li&gt;</span>
+  <span class="t">&lt;/ul&gt;</span>
+
+  <span class="c"><!-- 4. Botón de llamada a la acción (CTA) --></span>
+  <span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"contacto.html"</span> <span class="a">class</span>=<span class="v">"navbar-cta"</span><span class="t">&gt;</span>Contratar<span class="t">&lt;/a&gt;</span>
+
+<span class="t">&lt;/nav&gt;</span></pre>
+                </div>
+            </div>
+
+            <div class="exp-list">
+                <div class="exp-item">
+                    <span class="exp-num">1</span>
+                    <div>
+                        <p class="exp-desc"><code class="exp-tag">&lt;nav&gt;</code> <strong>Etiqueta semántica de HTML5.</strong> Le dice al navegador y a los lectores de pantalla que este bloque es la zona principal de navegación del sitio. Usar <code class="exp-tag">&lt;div&gt;</code> también funcionaría visualmente, pero perdemos semántica y accesibilidad.</p>
+                    </div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">2</span>
+                    <div>
+                        <p class="exp-desc"><code class="exp-tag">&lt;a href="index.html"&gt;</code> <strong>El logo siempre es un enlace</strong> que apunta a la página principal. Usar <code class="exp-tag">&lt;a&gt;</code> en vez de <code class="exp-tag">&lt;span&gt;</code> es la práctica correcta — los usuarios esperan hacer clic en el logo para volver al inicio.</p>
+                    </div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">3</span>
+                    <div>
+                        <p class="exp-desc"><code class="exp-tag">&lt;ul&gt;</code> + <code class="exp-tag">&lt;li&gt;</code> <strong>La estructura correcta para listas de navegación.</strong> Los links de un navbar son semánticamente una lista de opciones. Esto ayuda a los lectores de pantalla (accesibilidad) y a los motores de búsqueda (SEO) a entender la jerarquía.</p>
+                    </div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">4</span>
+                    <div>
+                        <p class="exp-desc"><code class="exp-tag">.navbar-cta</code> <strong>El botón de acción principal</strong> usa <code class="exp-tag">&lt;a&gt;</code> y no <code class="exp-tag">&lt;button&gt;</code> porque dirige al usuario a otra página. Se distingue visualmente del resto de los links para atraer la atención.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CÓDIGO CSS -->
+        <section class="mb-12 fade-up" style="animation-delay:0.2s">
+            <p class="sec-label">Código CSS — Propiedad a Propiedad</p>
+            <h2 class="text-2xl font-bold mb-5">Estilos del Navbar</h2>
+            <div class="code-wrap mb-6">
+                <div class="code-header">
+                    <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+                    <span style="color:#6b7280;font-size:0.75rem;margin-left:0.5rem;">navbar.css</span>
+                </div>
+                <div class="code-body">
+<pre><span class="c">/* ── CONTENEDOR PRINCIPAL ─────────────────── */</span>
+<span class="p">.navbar</span> {
+  <span class="p">display</span>: <span class="pv">flex</span>;                    <span class="c">/* [A] */</span>
+  <span class="p">justify-content</span>: <span class="pv">space-between</span>;  <span class="c">/* [B] */</span>
+  <span class="p">align-items</span>: <span class="pv">center</span>;             <span class="c">/* [C] */</span>
+  <span class="p">padding</span>: <span class="pv">1rem 2rem</span>;              <span class="c">/* [D] */</span>
+  <span class="p">background</span>: <span class="pv">#0f172a</span>;             <span class="c">/* [E] */</span>
+  <span class="p">position</span>: <span class="pv">sticky</span>;               <span class="c">/* [F] */</span>
+  <span class="p">top</span>: <span class="pv">0</span>;                          <span class="c">/* [G] */</span>
+  <span class="p">z-index</span>: <span class="pv">100</span>;                    <span class="c">/* [H] */</span>
+  <span class="p">border-bottom</span>: <span class="pv">1px solid rgba(255,255,255,0.1)</span>; <span class="c">/* [I] */</span>
+}
+
+<span class="c">/* ── LOGO ─────────────────────────────────── */</span>
+<span class="p">.logo</span> {
+  <span class="p">font-size</span>: <span class="pv">1.5rem</span>;              <span class="c">/* [J] */</span>
+  <span class="p">font-weight</span>: <span class="pv">700</span>;               <span class="c">/* [K] */</span>
+  <span class="p">color</span>: <span class="pv">#10b981</span>;                 <span class="c">/* [L] */</span>
+  <span class="p">text-decoration</span>: <span class="pv">none</span>;          <span class="c">/* [M] */</span>
+}
+
+<span class="c">/* ── LISTA DE LINKS ───────────────────────── */</span>
+<span class="p">.navbar-links</span> {
+  <span class="p">display</span>: <span class="pv">flex</span>;                   <span class="c">/* [N] */</span>
+  <span class="p">list-style</span>: <span class="pv">none</span>;               <span class="c">/* [O] */</span>
+  <span class="p">gap</span>: <span class="pv">2rem</span>;                      <span class="c">/* [P] */</span>
+  <span class="p">margin</span>: <span class="pv">0</span>;
+  <span class="p">padding</span>: <span class="pv">0</span>;
+}
+
+<span class="c">/* ── LINKS INDIVIDUALES ───────────────────── */</span>
+<span class="p">.navbar-links a</span> {
+  <span class="p">color</span>: <span class="pv">#94a3b8</span>;                 <span class="c">/* [Q] */</span>
+  <span class="p">text-decoration</span>: <span class="pv">none</span>;          <span class="c">/* [R] */</span>
+  <span class="p">font-weight</span>: <span class="pv">500</span>;               <span class="c">/* [S] */</span>
+  <span class="p">transition</span>: <span class="pv">color 0.3s ease</span>;   <span class="c">/* [T] */</span>
+}
+<span class="p">.navbar-links a:hover</span> { <span class="p">color</span>: <span class="pv">#f8fafc</span>; } <span class="c">/* [U] */</span>
+
+<span class="c">/* ── BOTÓN CTA ────────────────────────────── */</span>
+<span class="p">.navbar-cta</span> {
+  <span class="p">background</span>: <span class="pv">#10b981</span>;            <span class="c">/* [V] */</span>
+  <span class="p">color</span>: <span class="pv">#ffffff</span>;
+  <span class="p">padding</span>: <span class="pv">0.5rem 1.25rem</span>;       <span class="c">/* [W] */</span>
+  <span class="p">border-radius</span>: <span class="pv">100px</span>;          <span class="c">/* [X] */</span>
+  <span class="p">text-decoration</span>: <span class="pv">none</span>;
+  <span class="p">font-weight</span>: <span class="pv">600</span>;
+  <span class="p">transition</span>: <span class="pv">all 0.3s ease</span>;     <span class="c">/* [Y] */</span>
+}
+<span class="p">.navbar-cta:hover</span> {
+  <span class="p">background</span>: <span class="pv">#059669</span>;           <span class="c">/* [Z] */</span>
+  <span class="p">transform</span>: <span class="pv">translateY(-2px)</span>;   <span class="c">/* [AA] */</span>
+  <span class="p">box-shadow</span>: <span class="pv">0 8px 20px rgba(16,185,129,0.4)</span>; <span class="c">/* [AB] */</span>
+}</pre>
+                </div>
+            </div>
+
+            <!-- Explicaciones CSS -->
+            <div class="exp-list">
+                <div class="exp-item">
+                    <span class="exp-num">A</span>
+                    <div><p class="exp-desc"><code class="exp-tag">display: flex</code> <strong>Activa Flexbox</strong> en el navbar. Convierte al <code class="exp-tag">&lt;nav&gt;</code> en un contenedor flex y a sus hijos directos (logo, links, CTA) en flex-items que se organizan automáticamente en una fila.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">B</span>
+                    <div><p class="exp-desc"><code class="exp-tag">justify-content: space-between</code> <strong>Distribuye los 3 elementos</strong> (logo · links · CTA) empujando el logo a la izquierda, el CTA a la derecha y los links al centro. Es el patrón más común en navbars.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">C</span>
+                    <div><p class="exp-desc"><code class="exp-tag">align-items: center</code> <strong>Alinea verticalmente</strong> todos los elementos al centro del navbar. Sin esto, los elementos quedarían en la parte superior de la barra.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">D</span>
+                    <div><p class="exp-desc"><code class="exp-tag">padding: 1rem 2rem</code> <strong>Espacio interno.</strong> El primer valor (1rem = 16px) es el espacio arriba y abajo. El segundo (2rem = 32px) es el espacio a los lados. Da "aire" al contenido del navbar.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">F</span>
+                    <div><p class="exp-desc"><code class="exp-tag">position: sticky</code> <strong>El navbar se pega al borde superior</strong> cuando el usuario hace scroll. A diferencia de <code class="exp-tag">position: fixed</code>, sticky respeta el flujo del documento y no saca al elemento del layout.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">G</span>
+                    <div><p class="exp-desc"><code class="exp-tag">top: 0</code> <strong>Define el punto de "pegado":</strong> cuando el navbar llega a 0px del borde superior de la ventana, se queda fijo ahí. Sin este valor, <code class="exp-tag">position: sticky</code> no tiene efecto.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">H</span>
+                    <div><p class="exp-desc"><code class="exp-tag">z-index: 100</code> <strong>Prioridad de apilamiento.</strong> Asegura que el navbar aparezca visualmente POR ENCIMA de todo el contenido que pase por debajo al hacer scroll. Los valores más altos = más arriba.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">I</span>
+                    <div><p class="exp-desc"><code class="exp-tag">border-bottom: 1px solid rgba(255,255,255,0.1)</code> <strong>Línea separadora sutil.</strong> El color blanco con solo 10% de opacidad crea una división casi invisible pero que da profundidad al separar el navbar del contenido.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">N</span>
+                    <div><p class="exp-desc"><code class="exp-tag">display: flex</code> en <code class="exp-tag">.navbar-links</code> <strong>Pone los ítems de la lista en fila.</strong> Por defecto un <code class="exp-tag">&lt;ul&gt;</code> es un bloque con items en columna. Flex los convierte a horizontal.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">O</span>
+                    <div><p class="exp-desc"><code class="exp-tag">list-style: none</code> <strong>Elimina los puntos (bullets)</strong> que el navegador agrega por defecto a todas las listas <code class="exp-tag">&lt;ul&gt;</code>. En un navbar no queremos esos bullets.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">T</span>
+                    <div><p class="exp-desc"><code class="exp-tag">transition: color 0.3s ease</code> <strong>Anima el cambio de color</strong> cuando el usuario pasa el mouse. Sin esto, el cambio sería brusco e instantáneo. <code class="exp-tag">0.3s</code> = 300 milisegundos de duración. <code class="exp-tag">ease</code> = arranca rápido y desacelera.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">X</span>
+                    <div><p class="exp-desc"><code class="exp-tag">border-radius: 100px</code> <strong>Hace el botón completamente redondeado (pill shape).</strong> El valor 100px es un truco: cualquier valor mayor que la mitad del alto crea bordes perfectamente circulares. Es el estilo más moderno para botones CTA.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">AA</span>
+                    <div><p class="exp-desc"><code class="exp-tag">transform: translateY(-2px)</code> <strong>Sube el botón 2 píxeles</strong> al hacer hover, creando una sensación de que el botón "flota". Este micro-movimiento da feedback visual al usuario de que el elemento es interactivo.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">AB</span>
+                    <div><p class="exp-desc"><code class="exp-tag">box-shadow: 0 8px 20px rgba(16,185,129,0.4)</code> <strong>Sombra de color</strong> (glow effect) al hacer hover. Los 4 valores son: desplazamiento-x | desplazamiento-y | difuminado | color. El color coincide con el del botón para crear un efecto de brillo.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RESPONSIVO -->
+        <section class="glass p-7 mb-12 fade-up" style="animation-delay:0.25s;border-left:3px solid var(--accent);">
+            <h3 class="text-xl font-bold mb-3">Responsivo: ¿Y en mobile?</h3>
+            <p style="color:var(--dim);margin-bottom:1rem;font-size:0.9rem;">En pantallas pequeñas, los links del navbar no caben. La solución profesional es ocultarlos con CSS y reemplazarlos con un menú hamburguesa (ver el siguiente paso).</p>
+            <div class="code-wrap">
+                <div class="code-body">
+<pre><span class="c">/* En pantallas menores a 768px */</span>
+<span class="t">@media</span> (<span class="p">max-width</span>: <span class="pv">768px</span>) {
+  <span class="p">.navbar-links</span> {
+    <span class="p">display</span>: <span class="pv">none</span>; <span class="c">/* Ocultamos la lista de links */</span>
+  }
+  <span class="p">.hamburger-btn</span> {
+    <span class="p">display</span>: <span class="pv">flex</span>; <span class="c">/* Mostramos el botón hamburguesa */</span>
+  }
+}</pre>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        const btn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme','light'); btn.innerHTML='🌙 Modo Oscuro'; }
+        btn.addEventListener('click', () => {
+            if (html.getAttribute('data-theme') === 'light') { html.removeAttribute('data-theme'); localStorage.setItem('theme','dark'); btn.innerHTML='☀️ Modo Claro'; }
+            else { html.setAttribute('data-theme','light'); localStorage.setItem('theme','light'); btn.innerHTML='🌙 Modo Oscuro'; }
+        });
+    </script>
+</body>
+</html>

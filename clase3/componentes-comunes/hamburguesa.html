@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Hamburguesa | Componentes Comunes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: rgba(30,41,59,0.8);
+            --accent: #10b981;
+            --accent-dim: rgba(16,185,129,0.15);
+            --text: #f8fafc;
+            --dim: #94a3b8;
+            --border: rgba(255,255,255,0.08);
+        }
+        [data-theme="light"] {
+            --bg: #f8fafc;
+            --card: rgba(255,255,255,0.9);
+            --accent: #059669;
+            --accent-dim: rgba(5,150,105,0.1);
+            --text: #0f172a;
+            --dim: #475569;
+            --border: rgba(0,0,0,0.07);
+        }
+        body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); transition:background 0.3s,color 0.3s; min-height:100vh; }
+        h1,h2,h3,h4 { font-family:'Outfit',sans-serif; }
+        code, pre { font-family:'JetBrains Mono',monospace; }
+        .glass { background:var(--card); backdrop-filter:blur(12px); border:1px solid var(--border); border-radius:1.25rem; }
+        #themeToggle { position:fixed; top:1.5rem; right:1.5rem; z-index:9999; background:var(--card); border:1px solid var(--border); color:var(--text); padding:0.6rem 1.1rem; border-radius:100px; font-weight:600; font-family:'Inter',sans-serif; cursor:pointer; font-size:0.85rem; }
+        .sec-label { color:var(--accent); font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.5rem; }
+        .code-wrap { background:#0d1117; border:1px solid rgba(255,255,255,0.07); border-radius:0.875rem; overflow:hidden; }
+        .code-header { background:rgba(255,255,255,0.04); padding:0.6rem 1.2rem; display:flex; align-items:center; gap:0.5rem; }
+        .dot { width:12px; height:12px; border-radius:50%; }
+        .dot-r{background:#ff5f57}.dot-y{background:#febc2e}.dot-g{background:#28c840}
+        .code-body { padding:1.25rem 1.5rem; overflow-x:auto; }
+        .code-body pre { margin:0; font-size:0.82rem; line-height:1.7; color:#e2e8f0; white-space:pre; }
+        .t{color:#7dd3fc}.a{color:#fbbf24}.v{color:#86efac}.c{color:#6b7280;font-style:italic}.p{color:#c084fc}.pv{color:#f9a8d4}.js-k{color:#f97316}.js-s{color:#86efac}.js-c{color:#6b7280;font-style:italic}
+        .exp-list { display:flex; flex-direction:column; gap:0.875rem; margin-top:1.5rem; }
+        .exp-item { display:flex; gap:1rem; align-items:flex-start; }
+        .exp-num { background:var(--accent-dim); color:var(--accent); font-family:'JetBrains Mono',monospace; font-size:0.7rem; font-weight:700; padding:0.2rem 0.55rem; border-radius:6px; flex-shrink:0; margin-top:0.15rem; }
+        .exp-tag { background:rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:5px; padding:0.1rem 0.5rem; font-size:0.72rem; font-family:'JetBrains Mono',monospace; color:#7dd3fc; margin-right:0.4rem; }
+        [data-theme="light"] .exp-tag { background:rgba(0,0,0,0.04); color:#0369a1; }
+        .exp-desc { color:var(--dim); font-size:0.875rem; line-height:1.55; }
+        .exp-desc strong { color:var(--text); font-weight:600; }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+        .fade-up { animation:fadeUp 0.5s ease both; }
+
+        /* ══════ DEMO DEL COMPONENTE ══════ */
+        .demo-box {
+            background: #1e293b;
+            border-radius: 0.875rem;
+            overflow: hidden;
+            position: relative;
+            height: 280px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        /* Navbar de demo */
+        .demo-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: #0f172a;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .demo-nav-logo { font-family:'Outfit',sans-serif; font-weight:700; color:#10b981; font-size:1.1rem; }
+        /* Botón hamburguesa */
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+        .hamburger:hover { background: rgba(255,255,255,0.08); }
+        .barra {
+            width: 26px;
+            height: 3px;
+            background: #f8fafc;
+            border-radius: 4px;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            display: block;
+        }
+        /* Estado ABIERTO */
+        .hamburger.open .barra:nth-child(1) {
+            transform: translateY(9px) rotate(45deg);
+        }
+        .hamburger.open .barra:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        .hamburger.open .barra:nth-child(3) {
+            transform: translateY(-9px) rotate(-45deg);
+        }
+        /* Menú lateral */
+        .menu-movil {
+            position: absolute;
+            top: 0;
+            right: -100%;
+            width: 200px;
+            height: 100%;
+            background: #0f172a;
+            border-left: 1px solid rgba(255,255,255,0.08);
+            transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 4rem 1.5rem 2rem;
+        }
+        .menu-movil.open { right: 0; }
+        .menu-movil ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.25rem; }
+        .menu-movil a { color: #94a3b8; text-decoration: none; font-weight: 500; font-size: 1rem; transition: color 0.2s; }
+        .menu-movil a:hover { color: #10b981; }
+        .demo-overlay {
+            position: absolute;
+            top: 58px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .demo-hint { color: #475569; font-size: 0.85rem; text-align: center; }
+        .demo-hint strong { color: #64748b; display: block; font-size: 1.5rem; margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body class="p-5 md:p-10">
+
+    <button id="themeToggle">☀️ Modo Claro</button>
+
+    <div class="max-w-4xl mx-auto">
+
+        <!-- HEADER -->
+        <header class="mb-12 fade-up">
+            <nav class="mb-5">
+                <a href="index.html" style="color:var(--accent);font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-size:0.9rem;">
+                    &larr; Volver a Componentes Comunes
+                </a>
+            </nav>
+            <p class="sec-label">Paso 02 · Navegación Mobile</p>
+            <h1 class="text-4xl md:text-5xl font-bold mb-3" style="background:linear-gradient(to right,var(--text),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">
+                Menú Hamburguesa
+            </h1>
+            <p style="color:var(--dim);font-size:1.05rem;max-width:560px;">El ícono de tres líneas que se transforma en una "X" al abrirse. Aprende la animación CSS y el control JavaScript que lo hacen funcionar.</p>
+        </header>
+
+        <!-- DEMO EN VIVO -->
+        <section class="mb-12 fade-up" style="animation-delay:0.1s">
+            <p class="sec-label">Demo Interactiva</p>
+            <h2 class="text-2xl font-bold mb-5">Haz clic en el ícono ☰</h2>
+            <div class="demo-box">
+                <nav class="demo-nav">
+                    <span class="demo-nav-logo">MiSitio</span>
+                    <button class="hamburger" id="demoHamburger" aria-label="Abrir menú" aria-expanded="false">
+                        <span class="barra"></span>
+                        <span class="barra"></span>
+                        <span class="barra"></span>
+                    </button>
+                </nav>
+                <div class="demo-overlay">
+                    <div class="demo-hint">
+                        <strong>☰</strong>
+                        Haz clic en el botón de arriba
+                    </div>
+                </div>
+                <nav class="menu-movil" id="demoMenu" aria-hidden="true">
+                    <ul>
+                        <li><a href="#">Inicio</a></li>
+                        <li><a href="#">Sobre mí</a></li>
+                        <li><a href="#">Proyectos</a></li>
+                        <li><a href="#">Contacto</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <p style="color:var(--dim);font-size:0.82rem;margin-top:0.75rem;">Las 3 barras se transforman en una ✕ y el menú aparece desde la derecha. Todo hecho con CSS puro + 5 líneas de JS.</p>
+        </section>
+
+        <!-- CÓDIGO HTML -->
+        <section class="mb-12 fade-up" style="animation-delay:0.15s">
+            <p class="sec-label">Código HTML — Línea a Línea</p>
+            <h2 class="text-2xl font-bold mb-5">Estructura del Botón y Menú</h2>
+            <div class="code-wrap mb-6">
+                <div class="code-header">
+                    <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+                    <span style="color:#6b7280;font-size:0.75rem;margin-left:0.5rem;">hamburguesa.html</span>
+                </div>
+                <div class="code-body">
+<pre><span class="c"><!-- 1. BOTÓN HAMBURGUESA --></span>
+<span class="t">&lt;button</span>
+  <span class="a">class</span>=<span class="v">"hamburger"</span>
+  <span class="a">id</span>=<span class="v">"menuBtn"</span>
+  <span class="a">aria-label</span>=<span class="v">"Abrir menú"</span>
+  <span class="a">aria-expanded</span>=<span class="v">"false"</span><span class="t">&gt;</span>
+
+  <span class="c"><!-- 2. Las tres "barras" del ícono --></span>
+  <span class="t">&lt;span</span> <span class="a">class</span>=<span class="v">"barra"</span><span class="t">&gt;&lt;/span&gt;</span>
+  <span class="t">&lt;span</span> <span class="a">class</span>=<span class="v">"barra"</span><span class="t">&gt;&lt;/span&gt;</span>
+  <span class="t">&lt;span</span> <span class="a">class</span>=<span class="v">"barra"</span><span class="t">&gt;&lt;/span&gt;</span>
+<span class="t">&lt;/button&gt;</span>
+
+<span class="c"><!-- 3. MENÚ LATERAL (oculto por defecto) --></span>
+<span class="t">&lt;nav</span>
+  <span class="a">class</span>=<span class="v">"menu-movil"</span>
+  <span class="a">id</span>=<span class="v">"menu"</span>
+  <span class="a">aria-hidden</span>=<span class="v">"true"</span><span class="t">&gt;</span>
+  <span class="t">&lt;ul&gt;</span>
+    <span class="t">&lt;li&gt;&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span><span class="t">&gt;</span>Inicio<span class="t">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="t">&lt;li&gt;&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span><span class="t">&gt;</span>Sobre mí<span class="t">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="t">&lt;li&gt;&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span><span class="t">&gt;</span>Proyectos<span class="t">&lt;/a&gt;&lt;/li&gt;</span>
+    <span class="t">&lt;li&gt;&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span><span class="t">&gt;</span>Contacto<span class="t">&lt;/a&gt;&lt;/li&gt;</span>
+  <span class="t">&lt;/ul&gt;</span>
+<span class="t">&lt;/nav&gt;</span></pre>
+                </div>
+            </div>
+            <div class="exp-list">
+                <div class="exp-item">
+                    <span class="exp-num">1</span>
+                    <div><p class="exp-desc"><code class="exp-tag">&lt;button&gt;</code> <strong>Usamos button y no div o span.</strong> Los elementos <code class="exp-tag">&lt;button&gt;</code> son enfocables con Tab, activables con Enter/Space y anunciados por lectores de pantalla. Usar un <code class="exp-tag">&lt;div&gt;</code> nos obliga a replicar todo eso manualmente.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">1b</span>
+                    <div><p class="exp-desc"><code class="exp-tag">aria-label="Abrir menú"</code> <strong>Descripción para lectores de pantalla.</strong> El botón visualmente solo muestra 3 rayas — sin este atributo, un usuario ciego escucharía solo "botón" sin saber qué hace. <code class="exp-tag">aria-label</code> le da contexto.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">1c</span>
+                    <div><p class="exp-desc"><code class="exp-tag">aria-expanded="false"</code> <strong>Estado de accesibilidad.</strong> Indica si el menú está abierto o cerrado. JavaScript debe actualizar este valor a <code class="exp-tag">"true"</code> cuando el menú se abre. Los lectores de pantalla lo anuncian al usuario.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">2</span>
+                    <div><p class="exp-desc"><code class="exp-tag">&lt;span class="barra"&gt;&lt;/span&gt;</code> ×3 <strong>Las tres barras del ícono.</strong> Son <code class="exp-tag">&lt;span&gt;</code> vacíos que se convierten en líneas con CSS (<code class="exp-tag">width</code>, <code class="exp-tag">height</code>, <code class="exp-tag">background</code>). CSS los anima individualmente con <code class="exp-tag">:nth-child()</code>.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">3</span>
+                    <div><p class="exp-desc"><code class="exp-tag">aria-hidden="true"</code> en el menú <strong>Oculta el menú para lectores de pantalla</strong> cuando está cerrado. Cuando JavaScript lo abra, debe cambiar este valor a <code class="exp-tag">"false"</code> para que el contenido sea accesible.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CÓDIGO CSS -->
+        <section class="mb-12 fade-up" style="animation-delay:0.2s">
+            <p class="sec-label">Código CSS — La Animación Explicada</p>
+            <h2 class="text-2xl font-bold mb-5">Transformar 3 barras en una ✕</h2>
+            <div class="code-wrap mb-6">
+                <div class="code-header">
+                    <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+                    <span style="color:#6b7280;font-size:0.75rem;margin-left:0.5rem;">hamburguesa.css</span>
+                </div>
+                <div class="code-body">
+<pre><span class="c">/* ── BOTÓN CONTENEDOR ────────────────── */</span>
+<span class="p">.hamburger</span> {
+  <span class="p">display</span>: <span class="pv">flex</span>;            <span class="c">/* [A] Barras en columna */</span>
+  <span class="p">flex-direction</span>: <span class="pv">column</span>;  <span class="c">/* [B] Una debajo de la otra */</span>
+  <span class="p">gap</span>: <span class="pv">6px</span>;                <span class="c">/* [C] Espacio entre barras */</span>
+  <span class="p">background</span>: <span class="pv">none</span>;        <span class="c">/* [D] Sin fondo */</span>
+  <span class="p">border</span>: <span class="pv">none</span>;            <span class="c">/* [E] Sin borde */</span>
+  <span class="p">cursor</span>: <span class="pv">pointer</span>;        <span class="c">/* [F] Cursor de mano */</span>
+  <span class="p">padding</span>: <span class="pv">8px</span>;
+}
+
+<span class="c">/* ── CADA BARRA ──────────────────────── */</span>
+<span class="p">.barra</span> {
+  <span class="p">width</span>: <span class="pv">28px</span>;             <span class="c">/* [G] Ancho fijo */</span>
+  <span class="p">height</span>: <span class="pv">3px</span>;             <span class="c">/* [H] Solo 3px de alto */</span>
+  <span class="p">background</span>: <span class="pv">#f8fafc</span>;    <span class="c">/* [I] Color blanco */</span>
+  <span class="p">border-radius</span>: <span class="pv">4px</span>;     <span class="c">/* [J] Bordes redondeados */</span>
+  <span class="p">transition</span>: <span class="pv">all 0.35s cubic-bezier(0.4, 0, 0.2, 1)</span>; <span class="c">/* [K] */</span>
+  <span class="p">display</span>: <span class="pv">block</span>;          <span class="c">/* [L] Necesario para transform */</span>
+}
+
+<span class="c">/* ── ESTADO ABIERTO: barra 1 → / ──── */</span>
+<span class="p">.hamburger.open .barra:nth-child(1)</span> {
+  <span class="p">transform</span>: <span class="pv">translateY(9px) rotate(45deg)</span>; <span class="c">/* [M] */</span>
+}
+
+<span class="c">/* ── ESTADO ABIERTO: barra 2 → invisible */</span>
+<span class="p">.hamburger.open .barra:nth-child(2)</span> {
+  <span class="p">opacity</span>: <span class="pv">0</span>;              <span class="c">/* [N] Desaparece */</span>
+  <span class="p">transform</span>: <span class="pv">scaleX(0)</span>;   <span class="c">/* [O] Se encoge */</span>
+}
+
+<span class="c">/* ── ESTADO ABIERTO: barra 3 → \ ──── */</span>
+<span class="p">.hamburger.open .barra:nth-child(3)</span> {
+  <span class="p">transform</span>: <span class="pv">translateY(-9px) rotate(-45deg)</span>; <span class="c">/* [P] */</span>
+}
+
+<span class="c">/* ── MENÚ LATERAL ────────────────────── */</span>
+<span class="p">.menu-movil</span> {
+  <span class="p">position</span>: <span class="pv">fixed</span>;         <span class="c">/* [Q] Fuera del flujo normal */</span>
+  <span class="p">top</span>: <span class="pv">0</span>;
+  <span class="p">right</span>: <span class="pv">-300px</span>;           <span class="c">/* [R] Oculto a la derecha */</span>
+  <span class="p">width</span>: <span class="pv">300px</span>;
+  <span class="p">height</span>: <span class="pv">100vh</span>;           <span class="c">/* [S] Altura completa */</span>
+  <span class="p">background</span>: <span class="pv">#1e293b</span>;
+  <span class="p">transition</span>: <span class="pv">right 0.35s ease</span>; <span class="c">/* [T] Animación de deslizamiento */</span>
+  <span class="p">padding</span>: <span class="pv">5rem 2rem</span>;
+}
+<span class="p">.menu-movil.open</span> {
+  <span class="p">right</span>: <span class="pv">0</span>;               <span class="c">/* [U] Entra en pantalla */</span>
+}</pre>
+                </div>
+            </div>
+            <div class="exp-list">
+                <div class="exp-item">
+                    <span class="exp-num">A-B</span>
+                    <div><p class="exp-desc"><code class="exp-tag">display:flex</code> + <code class="exp-tag">flex-direction:column</code> <strong>Apila las 3 barras verticalmente.</strong> Por defecto flex pone los elementos en fila. Con <code class="exp-tag">column</code> los pone en columna: barra arriba, barra en medio, barra abajo.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">C</span>
+                    <div><p class="exp-desc"><code class="exp-tag">gap: 6px</code> <strong>Separa las barras exactamente 6 píxeles.</strong> Este valor es importante para la animación: al transformar las barras 1 y 3, las moveremos 9px (= la barra de 3px + el gap de 6px) para que se crucen en el centro.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">K</span>
+                    <div><p class="exp-desc"><code class="exp-tag">transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1)</code> <strong>La clave de toda la animación.</strong> Cada cambio de propiedad (transform, opacity) se animará en 350ms con una curva de aceleración suave. Sin esto, la transformación sería instantánea.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">M</span>
+                    <div><p class="exp-desc"><code class="exp-tag">translateY(9px) rotate(45deg)</code> <strong>La barra superior se mueve 9px hacia abajo</strong> (para alinearse con el centro) y luego rota 45°. Esto la convierte en la parte "/" de la X. El orden importa: primero se mueve, luego rota.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">N-O</span>
+                    <div><p class="exp-desc"><code class="exp-tag">opacity:0</code> + <code class="exp-tag">scaleX(0)</code> <strong>La barra del medio desaparece de dos maneras</strong>: se vuelve transparente (<code class="exp-tag">opacity</code>) y se encoge horizontalmente (<code class="exp-tag">scaleX</code>). Usar los dos juntos hace la animación más fluida.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">P</span>
+                    <div><p class="exp-desc"><code class="exp-tag">translateY(-9px) rotate(-45deg)</code> <strong>La barra inferior se mueve 9px hacia arriba</strong> y rota -45°. Esto la convierte en la parte "\" de la X. Combinada con la barra superior, forman la ✕ perfecta.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">R</span>
+                    <div><p class="exp-desc"><code class="exp-tag">right: -300px</code> <strong>Oculta el menú "fuera de pantalla"</strong> a la derecha. El menú tiene 300px de ancho y está posicionado -300px, así que queda completamente invisible. Cuando añadimos la clase <code class="exp-tag">.open</code>, <code class="exp-tag">right</code> cambia a <code class="exp-tag">0</code> y el menú "entra".</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">T</span>
+                    <div><p class="exp-desc"><code class="exp-tag">transition: right 0.35s ease</code> <strong>Anima el movimiento del menú.</strong> Cuando JavaScript cambia <code class="exp-tag">right</code> de -300px a 0, CSS anima esa transición suavemente en lugar de ser instantánea. El menú "desliza" desde afuera.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CÓDIGO JS -->
+        <section class="mb-12 fade-up" style="animation-delay:0.25s">
+            <p class="sec-label">JavaScript — El Control del Toggle</p>
+            <h2 class="text-2xl font-bold mb-5">Activar y desactivar el menú</h2>
+            <div class="code-wrap mb-6">
+                <div class="code-header">
+                    <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+                    <span style="color:#6b7280;font-size:0.75rem;margin-left:0.5rem;">hamburguesa.js</span>
+                </div>
+                <div class="code-body">
+<pre><span class="js-c">// 1. Seleccionamos los elementos del DOM</span>
+<span class="js-k">const</span> btn  = document.getElementById(<span class="js-s">'menuBtn'</span>);
+<span class="js-k">const</span> menu = document.getElementById(<span class="js-s">'menu'</span>);
+
+<span class="js-c">// 2. Escuchamos el clic en el botón</span>
+btn.addEventListener(<span class="js-s">'click'</span>, () => {
+
+  <span class="js-c">// 3. Alternamos la clase 'open' en el botón y el menú</span>
+  btn.classList.toggle(<span class="js-s">'open'</span>);
+  menu.classList.toggle(<span class="js-s">'open'</span>);
+
+  <span class="js-c">// 4. Actualizamos los atributos de accesibilidad</span>
+  <span class="js-k">const</span> isOpen = menu.classList.contains(<span class="js-s">'open'</span>);
+  btn.setAttribute(<span class="js-s">'aria-expanded'</span>, isOpen);
+  menu.setAttribute(<span class="js-s">'aria-hidden'</span>, !isOpen);
+});</pre>
+                </div>
+            </div>
+            <div class="exp-list">
+                <div class="exp-item">
+                    <span class="exp-num">1</span>
+                    <div><p class="exp-desc"><code class="exp-tag">getElementById()</code> <strong>Obtiene referencias a los elementos HTML.</strong> En lugar de buscar los elementos cada vez que el usuario hace clic, los guardamos en variables (<code class="exp-tag">btn</code>, <code class="exp-tag">menu</code>) para acceder a ellos rápidamente.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">2</span>
+                    <div><p class="exp-desc"><code class="exp-tag">addEventListener('click', ...)</code> <strong>Registra una función que se ejecuta cuando el usuario hace clic.</strong> Esto es un patrón fundamental de JavaScript: "cuando pase X evento, ejecuta Y función".</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">3</span>
+                    <div><p class="exp-desc"><code class="exp-tag">classList.toggle('open')</code> <strong>El comando más importante de esta lógica.</strong> Si el elemento tiene la clase <code class="exp-tag">open</code>, la quita. Si no la tiene, la agrega. Una sola línea reemplaza un condicional if/else completo.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">4</span>
+                    <div><p class="exp-desc"><code class="exp-tag">setAttribute('aria-expanded', isOpen)</code> <strong>Mantiene los atributos de accesibilidad actualizados.</strong> <code class="exp-tag">classList.contains()</code> devuelve true/false, que usamos para actualizar <code class="exp-tag">aria-expanded</code> y <code class="exp-tag">aria-hidden</code> automáticamente.</p></div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        /* Demo interactiva */
+        const demoBtn = document.getElementById('demoHamburger');
+        const demoMenu = document.getElementById('demoMenu');
+        demoBtn.addEventListener('click', () => {
+            demoBtn.classList.toggle('open');
+            demoMenu.classList.toggle('open');
+            const isOpen = demoMenu.classList.contains('open');
+            demoBtn.setAttribute('aria-expanded', isOpen);
+            demoMenu.setAttribute('aria-hidden', !isOpen);
+        });
+
+        /* Theme toggle */
+        const btn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme','light'); btn.innerHTML='🌙 Modo Oscuro'; }
+        btn.addEventListener('click', () => {
+            if (html.getAttribute('data-theme') === 'light') { html.removeAttribute('data-theme'); localStorage.setItem('theme','dark'); btn.innerHTML='☀️ Modo Claro'; }
+            else { html.setAttribute('data-theme','light'); localStorage.setItem('theme','light'); btn.innerHTML='🌙 Modo Oscuro'; }
+        });
+    </script>
+</body>
+</html>
