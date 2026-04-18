@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Variables Avanzado | Módulo 4</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #0b1120; --card-bg: rgba(15, 23, 42, 0.7); --accent: #f59e0b; --accent-glow: rgba(245, 158, 11, 0.4); --text-main: #f8fafc; --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        [data-theme="light"] { --bg-color: #f1f5f9; --card-bg: rgba(255, 255, 255, 0.85); --text-main: #0f172a; --accent: #d97706; --accent-glow: rgba(217, 119, 6, 0.2); }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); min-height: 100vh; scroll-behavior: smooth; font-size: 1.25rem; }
+        .glass-panel { background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 2.5rem; transition: var(--transition); }
+        .glass-panel:hover { border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow); }
+        
+        .hub-card { cursor: pointer; position: relative; overflow: hidden; }
+        .hub-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent); transform: translateX(-100%); transition: 0.6s; }
+        .hub-card:hover::before { transform: translateX(100%); }
+
+        .module-section { padding: 4rem 0; border-top: 1px solid rgba(255, 255, 255, 0.05); }
+        .code-snippet { background: #010409; border-radius: 1rem; padding: 1.5rem; border: 1px solid rgba(255, 255, 255, 0.1); font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; margin: 1rem 0; }
+        
+        .stack-heap-visual { display: flex; gap: 2rem; margin: 2rem 0; }
+        .memory-column { flex: 1; border: 2px dashed rgba(255, 255, 255, 0.1); padding: 1.5rem; border-radius: 1rem; background: rgba(0,0,0,0.2); }
+        .memory-slot { background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.05); margin: 0.5rem 0; padding: 0.75rem; border-radius: 0.5rem; font-size: 0.8rem; display: flex; justify-content: space-between; align-items: center; }
+        
+        #themeToggle { position: fixed; bottom: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-main); padding: 0.75rem 1.5rem; border-radius: 100px; font-weight: 600; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); cursor: pointer; }
+        .badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 100px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; background: var(--accent); color: white; margin-bottom: 0.5rem; }
+        .keyword { color: #f472b6; }
+        .string { color: #fbbf24; }
+        .number { color: #818cf8; }
+        .comment { color: #64748b; font-style: italic; }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+    <button id="themeToggle">☀️ Modo Claro</button>
+
+    <div class="max-w-6xl mx-auto">
+        <header class="mb-24 text-center">
+            <h1 class="text-5xl md:text-8xl font-black bg-gradient-to-r from-white via-slate-400 to-amber-500 bg-clip-text text-transparent mb-8 leading-tight">
+                Módulo 04: Variables
+            </h1>
+            <p class="text-slate-400 text-2xl font-light max-w-3xl mx-auto leading-relaxed">
+                Dominio de la gestión de estado, ciclos de vida y persistencia de datos en sistemas de alta disponibilidad.
+            </p>
+        </header>
+
+        <!-- HUB DE TARJETAS -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-32">
+            <a href="tipos-memoria.html" class="hub-card glass-panel p-10 group">
+                <div class="badge">Nivel 4.1</div>
+                <h3 class="text-3xl font-bold mb-4 text-amber-500">Arquitectura de Memoria</h3>
+                <p class="text-slate-400 text-base leading-relaxed mb-8">Análisis del Stack y Heap: Gestión de asignación dinámica y algoritmos de recolección de basura.</p>
+                <div class="mt-auto text-amber-400 font-bold flex items-center gap-3 text-lg">Acceder al Módulo &rarr;</div>
+            </a>
+            
+            <a href="scopes.html" class="hub-card glass-panel p-10 group">
+                <div class="badge">Nivel 4.2</div>
+                <h3 class="text-3xl font-bold mb-4 text-amber-500">Contextos de Ejecución</h3>
+                <p class="text-slate-400 text-base leading-relaxed mb-8">Resolución de Scopes, Hoisting y la cadena de entornos léxicos en el motor V8.</p>
+                <div class="mt-auto text-amber-400 font-bold flex items-center gap-3 text-lg">Acceder al Módulo &rarr;</div>
+            </a>
+
+            <a href="inmutabilidad.html" class="hub-card glass-panel p-10 group">
+                <div class="badge">Nivel 4.3</div>
+                <h3 class="text-3xl font-bold mb-4 text-amber-500">Integridad de Datos</h3>
+                <p class="text-slate-400 text-base leading-relaxed mb-8">Inmutabilidad profunda vs superficial: Descriptores de propiedad y sellado de objetos.</p>
+                <div class="mt-auto text-amber-400 font-bold flex items-center gap-3 text-lg">Acceder al Módulo &rarr;</div>
+            </a>
+        </section>
+
+        <!-- LABORATORIO FINAL -->
+        <section class="glass-panel p-12 border-t-8 border-amber-500 relative overflow-hidden">
+            <div class="absolute right-0 top-0 p-16 opacity-5 pointer-events-none">
+                <svg width="300" height="300" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
+            </div>
+            
+            <div class="max-w-4xl">
+                <h2 class="text-4xl font-bold mb-6">Evaluación de Integración Técnica</h2>
+                <p class="text-slate-400 text-xl mb-12 leading-relaxed">Esta sesión valida la competencia en la gestión de referencias, entornos léxicos y protección granular de estructuras de datos complejos.</p>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div>
+                        <h4 class="text-amber-500 font-bold mb-6 uppercase tracking-widest text-sm">Escenario de Implementación</h4>
+                        <p class="text-slate-400 text-base mb-8 leading-relaxed">
+                            1. Declarar un esquema de configuración consolidado.<br>
+                            2. Implementar cierres (closures) para protección de estado interno.<br>
+                            3. Validar la persistencia de datos tras clonación en el Heap.
+                        </p>
+                        <textarea id="codeEditor" spellcheck="false" class="w-full h-80 bg-slate-900/50 text-amber-400 font-mono p-10 rounded-2xl border border-white/10 resize-none focus:border-amber-500 outline-none transition-all text-lg leading-relaxed mb-8">// PROTOCOLO_FINAL
+const SYSTEM_STATE = Object.freeze({ version: "1.0.0" });
+
+function initialize() {
+  // Lógica de arquitectura avanzada
+}
+</textarea>
+                        <button onclick="runCode()" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-black py-5 px-12 rounded-2xl transition-all shadow-2xl active:scale-95 text-xl uppercase tracking-tighter">Ejecutar Validación de Sistema</button>
+                    </div>
+                    <div class="flex flex-col">
+                        <p class="text-slate-400 mb-2 font-mono text-[10px] uppercase tracking-widest">System Monitor</p>
+                        <div id="consoleOutput" class="flex-1 bg-black/40 text-emerald-400 font-mono p-6 rounded-xl border border-white/10 min-h-[250px] overflow-y-auto shadow-inner"></div>
+                        <button onclick="clearConsole()" class="mt-2 text-[10px] text-slate-500 hover:text-white transition-colors self-end uppercase font-bold">Purge Logs</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Laboratory Logic
+        function runCode() {
+            const code = document.getElementById('codeEditor').value;
+            const output = document.getElementById('consoleOutput');
+            output.innerHTML = "";
+            const oldLog = console.log;
+            
+            console.log = function(...args) {
+                args.forEach(arg => {
+                    const line = document.createElement('div');
+                    line.className = "mb-1 border-l-2 border-emerald-500/30 pl-3 py-1";
+                    line.innerHTML = `<span class="text-emerald-500/50 mr-2">SYS:</span>${
+                        typeof arg === 'object' ? JSON.stringify(arg) : arg
+                    }`;
+                    output.appendChild(line);
+                });
+                oldLog.apply(console, args);
+            };
+
+            try {
+                const run = new Function(code);
+                run();
+            } catch (err) {
+                const errorLine = document.createElement('div');
+                errorLine.className = "text-red-400 mt-2 p-3 bg-red-400/10 rounded-lg border border-red-400/20";
+                errorLine.textContent = `CRITICAL_ERROR: ${err.message}`;
+                output.appendChild(errorLine);
+            } finally {
+                console.log = oldLog;
+            }
+        }
+
+        function clearConsole() {
+            document.getElementById('consoleOutput').innerHTML = "";
+        }
+
+        // Theme Management
+        const themeBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        function updateThemeUI(isLight) {
+            themeBtn.innerHTML = isLight ? '🌙 Modo Oscuro' : '☀️ Modo Claro';
+            if (isLight) html.setAttribute('data-theme', 'light');
+            else html.removeAttribute('data-theme');
+        }
+
+        if (localStorage.getItem('theme') === 'light') updateThemeUI(true);
+
+        themeBtn.addEventListener('click', () => {
+            const isLight = html.getAttribute('data-theme') === 'light';
+            localStorage.setItem('theme', isLight ? 'dark' : 'light');
+            updateThemeUI(!isLight);
+        });
+    </script>
+</body>
+</html>

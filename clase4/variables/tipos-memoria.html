@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arquitectura de Memoria Avanzada | Módulo 4</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #0b1120; --card-bg: rgba(15, 23, 42, 0.7); --accent: #10b981; --accent-glow: rgba(16, 185, 129, 0.2); --text-main: #f8fafc; --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        [data-theme="light"] { --bg-color: #f1f5f9; --card-bg: rgba(255, 255, 255, 0.85); --text-main: #0f172a; --accent: #059669; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); min-height: 100vh; font-size: 1.25rem; }
+        .glass-panel { background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 2.5rem; }
+        .code-snippet { background: #010409; border-radius: 1.5rem; padding: 2rem; border: 1px solid rgba(255, 255, 255, 0.1); font-family: 'JetBrains Mono', monospace; font-size: 1rem; }
+        .memory-slot { background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.05); margin: 0.75rem 0; padding: 1.25rem; border-radius: 1rem; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; }
+        #themeToggle { position: fixed; bottom: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-main); padding: 1rem 2rem; border-radius: 100px; cursor: pointer; font-weight: 600; }
+        .keyword { color: #f472b6; }
+        .string { color: #fbbf24; }
+        .number { color: #818cf8; }
+        .comment { color: #64748b; font-style: italic; }
+        .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.3), transparent); margin: 6rem 0; }
+        .tech-tag { background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+    </style>
+</head>
+<body class="p-6 md:p-12 pb-32">
+    <button id="themeToggle">Modo Claro</button>
+
+    <div class="max-w-6xl mx-auto">
+        <!-- HEADER -->
+        <header class="mb-24 text-center">
+            <nav class="mb-12 flex justify-center gap-6 text-sm font-semibold uppercase tracking-widest">
+                <a href="index.html" class="text-emerald-500 hover:text-emerald-400 transition-colors">Variables Hub</a>
+                <span class="text-slate-700">|</span>
+                <span class="text-slate-500">Arquitectura Avanzada</span>
+            </nav>
+            <h1 class="text-5xl md:text-7xl font-black bg-gradient-to-r from-white to-emerald-500 bg-clip-text text-transparent mb-8 leading-tight">
+                Gestión de Memoria y Tipado
+            </h1>
+            <p class="text-slate-400 text-2xl font-light max-w-2xl mx-auto leading-relaxed">
+                Profundización técnica: de la asignación escalar a la recolección de basura generacional.
+            </p>
+        </header>
+
+        <!-- SECTION 1: VARIABLE TYPES EXAMPLES -->
+        <section class="mb-32">
+            <h2 class="text-3xl font-bold text-emerald-400 mb- aggregation-8 border-b border-emerald-500/20 pb-4 inline-block">1. Catálogo de Tipos en JavaScript</h2>
+            <div class="space-y-12">
+                <p class="text-slate-300 text-xl leading-relaxed mt-8">
+                    JavaScript es un lenguaje de tipado dinámico, donde las variables no tienen un tipo fijo, pero los valores sí.
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="glass-panel p-8">
+                        <h4 class="tech-tag mb-4">Primitivos (By Value)</h4>
+                        <div class="code-snippet p-4 text-xs h-full">
+                            <span class="keyword">let</span> num = <span class="number">42</span>; <span class="comment">// Number</span><br>
+                            <span class="keyword">let</span> str = <span class="string">"Pro"</span>; <span class="comment">// String</span><br>
+                            <span class="keyword">let</span> bool = <span class="keyword">true</span>; <span class="comment">// Boolean</span><br>
+                            <span class="keyword">let</span> empty = <span class="keyword">null</span>; <span class="comment">// Objeto nulo intencional</span><br>
+                            <span class="keyword">let</span> undef; <span class="comment">// Undefined (no asignado)</span><br>
+                            <span class="keyword">let</span> big = <span class="number">9007n</span>; <span class="comment">// BigInt</span><br>
+                            <span class="keyword">let</span> sym = <span class="keyword">Symbol</span>(); <span class="comment">// Identificador único</span>
+                        </div>
+                    </div>
+                    <div class="glass-panel p-8">
+                        <h4 class="tech-tag mb-4" style="background:rgba(6, 182, 212, 0.1); color:#06b6d4;">Estructuras (By Reference)</h4>
+                        <div class="code-snippet p-4 text-xs h-full">
+                            <span class="comment">// Objetos (Colecciones de datos)</span><br>
+                            <span class="keyword">const</span> user = { id: <span class="number">1</span>, name: <span class="string">"Ana"</span> };<br><br>
+                            <span class="comment">// Arreglos (Listas ordenadas)</span><br>
+                            <span class="keyword">const</span> list = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>];<br><br>
+                            <span class="comment">// Funciones (Bloques ejecutables)</span><br>
+                            <span class="keyword">const</span> run = () => <span class="keyword">true</span>;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECTION 2: FIFO vs LIFO -->
+        <section class="mb-32">
+            <h2 class="text-3xl font-bold text-emerald-400 mb-12 border-b border-emerald-500/20 pb-4 inline-block">2. Estructuras Dinámicas: LIFO vs FIFO</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+                <div class="space-y-6">
+                    <p class="text-slate-300 text-lg leading-relaxed">
+                        La memoria en JS no solo se asigna, sino que se organiza bajo reglas lógicas de acceso.
+                    </p>
+                    <div class="p-6 bg-slate-900/50 rounded-2xl border border-white/5">
+                        <h4 class="font-bold text-slate-200 mb-2">LIFO (The Stack)</h4>
+                        <p class="text-sm text-slate-400 italic mb-4">"Last In, First Out": El último en entrar es el primero en salir. Como una pila de platos.</p>
+                        <p class="text-xs text-emerald-500 font-bold uppercase tracking-wider">Uso: Gestión de llamadas a funciones.</p>
+                    </div>
+                    <div class="p-6 bg-slate-900/50 rounded-2xl border border-white/5">
+                        <h4 class="font-bold text-slate-200 mb-2">FIFO (The Queue)</h4>
+                        <p class="text-sm text-slate-400 italic mb-4">"First In, First Out": El primero en entrar es el primero en salir. Como una fila en el banco.</p>
+                        <p class="text-xs text-cyan-500 font-bold uppercase tracking-wider">Uso: Event Loop y gestión de tareas asíncronas.</p>
+                    </div>
+                </div>
+                <div class="glass-panel p-8 flex flex-col items-center">
+                    <div class="w-24 h-48 border-2 border-emerald-500/30 rounded-b-xl relative flex flex-col-reverse p-2 gap-2">
+                        <div class="bg-emerald-500 h-10 w-full rounded flex items-center justify-center text-[10px] font-bold">LIFO 1</div>
+                        <div class="bg-emerald-500/50 h-10 w-full rounded flex items-center justify-center text-[10px] font-bold">LIFO 2</div>
+                        <div class="absolute -top-12 text-[10px] text-emerald-500 uppercase font-bold">Pila (Stack)</div>
+                    </div>
+                    <div class="w-full h-12 border-2 border-cyan-500/30 rounded-xl mt-16 relative flex p-1 gap-2 items-center">
+                        <div class="bg-cyan-500 h-8 w-1/4 rounded flex items-center justify-center text-[10px] font-bold">FIFO 1</div>
+                        <div class="bg-cyan-500/50 h-8 w-1/4 rounded flex items-center justify-center text-[10px] font-bold">FIFO 2</div>
+                        <div class="absolute -top-8 text-[10px] text-cyan-500 uppercase font-bold">Cola (Queue)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECTION 3: POINTERS AND REFERENCES -->
+        <section class="mb-32">
+            <h2 class="text-3xl font-bold text-emerald-400 mb-12 border-b border-emerald-500/20 pb-4 inline-block">3. Punteros y Referencias</h2>
+            <div class="space-y-12">
+                <div class="glass-panel p-10 border-l-8 border-cyan-500">
+                    <h4 class="text-2xl font-bold mb-4">¿Qué es un Puntero?</h4>
+                    <p class="text-slate-300 text-lg leading-relaxed mb-6">
+                        Un puntero es una variable cuyo único propósito es almacenar la <strong>dirección de memoria</strong> de otra ubicación donde se encuentran los datos reales.
+                    </p>
+                    <p class="text-slate-400 text-base leading-relaxed">
+                        En lenguajes como C++, los punteros son explícitos. En JavaScript, son implícitos y los llamamos <strong>Referencias</strong>. Cuando asignas un objeto a una variable, no estás guardando el objeto, sino un puntero que le dice a JavaScript dónde buscarlo en el Heap.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="memory-slot p-8 flex-col items-start gap-4">
+                        <div class="flex justify-between w-full border-b border-white/5 pb-2">
+                            <span class="text-xs uppercase font-bold text-slate-500">Variable (Stack)</span>
+                            <span class="text-xs font-mono text-cyan-400">#0x0A01</span>
+                        </div>
+                        <p class="text-sm text-slate-400 italic leading-relaxed">
+                            "He guardado la dirección #0x0A01. Si el motor me pide el valor, iré al Heap a buscarlo."
+                        </p>
+                    </div>
+                    <div class="memory-slot p-8 flex-col items-start gap-4 border-cyan-500/30 bg-cyan-500/5">
+                        <div class="flex justify-between w-full border-b border-white/5 pb-2">
+                            <span class="text-xs uppercase font-bold text-cyan-500">Data (Heap)</span>
+                            <span class="text-xs font-mono text-slate-500">#0x0A01</span>
+                        </div>
+                        <p class="text-sm text-slate-300 font-mono">
+                            { status: "OK", value: 512 }
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECTION 4: GARBAGE COLLECTION DEEP DIVE -->
+        <section class="mb-32">
+            <h2 class="text-3xl font-bold text-emerald-400 mb-12 border-b border-emerald-500/20 pb-4 inline-block">4. El Motor de Recolección (GC)</h2>
+            <div class="space-y-12">
+                <p class="text-slate-300 text-xl leading-relaxed">
+                    JavaScript utiliza una recolección de basura de tipo **Generacional**, dividiendo el Heap en dos áreas principales para optimizar el rendimiento.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="glass-panel p-8 border-l-4 border-emerald-500 hover:bg-emerald-500/5 transition-colors">
+                        <h4 class="font-bold text-slate-200 mb-4">Young Generation</h4>
+                        <p class="text-sm text-slate-400 leading-relaxed">
+                            Es un espacio pequeño donde se alojan objetos nuevos. El recolector pasa muy a menudo aquí (Minor GC) porque la mayoría de los objetos mueren jóvenes (objetos temporales en funciones).
+                        </p>
+                    </div>
+                    <div class="glass-panel p-8 border-l-4 border-slate-600 hover:bg-white/5 transition-colors">
+                        <h4 class="font-bold text-slate-200 mb-4">Old Generation</h4>
+                        <p class="text-sm text-slate-400 leading-relaxed">
+                            Si un objeto sobrevive varios ciclos de recolección en el Young Space, se promueve al Old Space. Aquí la recolección es menos frecuente (Major GC) pero mucho más pesada.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="p-10 bg-slate-900 border border-emerald-500/20 rounded-3xl">
+                    <h5 class="text-emerald-400 font-black mb-6 uppercase tracking-widest text-center">Fases del Algoritmo Mark-and-Sweep</h5>
+                    <div class="space-y-8">
+                        <div class="flex gap-6">
+                            <div class="w-12 h-12 bg-emerald-500/20 text-emerald-500 rounded-full flex items-center justify-center font-bold text-xl shrink-0">1</div>
+                            <p class="text-base text-slate-400 leading-relaxed">
+                                <strong class="text-slate-200">Root Scanning:</strong> El GC identifica todos los objetos "raíz" (global object like <code>window</code>, variables actuales en el stack).
+                            </p>
+                        </div>
+                        <div class="flex gap-6">
+                            <div class="w-12 h-12 bg-emerald-500/20 text-emerald-500 rounded-full flex items-center justify-center font-bold text-xl shrink-0">2</div>
+                            <p class="text-base text-slate-400 leading-relaxed">
+                                <strong class="text-slate-200">Marking:</strong> Recorre recursivamente todas las referencias. Cada objeto alcanzado es marcado con un "bit" de vida.
+                            </p>
+                        </div>
+                        <div class="flex gap-6">
+                            <div class="w-12 h-12 bg-emerald-500/20 text-emerald-500 rounded-full flex items-center justify-center font-bold text-xl shrink-0">3</div>
+                            <p class="text-base text-slate-400 leading-relaxed">
+                                <strong class="text-slate-200">Sweeping:</strong> Se recorre todo el Heap. Cualquier objeto sin la marca de vida es eliminado y su espacio de memoria se reclama como libre.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHALLENGE -->
+        <section class="glass-panel p-12 border-t-8 border-amber-500">
+            <h2 class="text-3xl font-bold mb-8 text-amber-500 font-mono tracking-widest text-center uppercase">V8_SIMULATOR: ARCHITECTURE VALIDATION</h2>
+            <div class="grid grid-cols-1 gap-12">
+                <div>
+                    <p class="text-slate-300 text-lg mb-8 leading-relaxed">
+                        Analiza cómo las referencias en el Heap pueden generar "fugas de memoria" si no se gestionan correctamente. Implementa un objeto y luego rompe su puntero para permitir que sea recolectado.
+                    </p>
+                    <textarea id="codeEditor" spellcheck="false" class="w-full h-64 bg-slate-900/50 text-emerald-400 font-mono p-10 rounded-2xl border border-white/10 resize-none focus:border-emerald-500 outline-none transition-all leading-relaxed text-lg mb-8">// MEMORY_ALLOCATION
+let data_buffer = { huge_array: [1, 2, 3] };
+
+// Tu Tarea: 
+// 1. Crea una referencia 'ptr' que apunte a data_buffer
+// 2. Rompe la conexión original de data_buffer para probar el GC
+// 3. Imprime 'ptr' para ver si los datos persisten
+</textarea>
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <button onclick="runCode()" class="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-black py-5 px-12 rounded-2xl transition-all shadow-xl active:scale-95 text-xl">
+                            Ejecutar Protocolo
+                        </button>
+                        <div id="consoleOutput" class="flex-[1.5] bg-black/70 text-emerald-400 font-mono p-10 rounded-2xl border border-white/10 min-h-[150px] overflow-y-auto text-base"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function runCode() {
+            const code = document.getElementById('codeEditor').value;
+            const output = document.getElementById('consoleOutput');
+            output.innerHTML = "";
+            const oldLog = console.log;
+            console.log = function(...args) {
+                args.forEach(arg => {
+                    const line = document.createElement('div');
+                    line.className = "mb-2 border-l-2 border-emerald-500/30 pl-4 py-1";
+                    line.innerHTML = `<span class="text-emerald-500/50 mr-3">MEM_DUMP:</span> ${JSON.stringify(arg)}`;
+                    output.appendChild(line);
+                });
+                oldLog.apply(console, args);
+            };
+            try { new Function(code)(); } catch (err) {
+                const errorLine = document.createElement('div');
+                errorLine.className = "text-red-400 py-2";
+                errorLine.textContent = `ALLOCATION_ERROR: ${err.message}`;
+                output.appendChild(errorLine);
+            } finally { console.log = oldLog; }
+        }
+
+        const themeBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme', 'light'); themeBtn.innerHTML = 'Modo Oscuro'; }
+        themeBtn.addEventListener('click', () => {
+            const isLight = html.getAttribute('data-theme') === 'light';
+            localStorage.setItem('theme', isLight ? 'dark' : 'light');
+            themeBtn.innerHTML = isLight ? 'Modo Claro' : 'Modo Oscuro';
+            if (isLight) html.removeAttribute('data-theme'); else html.setAttribute('data-theme', 'light');
+        });
+    </script>
+</body>
+</html>
