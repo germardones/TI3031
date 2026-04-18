@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Módulo 1 | Estructura y Semántica HTML</title>
+    <title>Módulo 1 | HTML y CSS Fundamentos</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -104,13 +104,55 @@
         .subtitle {
             font-size: 1.25rem;
             color: var(--text-dim);
-            max-width: 600px;
+            max-width: 680px;
+        }
+
+        .section-block {
+            margin-bottom: 3.5rem;
+        }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .section-label h2 {
+            font-size: 1.4rem;
+            color: var(--text-main);
+        }
+
+        .section-label .section-badge {
+            padding: 0.25rem 0.9rem;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .badge-html {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+        }
+
+        .badge-css {
+            background: rgba(251, 191, 36, 0.15);
+            color: #fbbf24;
+        }
+
+        .section-divider {
+            width: 100%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.06);
+            margin-bottom: 3.5rem;
         }
 
         .content-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.75rem;
         }
 
         .content-card {
@@ -169,10 +211,15 @@
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
             .container { padding: 2rem 1.5rem; }
+            .content-grid { grid-template-columns: 1fr; }
         }
-        
+
         [data-theme="light"] h1 {
             background-image: linear-gradient(to right, #0f172a, #0284c7) !important;
+        }
+
+        [data-theme="light"] .section-divider {
+            background: rgba(0, 0, 0, 0.08);
         }
     </style>
 </head>
@@ -186,47 +233,117 @@
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
                 Regresar al Hub Principal
             </a>
-            <h1>Módulo 1: Estructura y Semántica</h1>
-            <p class="subtitle">Domina la arquitectura del DOM, la jerarquía de etiquetas y los pilares de la accesibilidad estructural en la web.</p>
+            <h1>Módulo 1: HTML y CSS</h1>
+            <p class="subtitle">Domina la arquitectura semántica del DOM y el sistema de diseño visual con CSS moderno — todo en un solo módulo integrado.</p>
         </header>
 
-        <main class="content-grid">
-            <!-- Paso 01: El Esqueleto -->
-            <a href="esqueleto-web.html" class="content-card border-sky-500/20">
-                <div>
-                    <span class="card-tag">Paso 01</span>
-                    <h2 class="text-sky-400">El Esqueleto Web</h2>
-                    <p>Entiende la estructura base indispensable: Doctype, Head, Body y los metadatos esenciales.</p>
-                </div>
-                <div class="card-action text-sky-400">
-                    Iniciar Guía <span>&rarr;</span>
-                </div>
-            </a>
+        <!-- HTML Section -->
+        <div class="section-block">
+            <div class="section-label">
+                <h2>Estructura y Semántica HTML</h2>
+                <span class="section-badge badge-html">HTML</span>
+            </div>
+            <div class="content-grid">
+                <a href="esqueleto-web.html" class="content-card">
+                    <div>
+                        <span class="card-tag">Paso 01</span>
+                        <h2 class="text-sky-400" style="color:#38bdf8;">El Esqueleto Web</h2>
+                        <p>Entiende la estructura base indispensable: Doctype, Head, Body y los metadatos esenciales.</p>
+                    </div>
+                    <div class="card-action" style="color:#38bdf8;">
+                        Iniciar Guía <span>&rarr;</span>
+                    </div>
+                </a>
 
-            <!-- Paso 02: Anatomía Semántica -->
-            <a href="anatomia-html.html" class="content-card border-red-500/20">
-                <div>
-                    <span class="card-tag">Paso 02</span>
-                    <h2 class="text-red-500">Anatomía Semántica</h2>
-                    <p>Explorador interactivo de etiquetas estructurales. Identifica cada componente del documento con visión de rayos X.</p>
-                </div>
-                <div class="card-action text-red-500">
-                    Iniciar Explorador <span>&rarr;</span>
-                </div>
-            </a>
+                <a href="anatomia-html.html" class="content-card">
+                    <div>
+                        <span class="card-tag">Paso 02</span>
+                        <h2 style="color:#f87171;">Anatomía Semántica</h2>
+                        <p>Explorador interactivo de etiquetas estructurales. Identifica cada componente del documento con visión de rayos X.</p>
+                    </div>
+                    <div class="card-action" style="color:#f87171;">
+                        Iniciar Explorador <span>&rarr;</span>
+                    </div>
+                </a>
 
-            <!-- Paso 03: Atributos -->
-            <a href="atributos-html.html" class="content-card border-emerald-500/20">
-                <div>
-                    <span class="card-tag">Paso 03</span>
-                    <h2 class="text-emerald-500">Parámetros y Atributos</h2>
-                    <p>Dominio técnico de atributos (href, src, alt, class, id) y cómo afectan el comportamiento de cada etiqueta.</p>
-                </div>
-                <div class="card-action text-emerald-500">
-                    Ver Teoría <span>&rarr;</span>
-                </div>
-            </a>
-        </main>
+                <a href="atributos-html.html" class="content-card">
+                    <div>
+                        <span class="card-tag">Paso 03</span>
+                        <h2 style="color:#34d399;">Parámetros y Atributos</h2>
+                        <p>Dominio técnico de atributos (href, src, alt, class, id) y cómo afectan el comportamiento de cada etiqueta.</p>
+                    </div>
+                    <div class="card-action" style="color:#34d399;">
+                        Ver Teoría <span>&rarr;</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- CSS Section -->
+        <div class="section-block">
+            <div class="section-label">
+                <h2>Estructura y Diseño CSS</h2>
+                <span class="section-badge badge-css">CSS</span>
+            </div>
+            <div class="content-grid">
+                <a href="../clase2/css/aplicando-css.html" class="content-card">
+                    <div>
+                        <span class="card-tag">Paso 04</span>
+                        <h2 style="color:#fbbf24;">Fundamentos y Cascada</h2>
+                        <p>Entiende la estructura de las reglas CSS y el poder de la jerarquía (Inline vs Internal vs External).</p>
+                    </div>
+                    <div class="card-action" style="color:#fbbf24;">
+                        Iniciar Fundamentos <span>&rarr;</span>
+                    </div>
+                </a>
+
+                <a href="../clase2/clase2-1.html" class="content-card">
+                    <div>
+                        <span class="card-tag">Paso 05</span>
+                        <h2 style="color:#38bdf8;">Especificidad CSS</h2>
+                        <p>Un simulador de combate táctico para entender la jerarquía, el peso de los selectores y la prioridad en el DOM.</p>
+                    </div>
+                    <div class="card-action" style="color:#38bdf8;">
+                        Iniciar Desafío <span>&rarr;</span>
+                    </div>
+                </a>
+
+                <a href="../clase2/css/modelo-de-caja.html" class="content-card">
+                    <div>
+                        <span class="card-tag">Paso 06</span>
+                        <h2>El Modelo de Caja</h2>
+                        <p>Explora cómo el Padding, Border y Margin afectan el tamaño real de tus componentes en pantalla.</p>
+                    </div>
+                    <div class="card-action">
+                        Iniciar Experimento <span>&rarr;</span>
+                    </div>
+                </a>
+
+                <a href="../clase2/css/unidades-de-medida.html" class="content-card">
+                    <div>
+                        <span class="card-tag">Paso 07</span>
+                        <h2>Unidades de Medida</h2>
+                        <p>Compara px, %, rem y vh/vw en tiempo real para entender la responsividad y accesibilidad.</p>
+                    </div>
+                    <div class="card-action">
+                        Ver Comparativa <span>&rarr;</span>
+                    </div>
+                </a>
+
+                <a href="../clase2/css/flexbox-playground.html" class="content-card">
+                    <div>
+                        <span class="card-tag">Paso 08</span>
+                        <h2>Flexbox Avanzado</h2>
+                        <p>Visualiza y domina los ejes principal y secundario. Manipula el contenedor y sus hijos en un entorno controlado.</p>
+                    </div>
+                    <div class="card-action">
+                        Dominar Flexbox <span>&rarr;</span>
+                    </div>
+                </a>
+            </div>
+        </div>
     </div>
 
     <script>
