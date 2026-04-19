@@ -8,46 +8,28 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0f172a;
-            --card: rgba(30,41,59,0.8);
-            --accent: #10b981;
-            --accent-dim: rgba(16,185,129,0.15);
-            --text: #f8fafc;
-            --dim: #94a3b8;
+            --bg: #0f172a; --card: rgba(30,41,59,0.8); --accent: #10b981;
+            --accent-dim: rgba(16,185,129,0.15); --text: #f8fafc; --dim: #94a3b8;
             --border: rgba(255,255,255,0.08);
         }
         [data-theme="light"] {
-            --bg: #f8fafc;
-            --card: rgba(255,255,255,0.9);
-            --accent: #059669;
-            --accent-dim: rgba(5,150,105,0.1);
-            --text: #0f172a;
-            --dim: #475569;
+            --bg: #f8fafc; --card: rgba(255,255,255,0.9); --accent: #059669;
+            --accent-dim: rgba(5,150,105,0.1); --text: #0f172a; --dim: #475569;
             --border: rgba(0,0,0,0.07);
         }
         body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); transition:background 0.3s,color 0.3s; min-height:100vh; }
         h1,h2,h3,h4 { font-family:'Outfit',sans-serif; }
         code, pre { font-family:'JetBrains Mono',monospace; }
-
         .glass { background:var(--card); backdrop-filter:blur(12px); border:1px solid var(--border); border-radius:1.25rem; }
-
         #themeToggle { position:fixed; top:1.5rem; right:1.5rem; z-index:999; background:var(--card); border:1px solid var(--border); color:var(--text); padding:0.6rem 1.1rem; border-radius:100px; font-weight:600; font-family:'Inter',sans-serif; cursor:pointer; font-size:0.85rem; }
-
         .sec-label { color:var(--accent); font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.5rem; }
-
         .code-wrap { background:#0d1117; border:1px solid rgba(255,255,255,0.07); border-radius:0.875rem; overflow:hidden; }
         .code-header { background:rgba(255,255,255,0.04); padding:0.6rem 1.2rem; display:flex; align-items:center; gap:0.5rem; }
         .dot { width:12px; height:12px; border-radius:50%; }
-        .dot-r { background:#ff5f57; } .dot-y { background:#febc2e; } .dot-g { background:#28c840; }
+        .dot-r{background:#ff5f57}.dot-y{background:#febc2e}.dot-g{background:#28c840}
         .code-body { padding:1.25rem 1.5rem; overflow-x:auto; }
         .code-body pre { margin:0; font-size:0.82rem; line-height:1.7; color:#e2e8f0; white-space:pre; }
-        .t { color:#7dd3fc; }
-        .a { color:#fbbf24; }
-        .v { color:#86efac; }
-        .c { color:#6b7280; font-style:italic; }
-        .p { color:#c084fc; }
-        .pv { color:#f9a8d4; }
-
+        .t{color:#7dd3fc}.a{color:#fbbf24}.v{color:#86efac}.c{color:#6b7280;font-style:italic}.p{color:#c084fc}.pv{color:#f9a8d4}
         .exp-list { display:flex; flex-direction:column; gap:0.875rem; margin-top:1.5rem; }
         .exp-item { display:flex; gap:1rem; align-items:flex-start; }
         .exp-num { background:var(--accent-dim); color:var(--accent); font-family:'JetBrains Mono',monospace; font-size:0.7rem; font-weight:700; padding:0.2rem 0.55rem; border-radius:6px; flex-shrink:0; margin-top:0.15rem; }
@@ -57,123 +39,66 @@
         .exp-desc strong { color:var(--text); font-weight:600; }
 
         /* ---- DEMO CARDS ---- */
-        .demo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 1.5rem;
-        }
+        .demo-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:1.5rem; }
 
-        /* Variante 1: Tarjeta de Característica */
-        .card-feature {
-            background: #1e293b;
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 1.25rem;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
-        }
-        .card-feature:hover {
-            transform: translateY(-8px);
-            border-color: #10b981;
-            box-shadow: 0 20px 40px -15px rgba(16,185,129,0.3);
-        }
-        .card-feature .card-icon-box {
-            width: 48px;
-            height: 48px;
-            border-radius: 0.75rem;
-            background: rgba(16,185,129,0.15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
+        /* Variante 1: Feature */
+        .card-feature { background:#1e293b; border:1px solid rgba(255,255,255,0.08); border-radius:1.25rem; padding:2rem; display:flex; flex-direction:column; gap:1rem; transition:all 0.3s cubic-bezier(0.4,0,0.2,1); }
+        .card-feature:hover { transform:translateY(-8px); border-color:#10b981; box-shadow:0 20px 40px -15px rgba(16,185,129,0.3); }
+        .card-icon-box { width:48px; height:48px; border-radius:0.75rem; background:rgba(16,185,129,0.15); display:flex; align-items:center; justify-content:center; font-size:1.5rem; }
         .card-feature h3 { font-family:'Outfit',sans-serif; font-size:1.15rem; font-weight:700; color:#f8fafc; margin:0; }
         .card-feature p { color:#94a3b8; font-size:0.875rem; line-height:1.6; margin:0; flex-grow:1; }
-        .card-feature .card-link { color:#10b981; font-size:0.875rem; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:0.3rem; transition:gap 0.3s; }
+        .card-link { color:#10b981; font-size:0.875rem; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:0.3rem; transition:gap 0.3s; }
         .card-feature:hover .card-link { gap:0.6rem; }
 
-        /* Variante 2: Tarjeta de Perfil */
-        .card-profile {
-            background: #1e293b;
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 1.25rem;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
-        }
-        .card-profile:hover { transform: translateY(-8px); box-shadow: 0 20px 40px -15px rgba(0,0,0,0.4); }
-        .card-profile .profile-cover {
-            height: 100px;
-            background: linear-gradient(135deg, #10b981, #3b82f6);
-            aspect-ratio: auto;
-        }
-        .card-profile .profile-body { padding: 0 1.5rem 1.5rem; }
-        .card-profile .profile-avatar {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: #334155;
-            border: 3px solid #1e293b;
-            margin-top: -32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.75rem;
-            overflow: hidden;
-        }
+        /* Variante 2: Perfil */
+        .card-profile { background:#1e293b; border:1px solid rgba(255,255,255,0.08); border-radius:1.25rem; overflow:hidden; transition:all 0.3s cubic-bezier(0.4,0,0.2,1); }
+        .card-profile:hover { transform:translateY(-8px); box-shadow:0 20px 40px -15px rgba(0,0,0,0.4); }
+        .profile-cover { height:100px; background:linear-gradient(135deg, #10b981, #3b82f6); }
+        .profile-body { padding:0 1.5rem 1.5rem; }
+        .profile-avatar { width:64px; height:64px; border-radius:50%; background:#334155; border:3px solid #1e293b; margin-top:-32px; display:flex; align-items:center; justify-content:center; font-size:1.75rem; overflow:hidden; }
         .card-profile h3 { font-family:'Outfit',sans-serif; font-size:1.1rem; font-weight:700; color:#f8fafc; margin:0.75rem 0 0.25rem; }
-        .card-profile .profile-role { color:#10b981; font-size:0.78rem; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.75rem; }
+        .profile-role { color:#10b981; font-size:0.78rem; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.75rem; }
         .card-profile p { color:#94a3b8; font-size:0.82rem; line-height:1.55; margin:0 0 1rem; }
-        .card-profile .profile-stats { display:flex; gap:1.5rem; border-top:1px solid rgba(255,255,255,0.06); padding-top:1rem; }
-        .card-profile .stat { display:flex; flex-direction:column; align-items:center; }
-        .card-profile .stat-num { font-family:'Outfit',sans-serif; font-size:1.1rem; font-weight:700; color:#f8fafc; }
-        .card-profile .stat-label { font-size:0.72rem; color:#64748b; }
+        .profile-stats { display:flex; gap:1.5rem; border-top:1px solid rgba(255,255,255,0.06); padding-top:1rem; }
+        .stat { display:flex; flex-direction:column; align-items:center; }
+        .stat-num { font-family:'Outfit',sans-serif; font-size:1.1rem; font-weight:700; color:#f8fafc; }
+        .stat-label { font-size:0.72rem; color:#64748b; }
 
-        /* Variante 3: Tarjeta de Precio */
-        .card-pricing {
-            background: #1e293b;
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 1.25rem;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
-        }
-        .card-pricing.featured {
-            border-color: #10b981;
-            box-shadow: 0 0 0 1px #10b981, 0 20px 40px -15px rgba(16,185,129,0.3);
-        }
-        .card-pricing:hover { transform: translateY(-8px); }
-        .card-pricing .pricing-badge { position:absolute; top:1rem; right:1rem; background:#10b981; color:#fff; font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:0.2rem 0.6rem; border-radius:100px; }
-        .card-pricing .plan-name { color:#94a3b8; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.5rem; }
-        .card-pricing .price { font-family:'Outfit',sans-serif; font-size:2.75rem; font-weight:700; color:#f8fafc; line-height:1; margin-bottom:0.25rem; }
-        .card-pricing .price span { font-size:1rem; font-weight:500; color:#64748b; }
-        .card-pricing .price-desc { color:#64748b; font-size:0.82rem; margin-bottom:1.5rem; }
+        /* Variante 3: Precio */
+        .card-pricing { background:#1e293b; border:1px solid rgba(255,255,255,0.08); border-radius:1.25rem; padding:2rem; display:flex; flex-direction:column; position:relative; overflow:hidden; transition:all 0.3s cubic-bezier(0.4,0,0.2,1); }
+        .card-pricing.featured { border-color:#10b981; box-shadow:0 0 0 1px #10b981, 0 20px 40px -15px rgba(16,185,129,0.3); }
+        .card-pricing:hover { transform:translateY(-8px); }
+        .pricing-badge { position:absolute; top:1rem; right:1rem; background:#10b981; color:#fff; font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:0.2rem 0.6rem; border-radius:100px; }
+        .plan-name { color:#94a3b8; font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.5rem; }
+        .price { font-family:'Outfit',sans-serif; font-size:2.75rem; font-weight:700; color:#f8fafc; line-height:1; margin-bottom:0.25rem; }
+        .price span { font-size:1rem; font-weight:500; color:#64748b; }
+        .price-desc { color:#64748b; font-size:0.82rem; margin-bottom:1.5rem; }
         .card-pricing ul { list-style:none; padding:0; margin:0 0 1.75rem; display:flex; flex-direction:column; gap:0.6rem; flex-grow:1; }
         .card-pricing ul li { color:#94a3b8; font-size:0.875rem; display:flex; align-items:center; gap:0.5rem; }
         .card-pricing ul li::before { content:"✓"; color:#10b981; font-weight:700; flex-shrink:0; }
         .card-pricing ul li.disabled { color:#475569; text-decoration:line-through; }
         .card-pricing ul li.disabled::before { content:"×"; color:#475569; }
-        .card-pricing .btn-plan { display:block; text-align:center; padding:0.75rem; border-radius:0.75rem; font-weight:600; font-size:0.9rem; text-decoration:none; transition:all 0.3s; border:none; cursor:pointer; font-family:'Inter',sans-serif; }
-        .card-pricing .btn-plan.primary { background:#10b981; color:#fff; }
-        .card-pricing .btn-plan.primary:hover { background:#059669; transform:translateY(-2px); box-shadow:0 8px 20px rgba(16,185,129,0.4); }
-        .card-pricing .btn-plan.outline { background:transparent; color:#f8fafc; border:1px solid rgba(255,255,255,0.15); }
-        .card-pricing .btn-plan.outline:hover { border-color:#10b981; color:#10b981; }
+        .btn-plan { display:block; text-align:center; padding:0.75rem; border-radius:0.75rem; font-weight:600; font-size:0.9rem; text-decoration:none; transition:all 0.3s; border:none; cursor:pointer; font-family:'Inter',sans-serif; }
+        .btn-plan.primary { background:#10b981; color:#fff; }
+        .btn-plan.primary:hover { background:#059669; transform:translateY(-2px); box-shadow:0 8px 20px rgba(16,185,129,0.4); }
+        .btn-plan.outline { background:transparent; color:#f8fafc; border:1px solid rgba(255,255,255,0.15); }
+        .btn-plan.outline:hover { border-color:#10b981; color:#10b981; }
 
-        [data-theme="light"] .card-feature,
-        [data-theme="light"] .card-profile,
-        [data-theme="light"] .card-pricing { background:#ffffff; border-color:rgba(0,0,0,0.08); }
-        [data-theme="light"] .card-feature h3,
-        [data-theme="light"] .card-profile h3,
-        [data-theme="light"] .card-pricing .price { color:#0f172a; }
-        [data-theme="light"] .card-profile .profile-avatar { background:#e2e8f0; border-color:#f8fafc; }
-        [data-theme="light"] .card-profile .profile-stats { border-color:rgba(0,0,0,0.06); }
-        [data-theme="light"] .card-profile .stat-num { color:#0f172a; }
-        [data-theme="light"] .card-pricing .price-desc { color:#94a3b8; }
+        [data-theme="light"] .card-feature, [data-theme="light"] .card-profile, [data-theme="light"] .card-pricing { background:#ffffff; border-color:rgba(0,0,0,0.08); }
+        [data-theme="light"] .card-feature h3, [data-theme="light"] .card-profile h3, [data-theme="light"] .card-pricing .price { color:#0f172a; }
+        [data-theme="light"] .profile-avatar { background:#e2e8f0; border-color:#f8fafc; }
+        [data-theme="light"] .profile-stats { border-color:rgba(0,0,0,0.06); }
+        [data-theme="light"] .stat-num { color:#0f172a; }
 
+        /* ---- highlight system ---- */
+        [data-hl] { cursor:pointer; outline:2px solid transparent; border-radius:4px; transition:outline 0.2s; }
+        [data-hl]:hover { outline:2px solid rgba(16,185,129,0.5); }
+        [data-hl].hl-selected { outline:2px solid #10b981; }
+        .hl-block { display:block; border-left:2px solid transparent; padding-left:0.5rem; margin-left:-0.5rem; border-radius:3px; transition:background 0.25s, border-color 0.25s; }
+        .hl-block.hl-active { background:rgba(16,185,129,0.15); border-left-color:#10b981; }
+        .demo-hint-bar { display:flex; align-items:center; gap:0.5rem; color:var(--dim); font-size:0.78rem; margin-top:0.75rem; }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
+        .hint-dot { width:8px; height:8px; border-radius:50%; background:#10b981; animation:pulse 2s infinite; flex-shrink:0; }
         @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
         .fade-up { animation:fadeUp 0.5s ease both; }
     </style>
@@ -206,22 +131,22 @@
                 <div class="demo-grid">
 
                     <!-- Variante 1: Feature -->
-                    <div class="card-feature">
-                        <div class="card-icon-box">⚡</div>
-                        <h3>Rendimiento</h3>
-                        <p>Optimizado para cargar en menos de 2 segundos en cualquier dispositivo o red móvil.</p>
-                        <a href="#" class="card-link">Saber más <span>&rarr;</span></a>
+                    <div class="card-feature" data-hl="card-feature">
+                        <div class="card-icon-box" data-hl="feature-icon">⚡</div>
+                        <h3 data-hl="feature-content">Rendimiento</h3>
+                        <p data-hl="feature-content">Optimizado para cargar en menos de 2 segundos en cualquier dispositivo o red móvil.</p>
+                        <a href="#" class="card-link" data-hl="feature-link">Saber más <span>&rarr;</span></a>
                     </div>
 
                     <!-- Variante 2: Perfil -->
-                    <div class="card-profile">
-                        <div class="profile-cover"></div>
+                    <div class="card-profile" data-hl="card-profile">
+                        <div class="profile-cover" data-hl="profile-cover"></div>
                         <div class="profile-body">
-                            <div class="profile-avatar">👩‍💻</div>
+                            <div class="profile-avatar" data-hl="profile-avatar">👩‍💻</div>
                             <h3>Ana García</h3>
                             <p class="profile-role">Frontend Developer</p>
                             <p>Especialista en React y diseño de sistemas. Apasionada por la accesibilidad web.</p>
-                            <div class="profile-stats">
+                            <div class="profile-stats" data-hl="profile-stats">
                                 <div class="stat">
                                     <span class="stat-num">48</span>
                                     <span class="stat-label">Proyectos</span>
@@ -239,23 +164,26 @@
                     </div>
 
                     <!-- Variante 3: Precio -->
-                    <div class="card-pricing featured">
-                        <span class="pricing-badge">Popular</span>
+                    <div class="card-pricing featured" data-hl="card-pricing">
+                        <span class="pricing-badge" data-hl="pricing-badge">Popular</span>
                         <p class="plan-name">Pro</p>
-                        <div class="price">$19<span>/mes</span></div>
+                        <div class="price" data-hl="pricing-price">$19<span>/mes</span></div>
                         <p class="price-desc">Todo lo que necesitas para crecer</p>
-                        <ul>
+                        <ul data-hl="pricing-list">
                             <li>5 proyectos activos</li>
                             <li>50 GB de almacenamiento</li>
                             <li>Soporte prioritario 24/7</li>
                             <li class="disabled">Análisis avanzado</li>
                         </ul>
-                        <button class="btn-plan primary">Empezar ahora</button>
+                        <button class="btn-plan primary" data-hl="pricing-btn">Empezar ahora</button>
                     </div>
 
                 </div>
             </div>
-            <p style="color:var(--dim);font-size:0.82rem;margin-top:0.75rem;">⬆ Pasa el cursor sobre cada tarjeta para ver el efecto hover.</p>
+            <div class="demo-hint-bar">
+                <span class="hint-dot"></span>
+                Haz clic en cualquier elemento para resaltar las líneas de código que lo controlan.
+            </div>
         </section>
 
         <!-- VARIANTE 1: FEATURE -->
@@ -269,20 +197,20 @@
                     <span style="color:#6b7280;font-size:0.75rem;margin-left:0.5rem;">card-feature.html</span>
                 </div>
                 <div class="code-body">
-<pre><span class="c"><!-- 1. Contenedor de la tarjeta --></span>
-<span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"card-feature"</span><span class="t">&gt;</span>
+<pre><span class="hl-block" data-group="card-feature"><span class="c"><!-- Contenedor de la tarjeta --></span>
+<span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"card-feature"</span><span class="t">&gt;</span></span>
 
-  <span class="c"><!-- 2. Ícono con caja de color --></span>
-  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"card-icon-box"</span><span class="t">&gt;</span>⚡<span class="t">&lt;/div&gt;</span>
+<span class="hl-block" data-group="feature-icon">  <span class="c"><!-- Ícono con caja de color --></span>
+  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"card-icon-box"</span><span class="t">&gt;</span>⚡<span class="t">&lt;/div&gt;</span></span>
 
-  <span class="c"><!-- 3. Título y descripción --></span>
+<span class="hl-block" data-group="feature-content">  <span class="c"><!-- Título y descripción --></span>
   <span class="t">&lt;h3&gt;</span>Rendimiento<span class="t">&lt;/h3&gt;</span>
-  <span class="t">&lt;p&gt;</span>Optimizado para cargar en menos de 2 segundos.<span class="t">&lt;/p&gt;</span>
+  <span class="t">&lt;p&gt;</span>Optimizado para cargar en menos de 2 segundos.<span class="t">&lt;/p&gt;</span></span>
 
-  <span class="c"><!-- 4. Enlace de acción --></span>
-  <span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span> <span class="a">class</span>=<span class="v">"card-link"</span><span class="t">&gt;</span>Saber más →<span class="t">&lt;/a&gt;</span>
+<span class="hl-block" data-group="feature-link">  <span class="c"><!-- Enlace de acción --></span>
+  <span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span> <span class="a">class</span>=<span class="v">"card-link"</span><span class="t">&gt;</span>Saber más →<span class="t">&lt;/a&gt;</span></span>
 
-<span class="t">&lt;/div&gt;</span></pre>
+<span class="hl-block" data-group="card-feature"><span class="t">&lt;/div&gt;</span></span></pre>
                 </div>
             </div>
 
@@ -292,70 +220,53 @@
                     <span style="color:#6b7280;font-size:0.75rem;margin-left:0.5rem;">card-feature.css</span>
                 </div>
                 <div class="code-body">
-<pre><span class="p">.card-feature</span> {
-  <span class="p">display</span>: <span class="pv">flex</span>;                    <span class="c">/* [A] */</span>
-  <span class="p">flex-direction</span>: <span class="pv">column</span>;          <span class="c">/* [B] */</span>
-  <span class="p">gap</span>: <span class="pv">1rem</span>;                       <span class="c">/* [C] */</span>
+<pre><span class="hl-block" data-group="card-feature"><span class="p">.card-feature</span> {
+  <span class="p">display</span>: <span class="pv">flex</span>;
+  <span class="p">flex-direction</span>: <span class="pv">column</span>;          <span class="c">/* [A] Apila ícono, título, texto, link */</span>
+  <span class="p">gap</span>: <span class="pv">1rem</span>;                       <span class="c">/* [B] Espacio automático entre hijos */</span>
   <span class="p">padding</span>: <span class="pv">2rem</span>;
-  <span class="p">border-radius</span>: <span class="pv">1.25rem</span>;          <span class="c">/* [D] */</span>
-  <span class="p">border</span>: <span class="pv">1px solid rgba(255,255,255,0.08)</span>; <span class="c">/* [E] */</span>
+  <span class="p">border-radius</span>: <span class="pv">1.25rem</span>;          <span class="c">/* [C] Esquinas redondeadas */</span>
+  <span class="p">border</span>: <span class="pv">1px solid rgba(255,255,255,0.08)</span>; <span class="c">/* [D] Borde sutil */</span>
   <span class="p">transition</span>: <span class="pv">all 0.3s ease</span>;
 }
 <span class="p">.card-feature:hover</span> {
-  <span class="p">transform</span>: <span class="pv">translateY(-8px)</span>;     <span class="c">/* [F] */</span>
+  <span class="p">transform</span>: <span class="pv">translateY(-8px)</span>;     <span class="c">/* [E] Efecto "levitar" */</span>
   <span class="p">border-color</span>: <span class="pv">#10b981</span>;
-  <span class="p">box-shadow</span>: <span class="pv">0 20px 40px -15px rgba(16,185,129,0.3)</span>; <span class="c">/* [G] */</span>
-}
+  <span class="p">box-shadow</span>: <span class="pv">0 20px 40px -15px rgba(16,185,129,0.3)</span>; <span class="c">/* [F] */</span>
+}</span>
 
-<span class="p">.card-icon-box</span> {
-  <span class="p">width</span>: <span class="pv">48px</span>;
-  <span class="p">height</span>: <span class="pv">48px</span>;
-  <span class="p">border-radius</span>: <span class="pv">0.75rem</span>;          <span class="c">/* [H] */</span>
-  <span class="p">background</span>: <span class="pv">rgba(16,185,129,0.15)</span>; <span class="c">/* [I] */</span>
+<span class="hl-block" data-group="feature-icon"><span class="p">.card-icon-box</span> {
+  <span class="p">width</span>: <span class="pv">48px</span>; <span class="p">height</span>: <span class="pv">48px</span>;
+  <span class="p">border-radius</span>: <span class="pv">0.75rem</span>;          <span class="c">/* [G] Cuadrado redondeado */</span>
+  <span class="p">background</span>: <span class="pv">rgba(16,185,129,0.15)</span>; <span class="c">/* [H] Color acento al 15% */</span>
   <span class="p">display</span>: <span class="pv">flex</span>;
   <span class="p">align-items</span>: <span class="pv">center</span>;
   <span class="p">justify-content</span>: <span class="pv">center</span>;
-}</pre>
+}</span>
+
+<span class="hl-block" data-group="feature-content"><span class="p">.card-feature p</span> {
+  <span class="p">flex-grow</span>: <span class="pv">1</span>;                   <span class="c">/* [I] Empuja el link al fondo */</span>
+  <span class="p">color</span>: <span class="pv">#94a3b8</span>;
+}</span>
+
+<span class="hl-block" data-group="feature-link"><span class="p">.card-link</span> {
+  <span class="p">color</span>: <span class="pv">#10b981</span>;
+  <span class="p">font-weight</span>: <span class="pv">600</span>;
+  <span class="p">display</span>: <span class="pv">inline-flex</span>;
+  <span class="p">gap</span>: <span class="pv">0.3rem</span>;
+  <span class="p">transition</span>: <span class="pv">gap 0.3s</span>;           <span class="c">/* [J] Anima la flecha al hover */</span>
+}
+<span class="p">.card-feature:hover .card-link</span> { <span class="p">gap</span>: <span class="pv">0.6rem</span>; }</span></pre>
                 </div>
             </div>
 
             <div class="exp-list">
-                <div class="exp-item">
-                    <span class="exp-num">A</span>
-                    <div><p class="exp-desc"><code class="exp-tag">display: flex</code> <strong>Activa Flexbox en la tarjeta.</strong> Convierte sus hijos (ícono, título, párrafo, enlace) en flex-items que se pueden organizar con precisión.</p></div>
-                </div>
-                <div class="exp-item">
-                    <span class="exp-num">B</span>
-                    <div><p class="exp-desc"><code class="exp-tag">flex-direction: column</code> <strong>Cambia el eje principal a vertical.</strong> Por defecto Flexbox apila los elementos en fila (row). Con <code class="exp-tag">column</code> los apilamos hacia abajo, que es lo que queremos en una tarjeta.</p></div>
-                </div>
-                <div class="exp-item">
-                    <span class="exp-num">C</span>
-                    <div><p class="exp-desc"><code class="exp-tag">gap: 1rem</code> <strong>Espacio automático entre hijos.</strong> En vez de agregar <code class="exp-tag">margin-bottom</code> a cada elemento, <code class="exp-tag">gap</code> aplica el espacio entre todos los hijos automáticamente, sin afectar el primero ni el último.</p></div>
-                </div>
-                <div class="exp-item">
-                    <span class="exp-num">D</span>
-                    <div><p class="exp-desc"><code class="exp-tag">border-radius: 1.25rem</code> <strong>Esquinas redondeadas.</strong> Las tarjetas modernas usan radios generosos (12-20px). Transmite suavidad y modernidad. En cambio, <code class="exp-tag">border-radius: 0</code> comunica rigidez y formalidad.</p></div>
-                </div>
-                <div class="exp-item">
-                    <span class="exp-num">E</span>
-                    <div><p class="exp-desc"><code class="exp-tag">border: 1px solid rgba(255,255,255,0.08)</code> <strong>Borde sutil.</strong> Un borde muy transparente (8% de opacidad) define los límites de la tarjeta sin hacerla pesada visualmente. Es la técnica glassmorphism.</p></div>
-                </div>
-                <div class="exp-item">
-                    <span class="exp-num">F</span>
-                    <div><p class="exp-desc"><code class="exp-tag">transform: translateY(-8px)</code> <strong>Efecto "levitar" en hover.</strong> Mueve la tarjeta 8px hacia arriba al pasar el cursor, dando feedback visual de interactividad. <code class="exp-tag">transform</code> no afecta el layout — los elementos vecinos no se mueven.</p></div>
-                </div>
-                <div class="exp-item">
-                    <span class="exp-num">G</span>
-                    <div><p class="exp-desc"><code class="exp-tag">box-shadow: 0 20px 40px -15px rgba(…,0.3)</code> <strong>Sombra de profundidad con color.</strong> El cuarto valor negativo (<code class="exp-tag">-15px</code>) es el <em>spread</em> negativo: contrae la sombra para que no se extienda hacia los lados, solo hacia abajo. Crea una sombra más realista.</p></div>
-                </div>
-                <div class="exp-item">
-                    <span class="exp-num">H</span>
-                    <div><p class="exp-desc"><code class="exp-tag">border-radius: 0.75rem</code> en la caja del ícono. <strong>Esquinas redondeadas pero no circulares.</strong> Diferencia entre la caja del ícono (cuadrada-redondeada) y la tarjeta (más redondeada), creando jerarquía visual.</p></div>
-                </div>
-                <div class="exp-item">
-                    <span class="exp-num">I</span>
-                    <div><p class="exp-desc"><code class="exp-tag">background: rgba(16,185,129,0.15)</code> <strong>Fondo de color con baja opacidad.</strong> El mismo color del acento al 15% de transparencia. Crea una "mancha de color" suave que destaca el ícono sin competir con el texto principal.</p></div>
-                </div>
+                <div class="exp-item"><span class="exp-num">A</span><div><p class="exp-desc"><code class="exp-tag">flex-direction: column</code> <strong>Cambia el eje principal a vertical.</strong> Con <code class="exp-tag">column</code> los elementos se apilan hacia abajo — ícono, título, texto, link — que es lo que queremos en una tarjeta.</p></div></div>
+                <div class="exp-item"><span class="exp-num">B</span><div><p class="exp-desc"><code class="exp-tag">gap: 1rem</code> <strong>Espacio automático entre hijos.</strong> En vez de agregar <code class="exp-tag">margin-bottom</code> a cada elemento, <code class="exp-tag">gap</code> aplica el espacio entre todos los hijos sin afectar el primero ni el último.</p></div></div>
+                <div class="exp-item"><span class="exp-num">E</span><div><p class="exp-desc"><code class="exp-tag">transform: translateY(-8px)</code> <strong>Efecto "levitar" en hover.</strong> Mueve la tarjeta 8px hacia arriba. <code class="exp-tag">transform</code> no afecta el layout — los elementos vecinos no se mueven.</p></div></div>
+                <div class="exp-item"><span class="exp-num">H</span><div><p class="exp-desc"><code class="exp-tag">background: rgba(16,185,129,0.15)</code> <strong>Fondo de color con baja opacidad.</strong> El mismo acento al 15% crea una "mancha de color" suave que destaca el ícono sin competir con el texto.</p></div></div>
+                <div class="exp-item"><span class="exp-num">I</span><div><p class="exp-desc"><code class="exp-tag">flex-grow: 1</code> en el párrafo. <strong>Consume todo el espacio libre disponible,</strong> empujando el link siempre al fondo de la tarjeta, independientemente de cuánto texto haya.</p></div></div>
+                <div class="exp-item"><span class="exp-num">J</span><div><p class="exp-desc"><code class="exp-tag">transition: gap 0.3s</code> <strong>Anima el espacio entre el texto y la flecha.</strong> Al hacer hover la tarjeta, el gap del link pasa de 0.3rem a 0.6rem — la flecha "se aleja" sutilmente del texto.</p></div></div>
             </div>
         </section>
 
@@ -370,30 +281,30 @@
                     <span style="color:#6b7280;font-size:0.75rem;margin-left:0.5rem;">card-profile.html</span>
                 </div>
                 <div class="code-body">
-<pre><span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"card-profile"</span><span class="t">&gt;</span>
+<pre><span class="hl-block" data-group="card-profile"><span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"card-profile"</span><span class="t">&gt;</span></span>
 
-  <span class="c"><!-- 1. Banner superior de color --></span>
-  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"profile-cover"</span><span class="t">&gt;&lt;/div&gt;</span>
+<span class="hl-block" data-group="profile-cover">  <span class="c"><!-- Banner superior de color --></span>
+  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"profile-cover"</span><span class="t">&gt;&lt;/div&gt;</span></span>
 
   <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"profile-body"</span><span class="t">&gt;</span>
 
-    <span class="c"><!-- 2. Avatar que se superpone al cover --></span>
-    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"profile-avatar"</span><span class="t">&gt;</span>👩‍💻<span class="t">&lt;/div&gt;</span>
+<span class="hl-block" data-group="profile-avatar">    <span class="c"><!-- Avatar que se superpone al cover --></span>
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"profile-avatar"</span><span class="t">&gt;</span>👩‍💻<span class="t">&lt;/div&gt;</span></span>
 
     <span class="t">&lt;h3&gt;</span>Ana García<span class="t">&lt;/h3&gt;</span>
     <span class="t">&lt;p</span> <span class="a">class</span>=<span class="v">"profile-role"</span><span class="t">&gt;</span>Frontend Developer<span class="t">&lt;/p&gt;</span>
     <span class="t">&lt;p&gt;</span>Especialista en React y diseño de sistemas.<span class="t">&lt;/p&gt;</span>
 
-    <span class="c"><!-- 3. Estadísticas del perfil --></span>
+<span class="hl-block" data-group="profile-stats">    <span class="c"><!-- Estadísticas del perfil --></span>
     <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"profile-stats"</span><span class="t">&gt;</span>
       <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"stat"</span><span class="t">&gt;</span>
         <span class="t">&lt;span</span> <span class="a">class</span>=<span class="v">"stat-num"</span><span class="t">&gt;</span>48<span class="t">&lt;/span&gt;</span>
         <span class="t">&lt;span</span> <span class="a">class</span>=<span class="v">"stat-label"</span><span class="t">&gt;</span>Proyectos<span class="t">&lt;/span&gt;</span>
       <span class="t">&lt;/div&gt;</span>
-    <span class="t">&lt;/div&gt;</span>
+    <span class="t">&lt;/div&gt;</span></span>
 
   <span class="t">&lt;/div&gt;</span>
-<span class="t">&lt;/div&gt;</span></pre>
+<span class="hl-block" data-group="card-profile"><span class="t">&lt;/div&gt;</span></span></pre>
                 </div>
             </div>
 
@@ -403,68 +314,42 @@
                     <span style="color:#6b7280;font-size:0.75rem;margin-left:0.5rem;">card-profile.css</span>
                 </div>
                 <div class="code-body">
-<pre><span class="p">.card-profile</span> {
+<pre><span class="hl-block" data-group="card-profile"><span class="p">.card-profile</span> {
   <span class="p">border-radius</span>: <span class="pv">1.25rem</span>;
-  <span class="p">overflow</span>: <span class="pv">hidden</span>;              <span class="c">/* [A] */</span>
-}
+  <span class="p">overflow</span>: <span class="pv">hidden</span>;              <span class="c">/* [A] El cover respeta las esquinas */</span>
+}</span>
 
-<span class="p">.profile-cover</span> {
+<span class="hl-block" data-group="profile-cover"><span class="p">.profile-cover</span> {
   <span class="p">height</span>: <span class="pv">100px</span>;
-  <span class="p">background</span>: <span class="pv">linear-gradient(135deg, #10b981, #3b82f6)</span>; <span class="c">/* [B] */</span>
-}
+  <span class="p">background</span>: <span class="pv">linear-gradient(135deg, #10b981, #3b82f6)</span>; <span class="c">/* [B] Gradiente diagonal */</span>
+}</span>
 
-<span class="p">.profile-avatar</span> {
-  <span class="p">width</span>: <span class="pv">64px</span>;
-  <span class="p">height</span>: <span class="pv">64px</span>;
-  <span class="p">border-radius</span>: <span class="pv">50%</span>;           <span class="c">/* [C] */</span>
-  <span class="p">border</span>: <span class="pv">3px solid #1e293b</span>;   <span class="c">/* [D] */</span>
-  <span class="p">margin-top</span>: <span class="pv">-32px</span>;            <span class="c">/* [E] */</span>
-}
+<span class="hl-block" data-group="profile-avatar"><span class="p">.profile-avatar</span> {
+  <span class="p">width</span>: <span class="pv">64px</span>; <span class="p">height</span>: <span class="pv">64px</span>;
+  <span class="p">border-radius</span>: <span class="pv">50%</span>;           <span class="c">/* [C] Círculo perfecto */</span>
+  <span class="p">border</span>: <span class="pv">3px solid #1e293b</span>;   <span class="c">/* [D] Borde del color del fondo */</span>
+  <span class="p">margin-top</span>: <span class="pv">-32px</span>;            <span class="c">/* [E] Truco de superposición */</span>
+}</span>
 
-<span class="p">.profile-stats</span> {
+<span class="hl-block" data-group="profile-stats"><span class="p">.profile-stats</span> {
   <span class="p">display</span>: <span class="pv">flex</span>;
   <span class="p">gap</span>: <span class="pv">1.5rem</span>;
-  <span class="p">border-top</span>: <span class="pv">1px solid rgba(255,255,255,0.06)</span>; <span class="c">/* [F] */</span>
+  <span class="p">border-top</span>: <span class="pv">1px solid rgba(255,255,255,0.06)</span>; <span class="c">/* [F] Separador sutil */</span>
   <span class="p">padding-top</span>: <span class="pv">1rem</span>;
 }
-
 <span class="p">.stat</span> {
   <span class="p">display</span>: <span class="pv">flex</span>;
-  <span class="p">flex-direction</span>: <span class="pv">column</span>;       <span class="c">/* [G] */</span>
+  <span class="p">flex-direction</span>: <span class="pv">column</span>;       <span class="c">/* [G] Número arriba, label abajo */</span>
   <span class="p">align-items</span>: <span class="pv">center</span>;
-}</pre>
+}</span></pre>
                 </div>
             </div>
 
             <div class="exp-list">
-                <div class="exp-item">
-                    <span class="exp-num">A</span>
-                    <div><p class="exp-desc"><code class="exp-tag">overflow: hidden</code> en la tarjeta. <strong>Recorta todo lo que salga de los bordes redondeados.</strong> Sin esto, el banner de color y el avatar ignorarían el <code class="exp-tag">border-radius</code> de la tarjeta y "saldrían" de las esquinas. Es clave cuando hay hijos que deben respetar el borde.</p></div>
-                </div>
-                <div class="exp-item">
-                    <span class="exp-num">B</span>
-                    <div><p class="exp-desc"><code class="exp-tag">linear-gradient(135deg, #10b981, #3b82f6)</code> <strong>Degradado diagonal.</strong> El primer valor es el ángulo (135° = diagonal de arriba-izquierda a abajo-derecha). Le da personalidad al banner usando los colores de la marca sin necesitar una imagen.</p></div>
-                </div>
-                <div class="exp-item">
-                    <span class="exp-num">C</span>
-                    <div><p class="exp-desc"><code class="exp-tag">border-radius: 50%</code> <strong>Convierte el avatar en círculo perfecto.</strong> Al ser 50% del ancho/alto, todos los vértices del cuadrado quedan dentro del círculo. Sólo funciona perfectamente en elementos cuadrados (width = height).</p></div>
-                </div>
-                <div class="exp-item">
-                    <span class="exp-num">D</span>
-                    <div><p class="exp-desc"><code class="exp-tag">border: 3px solid #1e293b</code> en el avatar. <strong>Separación visual entre avatar y banner.</strong> El borde del mismo color que el fondo de la tarjeta crea un efecto de "espacio" alrededor del avatar, separándolo del cover. Se llama <em>ring</em> o <em>outline trick</em>.</p></div>
-                </div>
-                <div class="exp-item">
-                    <span class="exp-num">E</span>
-                    <div><p class="exp-desc"><code class="exp-tag">margin-top: -32px</code> <strong>El truco del avatar superpuesto.</strong> El avatar mide 64px de alto. Con <code class="exp-tag">margin-top: -32px</code> (la mitad) sube hacia arriba y se superpone al banner. Los márgenes negativos sacan al elemento de su posición natural, solapándose con el elemento anterior.</p></div>
-                </div>
-                <div class="exp-item">
-                    <span class="exp-num">F</span>
-                    <div><p class="exp-desc"><code class="exp-tag">border-top</code> en <code class="exp-tag">.profile-stats</code>. <strong>Separador sutil entre el contenido y las estadísticas.</strong> En vez de usar un <code class="exp-tag">&lt;hr&gt;</code>, se aplica un borde superior directamente al contenedor de stats.</p></div>
-                </div>
-                <div class="exp-item">
-                    <span class="exp-num">G</span>
-                    <div><p class="exp-desc"><code class="exp-tag">flex-direction: column</code> en <code class="exp-tag">.stat</code>. <strong>Apila el número encima de la etiqueta.</strong> Cada stat tiene el número (grande) arriba y la etiqueta (pequeña) abajo. Flex column + align-items: center lo centra todo automáticamente.</p></div>
-                </div>
+                <div class="exp-item"><span class="exp-num">A</span><div><p class="exp-desc"><code class="exp-tag">overflow: hidden</code> en la tarjeta. <strong>Recorta todo lo que salga de los bordes redondeados.</strong> Sin esto, el banner de color ignoraría el <code class="exp-tag">border-radius</code> de la tarjeta y "saldría" de las esquinas.</p></div></div>
+                <div class="exp-item"><span class="exp-num">B</span><div><p class="exp-desc"><code class="exp-tag">linear-gradient(135deg, #10b981, #3b82f6)</code> <strong>Degradado diagonal.</strong> 135° = diagonal de arriba-izquierda a abajo-derecha. Le da personalidad al banner sin necesitar una imagen.</p></div></div>
+                <div class="exp-item"><span class="exp-num">C</span><div><p class="exp-desc"><code class="exp-tag">border-radius: 50%</code> <strong>Convierte el avatar en círculo perfecto.</strong> Solo funciona en elementos cuadrados (width = height).</p></div></div>
+                <div class="exp-item"><span class="exp-num">E</span><div><p class="exp-desc"><code class="exp-tag">margin-top: -32px</code> <strong>El truco del avatar superpuesto.</strong> El avatar mide 64px. Con <code class="exp-tag">margin-top: -32px</code> (la mitad) sube y se superpone al banner. Los márgenes negativos sacan al elemento de su posición natural.</p></div></div>
             </div>
         </section>
 
@@ -479,26 +364,26 @@
                     <span style="color:#6b7280;font-size:0.75rem;margin-left:0.5rem;">card-pricing.html</span>
                 </div>
                 <div class="code-body">
-<pre><span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"card-pricing featured"</span><span class="t">&gt;</span>
+<pre><span class="hl-block" data-group="card-pricing"><span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"card-pricing featured"</span><span class="t">&gt;</span></span>
 
-  <span class="c"><!-- 1. Badge de "Popular" posicionado absolutamente --></span>
-  <span class="t">&lt;span</span> <span class="a">class</span>=<span class="v">"pricing-badge"</span><span class="t">&gt;</span>Popular<span class="t">&lt;/span&gt;</span>
+<span class="hl-block" data-group="pricing-badge">  <span class="c"><!-- Badge posicionado absolutamente --></span>
+  <span class="t">&lt;span</span> <span class="a">class</span>=<span class="v">"pricing-badge"</span><span class="t">&gt;</span>Popular<span class="t">&lt;/span&gt;</span></span>
 
-  <span class="c"><!-- 2. Nombre del plan y precio --></span>
   <span class="t">&lt;p</span> <span class="a">class</span>=<span class="v">"plan-name"</span><span class="t">&gt;</span>Pro<span class="t">&lt;/p&gt;</span>
-  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"price"</span><span class="t">&gt;</span>$19<span class="t">&lt;span&gt;</span>/mes<span class="t">&lt;/span&gt;&lt;/div&gt;</span>
-  <span class="t">&lt;p</span> <span class="a">class</span>=<span class="v">"price-desc"</span><span class="t">&gt;</span>Todo lo que necesitas<span class="t">&lt;/p&gt;</span>
 
-  <span class="c"><!-- 3. Lista de características incluidas/excluidas --></span>
+<span class="hl-block" data-group="pricing-price">  <span class="c"><!-- Precio con jerarquía tipográfica --></span>
+  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"price"</span><span class="t">&gt;</span>$19<span class="t">&lt;span&gt;</span>/mes<span class="t">&lt;/span&gt;&lt;/div&gt;</span></span>
+
+<span class="hl-block" data-group="pricing-list">  <span class="c"><!-- Lista de características --></span>
   <span class="t">&lt;ul&gt;</span>
     <span class="t">&lt;li&gt;</span>5 proyectos activos<span class="t">&lt;/li&gt;</span>
     <span class="t">&lt;li</span> <span class="a">class</span>=<span class="v">"disabled"</span><span class="t">&gt;</span>Análisis avanzado<span class="t">&lt;/li&gt;</span>
-  <span class="t">&lt;/ul&gt;</span>
+  <span class="t">&lt;/ul&gt;</span></span>
 
-  <span class="c"><!-- 4. Botón de conversión --></span>
-  <span class="t">&lt;button</span> <span class="a">class</span>=<span class="v">"btn-plan primary"</span><span class="t">&gt;</span>Empezar ahora<span class="t">&lt;/button&gt;</span>
+<span class="hl-block" data-group="pricing-btn">  <span class="c"><!-- Botón de conversión --></span>
+  <span class="t">&lt;button</span> <span class="a">class</span>=<span class="v">"btn-plan primary"</span><span class="t">&gt;</span>Empezar ahora<span class="t">&lt;/button&gt;</span></span>
 
-<span class="t">&lt;/div&gt;</span></pre>
+<span class="hl-block" data-group="card-pricing"><span class="t">&lt;/div&gt;</span></span></pre>
                 </div>
             </div>
 
@@ -508,80 +393,49 @@
                     <span style="color:#6b7280;font-size:0.75rem;margin-left:0.5rem;">card-pricing.css</span>
                 </div>
                 <div class="code-body">
-<pre><span class="p">.card-pricing</span> {
+<pre><span class="hl-block" data-group="card-pricing"><span class="p">.card-pricing</span> {
   <span class="p">display</span>: <span class="pv">flex</span>;
   <span class="p">flex-direction</span>: <span class="pv">column</span>;
-  <span class="p">position</span>: <span class="pv">relative</span>;           <span class="c">/* [A] */</span>
+  <span class="p">position</span>: <span class="pv">relative</span>;           <span class="c">/* [A] Contexto para el badge absoluto */</span>
   <span class="p">overflow</span>: <span class="pv">hidden</span>;
-  <span class="p">border-radius</span>: <span class="pv">1.25rem</span>;
-  <span class="p">padding</span>: <span class="pv">2rem</span>;
 }
-
 <span class="p">.card-pricing.featured</span> {
-  <span class="p">border-color</span>: <span class="pv">#10b981</span>;
-  <span class="p">box-shadow</span>: <span class="pv">0 0 0 1px #10b981</span>, <span class="c">/* [B] */</span>
+  <span class="p">box-shadow</span>: <span class="pv">0 0 0 1px #10b981</span>, <span class="c">/* [B] Doble sombra: borde + profundidad */</span>
               <span class="pv">0 20px 40px -15px rgba(16,185,129,0.3)</span>;
-}
+}</span>
 
-<span class="p">.pricing-badge</span> {
-  <span class="p">position</span>: <span class="pv">absolute</span>;           <span class="c">/* [C] */</span>
-  <span class="p">top</span>: <span class="pv">1rem</span>;
-  <span class="p">right</span>: <span class="pv">1rem</span>;
-}
+<span class="hl-block" data-group="pricing-badge"><span class="p">.pricing-badge</span> {
+  <span class="p">position</span>: <span class="pv">absolute</span>;           <span class="c">/* [C] Sale del flujo, flota encima */</span>
+  <span class="p">top</span>: <span class="pv">1rem</span>; <span class="p">right</span>: <span class="pv">1rem</span>;
+  <span class="p">border-radius</span>: <span class="pv">100px</span>;
+}</span>
 
-<span class="p">.price</span> { <span class="p">font-size</span>: <span class="pv">2.75rem</span>; }   <span class="c">/* [D] */</span>
-<span class="p">.price span</span> { <span class="p">font-size</span>: <span class="pv">1rem</span>; } <span class="c">/* [E] */</span>
+<span class="hl-block" data-group="pricing-price"><span class="p">.price</span> { <span class="p">font-size</span>: <span class="pv">2.75rem</span>; <span class="p">font-weight</span>: <span class="pv">700</span>; } <span class="c">/* [D] Grande para impacto */</span>
+<span class="p">.price span</span> { <span class="p">font-size</span>: <span class="pv">1rem</span>; <span class="p">color</span>: <span class="pv">#64748b</span>; }  <span class="c">/* [E] Unidad pequeña y tenue */</span></span>
 
-<span class="p">.card-pricing ul</span> {
-  <span class="p">flex-grow</span>: <span class="pv">1</span>;                 <span class="c">/* [F] */</span>
+<span class="hl-block" data-group="pricing-list"><span class="p">.card-pricing ul</span> {
+  <span class="p">flex-grow</span>: <span class="pv">1</span>;                 <span class="c">/* [F] Empuja el botón siempre al fondo */</span>
   <span class="p">list-style</span>: <span class="pv">none</span>;
 }
+<span class="p">.card-pricing ul li::before</span> { <span class="p">content</span>: <span class="pv">"✓"</span>; <span class="p">color</span>: <span class="pv">#10b981</span>; }   <span class="c">/* [G] */</span>
+<span class="p">.card-pricing ul li.disabled::before</span> { <span class="p">content</span>: <span class="pv">"×"</span>; <span class="p">color</span>: <span class="pv">#475569</span>; } <span class="c">/* [H] */</span></span>
 
-<span class="p">.card-pricing ul li</span> {
-  <span class="p">display</span>: <span class="pv">flex</span>;
-  <span class="p">align-items</span>: <span class="pv">center</span>;
-  <span class="p">gap</span>: <span class="pv">0.5rem</span>;
-}
-<span class="p">.card-pricing ul li::before</span> {
-  <span class="p">content</span>: <span class="pv">"✓"</span>;                <span class="c">/* [G] */</span>
-  <span class="p">color</span>: <span class="pv">#10b981</span>;
-}
-<span class="p">.card-pricing ul li.disabled::before</span> {
-  <span class="p">content</span>: <span class="pv">"×"</span>;                <span class="c">/* [H] */</span>
-  <span class="p">color</span>: <span class="pv">#475569</span>;
-}</pre>
+<span class="hl-block" data-group="pricing-btn"><span class="p">.btn-plan.primary</span> {
+  <span class="p">background</span>: <span class="pv">#10b981</span>; <span class="p">color</span>: <span class="pv">#fff</span>;
+  <span class="p">display</span>: <span class="pv">block</span>;             <span class="c">/* [I] Ocupa todo el ancho */</span>
+  <span class="p">text-align</span>: <span class="pv">center</span>;
+  <span class="p">padding</span>: <span class="pv">0.75rem</span>;
+  <span class="p">border-radius</span>: <span class="pv">0.75rem</span>;
+}</span></pre>
                 </div>
             </div>
 
             <div class="exp-list">
-                <div class="exp-item">
-                    <span class="exp-num">A</span>
-                    <div><p class="exp-desc"><code class="exp-tag">position: relative</code> en la tarjeta. <strong>Crea un contexto de posicionamiento.</strong> El badge ("Popular") necesita <code class="exp-tag">position: absolute</code> para ubicarse en la esquina. Para que funcione, el padre debe tener <code class="exp-tag">position: relative</code>, de lo contrario el badge se posicionaría respecto al viewport completo.</p></div>
-                </div>
-                <div class="exp-item">
-                    <span class="exp-num">B</span>
-                    <div><p class="exp-desc"><code class="exp-tag">box-shadow: 0 0 0 1px #10b981, 0 20px…</code> <strong>Doble sombra con coma.</strong> Se pueden apilar múltiples sombras separadas por coma. La primera (<code class="exp-tag">0 0 0 1px</code>) es un borde simulado con sombra (sin desplazamiento, solo spread). La segunda es la sombra de profundidad.</p></div>
-                </div>
-                <div class="exp-item">
-                    <span class="exp-num">C</span>
-                    <div><p class="exp-desc"><code class="exp-tag">position: absolute; top: 1rem; right: 1rem</code> en el badge. <strong>Sale del flujo normal del documento</strong> y se posiciona en coordenadas relativas al padre. No empuja a ningún otro elemento — flota encima del contenido.</p></div>
-                </div>
-                <div class="exp-item">
-                    <span class="exp-num">D / E</span>
-                    <div><p class="exp-desc">Tamaños del precio. <strong>Jerarquía tipográfica:</strong> el número ($19) es grande (2.75rem ≈ 44px) para ser el foco visual. La unidad (/mes) es pequeña (1rem) para no competir. Este contraste guía el ojo hacia la información más importante.</p></div>
-                </div>
-                <div class="exp-item">
-                    <span class="exp-num">F</span>
-                    <div><p class="exp-desc"><code class="exp-tag">flex-grow: 1</code> en la lista de features. <strong>Llena el espacio disponible.</strong> En un grid de tarjetas de precio, cada tarjeta puede tener distinto número de items. <code class="exp-tag">flex-grow: 1</code> hace que la lista ocupe todo el espacio libre, empujando el botón siempre al fondo — así todos los botones quedan alineados.</p></div>
-                </div>
-                <div class="exp-item">
-                    <span class="exp-num">G</span>
-                    <div><p class="exp-desc"><code class="exp-tag">li::before { content: "✓" }</code> <strong>Pseudo-elemento que inyecta contenido antes de cada ítem.</strong> No necesitas escribir el ✓ en el HTML. CSS lo agrega automáticamente a todos los <code class="exp-tag">&lt;li&gt;</code>, lo que hace el código más limpio y fácil de cambiar.</p></div>
-                </div>
-                <div class="exp-item">
-                    <span class="exp-num">H</span>
-                    <div><p class="exp-desc"><code class="exp-tag">li.disabled::before { content: "×" }</code> <strong>Override del pseudo-elemento para items desactivados.</strong> Al agregar la clase <code class="exp-tag">.disabled</code> al <code class="exp-tag">&lt;li&gt;</code>, se sobreescribe el <code class="exp-tag">::before</code> por defecto. El mismo mecanismo, diferente resultado — elegancia CSS.</p></div>
-                </div>
+                <div class="exp-item"><span class="exp-num">A</span><div><p class="exp-desc"><code class="exp-tag">position: relative</code> en la tarjeta. <strong>Crea contexto de posicionamiento.</strong> El badge necesita <code class="exp-tag">position: absolute</code> para ubicarse en la esquina. Sin <code class="exp-tag">relative</code> en el padre, el badge se posicionaría respecto al viewport.</p></div></div>
+                <div class="exp-item"><span class="exp-num">B</span><div><p class="exp-desc"><code class="exp-tag">box-shadow: 0 0 0 1px #10b981, ...</code> <strong>Doble sombra con coma.</strong> La primera (<code class="exp-tag">0 0 0 1px</code>) simula un borde con sombra sin desplazamiento. La segunda es la sombra de profundidad. Se pueden apilar tantas como necesites.</p></div></div>
+                <div class="exp-item"><span class="exp-num">C</span><div><p class="exp-desc"><code class="exp-tag">position: absolute; top: 1rem; right: 1rem</code> <strong>Sale del flujo normal.</strong> No empuja a ningún elemento — flota encima del contenido de la tarjeta.</p></div></div>
+                <div class="exp-item"><span class="exp-num">F</span><div><p class="exp-desc"><code class="exp-tag">flex-grow: 1</code> en la lista. <strong>Llena el espacio disponible.</strong> Si una tarjeta tiene más items que otra, la lista crece para ocupar el espacio — el botón queda siempre al fondo, alineado con otras tarjetas del mismo grid.</p></div></div>
+                <div class="exp-item"><span class="exp-num">G-H</span><div><p class="exp-desc"><code class="exp-tag">li::before { content: "✓" }</code> <strong>Pseudo-elemento que inyecta el ícono automáticamente.</strong> No necesitas escribirlo en el HTML. La clase <code class="exp-tag">.disabled</code> sobreescribe el <code class="exp-tag">::before</code> con "×" — mismo mecanismo, diferente resultado.</p></div></div>
             </div>
         </section>
 
@@ -589,10 +443,10 @@
         <section class="glass p-7 mb-12 fade-up" style="animation-delay:0.3s;border-left:3px solid var(--accent);">
             <h3 class="text-xl font-bold mb-3">¿Cuándo usar cada variante?</h3>
             <div style="display:flex;flex-direction:column;gap:0.75rem;color:var(--dim);font-size:0.9rem;">
-                <p><strong style="color:var(--text);">🃏 Feature Card</strong> — Para mostrar servicios, características de producto o beneficios en una sección "¿Por qué elegirnos?".</p>
-                <p><strong style="color:var(--text);">👤 Profile Card</strong> — Para equipos, autores de blog, testimonios o directorios de personas.</p>
-                <p><strong style="color:var(--text);">💰 Pricing Card</strong> — Para planes de suscripción, comparativas de productos o niveles de servicio.</p>
-                <p style="margin-top:0.25rem;">Las tres comparten la misma base: <code class="exp-tag" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:5px;padding:0.1rem 0.5rem;font-size:0.75rem;font-family:'JetBrains Mono',monospace;">display:flex</code> + <code class="exp-tag" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:5px;padding:0.1rem 0.5rem;font-size:0.75rem;font-family:'JetBrains Mono',monospace;">flex-direction:column</code> + <code class="exp-tag" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:5px;padding:0.1rem 0.5rem;font-size:0.75rem;font-family:'JetBrains Mono',monospace;">border-radius</code>. La diferencia está en qué hijos contienen y cómo se organizan.</p>
+                <p><strong style="color:var(--text);">🃏 Feature Card</strong> — Para mostrar servicios, características o beneficios.</p>
+                <p><strong style="color:var(--text);">👤 Profile Card</strong> — Para equipos, autores, testimonios o directorios.</p>
+                <p><strong style="color:var(--text);">💰 Pricing Card</strong> — Para planes de suscripción o comparativas.</p>
+                <p style="margin-top:0.25rem;">Las tres comparten la misma base: <code class="exp-tag" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:5px;padding:0.1rem 0.5rem;font-size:0.75rem;font-family:'JetBrains Mono',monospace;">display:flex</code> + <code class="exp-tag" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:5px;padding:0.1rem 0.5rem;font-size:0.75rem;font-family:'JetBrains Mono',monospace;">flex-direction:column</code> + <code class="exp-tag" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:5px;padding:0.1rem 0.5rem;font-size:0.75rem;font-family:'JetBrains Mono',monospace;">border-radius</code>.</p>
             </div>
         </section>
 
@@ -606,6 +460,29 @@
             if (html.getAttribute('data-theme') === 'light') { html.removeAttribute('data-theme'); localStorage.setItem('theme','dark'); btn.innerHTML='☀️ Modo Claro'; }
             else { html.setAttribute('data-theme','light'); localStorage.setItem('theme','light'); btn.innerHTML='🌙 Modo Oscuro'; }
         });
+
+        /* Highlight system */
+        let _justHL = false;
+        function clearHL() {
+            document.querySelectorAll('[data-hl].hl-selected').forEach(el => el.classList.remove('hl-selected'));
+            document.querySelectorAll('.hl-block.hl-active').forEach(el => el.classList.remove('hl-active'));
+        }
+        document.querySelectorAll('[data-hl]').forEach(el => {
+            el.addEventListener('click', () => {
+                _justHL = true;
+                setTimeout(() => { _justHL = false; }, 10);
+                const group = el.dataset.hl;
+                const already = el.classList.contains('hl-selected');
+                clearHL();
+                if (!already) {
+                    document.querySelectorAll(`[data-hl="${group}"]`).forEach(d => d.classList.add('hl-selected'));
+                    const blocks = document.querySelectorAll(`.hl-block[data-group="${group}"]`);
+                    blocks.forEach(b => b.classList.add('hl-active'));
+                    if (blocks.length) blocks[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+        });
+        document.addEventListener('click', () => { if (!_justHL) clearHL(); });
     </script>
 </body>
 </html>

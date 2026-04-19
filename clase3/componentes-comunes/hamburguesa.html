@@ -8,21 +8,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0f172a;
-            --card: rgba(30,41,59,0.8);
-            --accent: #10b981;
-            --accent-dim: rgba(16,185,129,0.15);
-            --text: #f8fafc;
-            --dim: #94a3b8;
+            --bg: #0f172a; --card: rgba(30,41,59,0.8); --accent: #10b981;
+            --accent-dim: rgba(16,185,129,0.15); --text: #f8fafc; --dim: #94a3b8;
             --border: rgba(255,255,255,0.08);
         }
         [data-theme="light"] {
-            --bg: #f8fafc;
-            --card: rgba(255,255,255,0.9);
-            --accent: #059669;
-            --accent-dim: rgba(5,150,105,0.1);
-            --text: #0f172a;
-            --dim: #475569;
+            --bg: #f8fafc; --card: rgba(255,255,255,0.9); --accent: #059669;
+            --accent-dim: rgba(5,150,105,0.1); --text: #0f172a; --dim: #475569;
             --border: rgba(0,0,0,0.07);
         }
         body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); transition:background 0.3s,color 0.3s; min-height:100vh; }
@@ -49,84 +41,33 @@
         .fade-up { animation:fadeUp 0.5s ease both; }
 
         /* ══════ DEMO DEL COMPONENTE ══════ */
-        .demo-box {
-            background: #1e293b;
-            border-radius: 0.875rem;
-            overflow: hidden;
-            position: relative;
-            height: 280px;
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-        /* Navbar de demo */
-        .demo-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            background: #0f172a;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-        }
+        .demo-box { background:#1e293b; border-radius:0.875rem; overflow:hidden; position:relative; height:280px; border:1px solid rgba(255,255,255,0.08); }
+        .demo-nav { display:flex; justify-content:space-between; align-items:center; padding:1rem 1.5rem; background:#0f172a; border-bottom:1px solid rgba(255,255,255,0.08); }
         .demo-nav-logo { font-family:'Outfit',sans-serif; font-weight:700; color:#10b981; font-size:1.1rem; }
-        /* Botón hamburguesa */
-        .hamburger {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 6px;
-            border-radius: 6px;
-            transition: background 0.2s;
-        }
-        .hamburger:hover { background: rgba(255,255,255,0.08); }
-        .barra {
-            width: 26px;
-            height: 3px;
-            background: #f8fafc;
-            border-radius: 4px;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            display: block;
-        }
-        /* Estado ABIERTO */
-        .hamburger.open .barra:nth-child(1) {
-            transform: translateY(9px) rotate(45deg);
-        }
-        .hamburger.open .barra:nth-child(2) {
-            opacity: 0;
-            transform: scaleX(0);
-        }
-        .hamburger.open .barra:nth-child(3) {
-            transform: translateY(-9px) rotate(-45deg);
-        }
-        /* Menú lateral */
-        .menu-movil {
-            position: absolute;
-            top: 0;
-            right: -100%;
-            width: 200px;
-            height: 100%;
-            background: #0f172a;
-            border-left: 1px solid rgba(255,255,255,0.08);
-            transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 4rem 1.5rem 2rem;
-        }
-        .menu-movil.open { right: 0; }
-        .menu-movil ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.25rem; }
-        .menu-movil a { color: #94a3b8; text-decoration: none; font-weight: 500; font-size: 1rem; transition: color 0.2s; }
-        .menu-movil a:hover { color: #10b981; }
-        .demo-overlay {
-            position: absolute;
-            top: 58px;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .demo-hint { color: #475569; font-size: 0.85rem; text-align: center; }
-        .demo-hint strong { color: #64748b; display: block; font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .hamburger { display:flex; flex-direction:column; gap:6px; background:none; border:none; cursor:pointer; padding:6px; border-radius:6px; transition:background 0.2s; }
+        .hamburger:hover { background:rgba(255,255,255,0.08); }
+        .barra { width:26px; height:3px; background:#f8fafc; border-radius:4px; transition:all 0.35s cubic-bezier(0.4,0,0.2,1); display:block; }
+        .hamburger.open .barra:nth-child(1) { transform:translateY(9px) rotate(45deg); }
+        .hamburger.open .barra:nth-child(2) { opacity:0; transform:scaleX(0); }
+        .hamburger.open .barra:nth-child(3) { transform:translateY(-9px) rotate(-45deg); }
+        .menu-movil { position:absolute; top:0; right:-100%; width:200px; height:100%; background:#0f172a; border-left:1px solid rgba(255,255,255,0.08); transition:right 0.35s cubic-bezier(0.4,0,0.2,1); padding:4rem 1.5rem 2rem; }
+        .menu-movil.open { right:0; }
+        .menu-movil ul { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:1.25rem; }
+        .menu-movil a { color:#94a3b8; text-decoration:none; font-weight:500; font-size:1rem; transition:color 0.2s; }
+        .menu-movil a:hover { color:#10b981; }
+        .demo-overlay { position:absolute; top:58px; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; }
+        .demo-overlay-text { color:#475569; font-size:0.85rem; text-align:center; }
+        .demo-overlay-text strong { color:#64748b; display:block; font-size:1.5rem; margin-bottom:0.5rem; }
+
+        /* ---- highlight system ---- */
+        [data-hl] { cursor:pointer; outline:2px solid transparent; border-radius:4px; transition:outline 0.2s; }
+        [data-hl]:hover { outline:2px solid rgba(16,185,129,0.5); }
+        [data-hl].hl-selected { outline:2px solid #10b981; }
+        .hl-block { display:block; border-left:2px solid transparent; padding-left:0.5rem; margin-left:-0.5rem; border-radius:3px; transition:background 0.25s, border-color 0.25s; }
+        .hl-block.hl-active { background:rgba(16,185,129,0.15); border-left-color:#10b981; }
+        .demo-hint-bar { display:flex; align-items:center; gap:0.5rem; color:var(--dim); font-size:0.78rem; margin-top:0.75rem; }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
+        .hint-dot { width:8px; height:8px; border-radius:50%; background:#10b981; animation:pulse 2s infinite; flex-shrink:0; }
     </style>
 </head>
 <body class="p-5 md:p-10">
@@ -156,28 +97,31 @@
             <div class="demo-box">
                 <nav class="demo-nav">
                     <span class="demo-nav-logo">MiSitio</span>
-                    <button class="hamburger" id="demoHamburger" aria-label="Abrir menú" aria-expanded="false">
-                        <span class="barra"></span>
-                        <span class="barra"></span>
-                        <span class="barra"></span>
+                    <button class="hamburger" id="demoHamburger" data-hl="hamburger-btn" aria-label="Abrir menú" aria-expanded="false">
+                        <span class="barra" data-hl="barra"></span>
+                        <span class="barra" data-hl="barra"></span>
+                        <span class="barra" data-hl="barra"></span>
                     </button>
                 </nav>
                 <div class="demo-overlay">
-                    <div class="demo-hint">
+                    <div class="demo-overlay-text">
                         <strong>☰</strong>
                         Haz clic en el botón de arriba
                     </div>
                 </div>
-                <nav class="menu-movil" id="demoMenu" aria-hidden="true">
+                <nav class="menu-movil" id="demoMenu" data-hl="menu-movil" aria-hidden="true">
                     <ul>
-                        <li><a href="#">Inicio</a></li>
-                        <li><a href="#">Sobre mí</a></li>
-                        <li><a href="#">Proyectos</a></li>
-                        <li><a href="#">Contacto</a></li>
+                        <li><a href="#" data-hl="menu-links">Inicio</a></li>
+                        <li><a href="#" data-hl="menu-links">Sobre mí</a></li>
+                        <li><a href="#" data-hl="menu-links">Proyectos</a></li>
+                        <li><a href="#" data-hl="menu-links">Contacto</a></li>
                     </ul>
                 </nav>
             </div>
-            <p style="color:var(--dim);font-size:0.82rem;margin-top:0.75rem;">Las 3 barras se transforman en una ✕ y el menú aparece desde la derecha. Todo hecho con CSS puro + 5 líneas de JS.</p>
+            <div class="demo-hint-bar">
+                <span class="hint-dot"></span>
+                Haz clic en cualquier elemento del demo para resaltar las líneas de código que lo controlan.
+            </div>
         </section>
 
         <!-- CÓDIGO HTML -->
@@ -190,31 +134,31 @@
                     <span style="color:#6b7280;font-size:0.75rem;margin-left:0.5rem;">hamburguesa.html</span>
                 </div>
                 <div class="code-body">
-<pre><span class="c"><!-- 1. BOTÓN HAMBURGUESA --></span>
+<pre><span class="hl-block" data-group="hamburger-btn"><span class="c"><!-- 1. BOTÓN HAMBURGUESA --></span>
 <span class="t">&lt;button</span>
   <span class="a">class</span>=<span class="v">"hamburger"</span>
   <span class="a">id</span>=<span class="v">"menuBtn"</span>
   <span class="a">aria-label</span>=<span class="v">"Abrir menú"</span>
   <span class="a">aria-expanded</span>=<span class="v">"false"</span><span class="t">&gt;</span>
 
-  <span class="c"><!-- 2. Las tres "barras" del ícono --></span>
+<span class="hl-block" data-group="barra">  <span class="c"><!-- 2. Las tres "barras" del ícono --></span>
   <span class="t">&lt;span</span> <span class="a">class</span>=<span class="v">"barra"</span><span class="t">&gt;&lt;/span&gt;</span>
   <span class="t">&lt;span</span> <span class="a">class</span>=<span class="v">"barra"</span><span class="t">&gt;&lt;/span&gt;</span>
-  <span class="t">&lt;span</span> <span class="a">class</span>=<span class="v">"barra"</span><span class="t">&gt;&lt;/span&gt;</span>
-<span class="t">&lt;/button&gt;</span>
+  <span class="t">&lt;span</span> <span class="a">class</span>=<span class="v">"barra"</span><span class="t">&gt;&lt;/span&gt;</span></span>
+<span class="t">&lt;/button&gt;</span></span>
 
-<span class="c"><!-- 3. MENÚ LATERAL (oculto por defecto) --></span>
+<span class="hl-block" data-group="menu-movil"><span class="c"><!-- 3. MENÚ LATERAL (oculto por defecto) --></span>
 <span class="t">&lt;nav</span>
   <span class="a">class</span>=<span class="v">"menu-movil"</span>
   <span class="a">id</span>=<span class="v">"menu"</span>
   <span class="a">aria-hidden</span>=<span class="v">"true"</span><span class="t">&gt;</span>
-  <span class="t">&lt;ul&gt;</span>
+<span class="hl-block" data-group="menu-links">  <span class="t">&lt;ul&gt;</span>
     <span class="t">&lt;li&gt;&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span><span class="t">&gt;</span>Inicio<span class="t">&lt;/a&gt;&lt;/li&gt;</span>
     <span class="t">&lt;li&gt;&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span><span class="t">&gt;</span>Sobre mí<span class="t">&lt;/a&gt;&lt;/li&gt;</span>
     <span class="t">&lt;li&gt;&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span><span class="t">&gt;</span>Proyectos<span class="t">&lt;/a&gt;&lt;/li&gt;</span>
     <span class="t">&lt;li&gt;&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span><span class="t">&gt;</span>Contacto<span class="t">&lt;/a&gt;&lt;/li&gt;</span>
-  <span class="t">&lt;/ul&gt;</span>
-<span class="t">&lt;/nav&gt;</span></pre>
+  <span class="t">&lt;/ul&gt;</span></span>
+<span class="t">&lt;/nav&gt;</span></span></pre>
                 </div>
             </div>
             <div class="exp-list">
@@ -251,7 +195,7 @@
                     <span style="color:#6b7280;font-size:0.75rem;margin-left:0.5rem;">hamburguesa.css</span>
                 </div>
                 <div class="code-body">
-<pre><span class="c">/* ── BOTÓN CONTENEDOR ────────────────── */</span>
+<pre><span class="hl-block" data-group="hamburger-btn"><span class="c">/* ── BOTÓN CONTENEDOR ────────────────── */</span>
 <span class="p">.hamburger</span> {
   <span class="p">display</span>: <span class="pv">flex</span>;            <span class="c">/* [A] Barras en columna */</span>
   <span class="p">flex-direction</span>: <span class="pv">column</span>;  <span class="c">/* [B] Una debajo de la otra */</span>
@@ -260,9 +204,9 @@
   <span class="p">border</span>: <span class="pv">none</span>;            <span class="c">/* [E] Sin borde */</span>
   <span class="p">cursor</span>: <span class="pv">pointer</span>;        <span class="c">/* [F] Cursor de mano */</span>
   <span class="p">padding</span>: <span class="pv">8px</span>;
-}
+}</span>
 
-<span class="c">/* ── CADA BARRA ──────────────────────── */</span>
+<span class="hl-block" data-group="barra"><span class="c">/* ── CADA BARRA ──────────────────────── */</span>
 <span class="p">.barra</span> {
   <span class="p">width</span>: <span class="pv">28px</span>;             <span class="c">/* [G] Ancho fijo */</span>
   <span class="p">height</span>: <span class="pv">3px</span>;             <span class="c">/* [H] Solo 3px de alto */</span>
@@ -286,9 +230,9 @@
 <span class="c">/* ── ESTADO ABIERTO: barra 3 → \ ──── */</span>
 <span class="p">.hamburger.open .barra:nth-child(3)</span> {
   <span class="p">transform</span>: <span class="pv">translateY(-9px) rotate(-45deg)</span>; <span class="c">/* [P] */</span>
-}
+}</span>
 
-<span class="c">/* ── MENÚ LATERAL ────────────────────── */</span>
+<span class="hl-block" data-group="menu-movil"><span class="c">/* ── MENÚ LATERAL ────────────────────── */</span>
 <span class="p">.menu-movil</span> {
   <span class="p">position</span>: <span class="pv">fixed</span>;         <span class="c">/* [Q] Fuera del flujo normal */</span>
   <span class="p">top</span>: <span class="pv">0</span>;
@@ -301,7 +245,12 @@
 }
 <span class="p">.menu-movil.open</span> {
   <span class="p">right</span>: <span class="pv">0</span>;               <span class="c">/* [U] Entra en pantalla */</span>
-}</pre>
+}</span>
+
+<span class="hl-block" data-group="menu-links"><span class="c">/* ── LINKS DEL MENÚ ──────────────────── */</span>
+<span class="p">.menu-movil ul</span> { <span class="p">list-style</span>: <span class="pv">none</span>; <span class="p">display</span>: <span class="pv">flex</span>; <span class="p">flex-direction</span>: <span class="pv">column</span>; <span class="p">gap</span>: <span class="pv">1.25rem</span>; }
+<span class="p">.menu-movil a</span> { <span class="p">color</span>: <span class="pv">#94a3b8</span>; <span class="p">text-decoration</span>: <span class="pv">none</span>; <span class="p">font-weight</span>: <span class="pv">500</span>; <span class="p">transition</span>: <span class="pv">color 0.2s</span>; }
+<span class="p">.menu-movil a:hover</span> { <span class="p">color</span>: <span class="pv">#10b981</span>; }</span></pre>
                 </div>
             </div>
             <div class="exp-list">
@@ -391,7 +340,7 @@ btn.addEventListener(<span class="js-s">'click'</span>, () => {
     </div>
 
     <script>
-        /* Demo interactiva */
+        /* Demo toggle */
         const demoBtn = document.getElementById('demoHamburger');
         const demoMenu = document.getElementById('demoMenu');
         demoBtn.addEventListener('click', () => {
@@ -410,6 +359,29 @@ btn.addEventListener(<span class="js-s">'click'</span>, () => {
             if (html.getAttribute('data-theme') === 'light') { html.removeAttribute('data-theme'); localStorage.setItem('theme','dark'); btn.innerHTML='☀️ Modo Claro'; }
             else { html.setAttribute('data-theme','light'); localStorage.setItem('theme','light'); btn.innerHTML='🌙 Modo Oscuro'; }
         });
+
+        /* Highlight system */
+        let _justHL = false;
+        function clearHL() {
+            document.querySelectorAll('[data-hl].hl-selected').forEach(el => el.classList.remove('hl-selected'));
+            document.querySelectorAll('.hl-block.hl-active').forEach(el => el.classList.remove('hl-active'));
+        }
+        document.querySelectorAll('[data-hl]').forEach(el => {
+            el.addEventListener('click', () => {
+                _justHL = true;
+                setTimeout(() => { _justHL = false; }, 10);
+                const group = el.dataset.hl;
+                const already = el.classList.contains('hl-selected');
+                clearHL();
+                if (!already) {
+                    document.querySelectorAll(`[data-hl="${group}"]`).forEach(d => d.classList.add('hl-selected'));
+                    const blocks = document.querySelectorAll(`.hl-block[data-group="${group}"]`);
+                    blocks.forEach(b => b.classList.add('hl-active'));
+                    if (blocks.length) blocks[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+        });
+        document.addEventListener('click', () => { if (!_justHL) clearHL(); });
     </script>
 </body>
 </html>

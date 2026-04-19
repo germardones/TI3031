@@ -41,158 +41,73 @@
         .fade-up { animation:fadeUp 0.5s ease both; }
 
         /* ══ CTA DEMOS ══════════════════════════ */
-
-        /* 1. CTA sección completa */
         .cta-seccion {
             background: linear-gradient(135deg, #0f172a 0%, #1a2744 50%, #0f2a1f 100%);
-            border-radius: 1rem;
-            padding: 3.5rem 2.5rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(16,185,129,0.2);
+            border-radius: 1rem; padding: 3.5rem 2.5rem; text-align: center;
+            position: relative; overflow: hidden; border: 1px solid rgba(16,185,129,0.2);
         }
         .cta-seccion::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 600px;
-            height: 600px;
+            content: ''; position: absolute; top: -50%; left: 50%; transform: translateX(-50%);
+            width: 600px; height: 600px;
             background: radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 70%);
             pointer-events: none;
         }
         .cta-badge {
-            display: inline-block;
-            background: rgba(16,185,129,0.15);
-            color: #10b981;
-            border: 1px solid rgba(16,185,129,0.3);
-            padding: 0.3rem 0.9rem;
-            border-radius: 100px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-bottom: 1.25rem;
+            display: inline-block; background: rgba(16,185,129,0.15); color: #10b981;
+            border: 1px solid rgba(16,185,129,0.3); padding: 0.3rem 0.9rem;
+            border-radius: 100px; font-size: 0.78rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1.25rem;
         }
         .cta-titulo {
-            font-family: 'Outfit', sans-serif;
-            font-size: clamp(1.75rem, 4vw, 2.5rem);
-            font-weight: 800;
-            color: #f8fafc;
-            margin-bottom: 1rem;
-            line-height: 1.2;
+            font-family: 'Outfit', sans-serif; font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 800; color: #f8fafc; margin-bottom: 1rem; line-height: 1.2;
         }
-        .cta-desc {
-            color: #94a3b8;
-            max-width: 480px;
-            margin: 0 auto 2rem;
-            font-size: 1rem;
-            line-height: 1.6;
-        }
-        .cta-botones {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        /* Botón primario */
+        .cta-desc { color: #94a3b8; max-width: 480px; margin: 0 auto 2rem; font-size: 1rem; line-height: 1.6; }
+        .cta-botones { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
         .btn-primario {
-            background: #10b981;
-            color: #ffffff;
-            padding: 0.8rem 2rem;
-            border-radius: 100px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.95rem;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.3s ease;
-            display: inline-block;
-            border: none;
-            cursor: pointer;
+            background: #10b981; color: #ffffff; padding: 0.8rem 2rem; border-radius: 100px;
+            text-decoration: none; font-weight: 700; font-size: 0.95rem; font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease; display: inline-block; border: none; cursor: pointer;
         }
-        .btn-primario:hover {
-            background: #059669;
-            transform: translateY(-3px);
-            box-shadow: 0 12px 28px rgba(16,185,129,0.45);
-        }
-
-        /* Botón secundario / outline */
+        .btn-primario:hover { background: #059669; transform: translateY(-3px); box-shadow: 0 12px 28px rgba(16,185,129,0.45); }
         .btn-secundario {
-            background: transparent;
-            color: #f8fafc;
-            padding: 0.8rem 2rem;
-            border-radius: 100px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            font-family: 'Inter', sans-serif;
-            border: 1.5px solid rgba(255,255,255,0.25);
-            transition: all 0.3s ease;
-            display: inline-block;
-            cursor: pointer;
+            background: transparent; color: #f8fafc; padding: 0.8rem 2rem; border-radius: 100px;
+            text-decoration: none; font-weight: 600; font-size: 0.95rem; font-family: 'Inter', sans-serif;
+            border: 1.5px solid rgba(255,255,255,0.25); transition: all 0.3s ease;
+            display: inline-block; cursor: pointer;
         }
-        .btn-secundario:hover {
-            border-color: rgba(255,255,255,0.6);
-            background: rgba(255,255,255,0.05);
-            transform: translateY(-3px);
-        }
-
-        /* Botón ghost */
+        .btn-secundario:hover { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.05); transform: translateY(-3px); }
         .btn-ghost {
-            background: transparent;
-            color: #10b981;
-            padding: 0.8rem 2rem;
-            border-radius: 100px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            font-family: 'Inter', sans-serif;
-            border: 1.5px solid #10b981;
-            transition: all 0.3s ease;
-            display: inline-block;
-            cursor: pointer;
+            background: transparent; color: #10b981; padding: 0.8rem 2rem; border-radius: 100px;
+            text-decoration: none; font-weight: 600; font-size: 0.95rem; font-family: 'Inter', sans-serif;
+            border: 1.5px solid #10b981; transition: all 0.3s ease; display: inline-block; cursor: pointer;
         }
-        .btn-ghost:hover {
-            background: rgba(16,185,129,0.1);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(16,185,129,0.2);
-        }
-
-        /* Botón gradiente */
+        .btn-ghost:hover { background: rgba(16,185,129,0.1); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(16,185,129,0.2); }
         .btn-gradiente {
-            background: linear-gradient(135deg, #10b981, #3b82f6);
-            color: #fff;
-            padding: 0.8rem 2rem;
-            border-radius: 100px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 0.95rem;
-            font-family: 'Inter', sans-serif;
-            border: none;
-            transition: all 0.3s ease;
-            display: inline-block;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
+            background: linear-gradient(135deg, #10b981, #3b82f6); color: #fff; padding: 0.8rem 2rem;
+            border-radius: 100px; text-decoration: none; font-weight: 700; font-size: 0.95rem;
+            font-family: 'Inter', sans-serif; border: none; transition: all 0.3s ease;
+            display: inline-block; cursor: pointer; position: relative; overflow: hidden;
         }
         .btn-gradiente::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, #059669, #2563eb);
-            opacity: 0;
-            transition: opacity 0.3s;
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, #059669, #2563eb); opacity: 0; transition: opacity 0.3s;
         }
         .btn-gradiente:hover::before { opacity: 1; }
         .btn-gradiente span { position: relative; z-index: 1; }
         .btn-gradiente:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(59,130,246,0.35); }
-
-        /* Variantes demo */
         .btn-sm { padding: 0.45rem 1.1rem; font-size: 0.82rem; }
         .btn-lg { padding: 1rem 2.5rem; font-size: 1.05rem; }
+
+        /* ---- highlight system ---- */
+        [data-hl] { cursor:pointer; outline:2px solid transparent; border-radius:4px; transition:outline 0.2s; }
+        [data-hl]:hover { outline:2px solid rgba(16,185,129,0.5); }
+        [data-hl].hl-selected { outline:2px solid #10b981; }
+        .hl-block { display:block; border-left:2px solid transparent; padding-left:0.5rem; margin-left:-0.5rem; border-radius:3px; transition:background 0.25s, border-color 0.25s; }
+        .hl-block.hl-active { background:rgba(16,185,129,0.15); border-left-color:#10b981; }
+        .demo-hint-bar { display:flex; align-items:center; gap:0.5rem; color:var(--dim); font-size:0.78rem; margin-top:0.75rem; }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
+        .hint-dot { width:8px; height:8px; border-radius:50%; background:#10b981; animation:pulse 2s infinite; flex-shrink:0; }
     </style>
 </head>
 <body class="p-5 md:p-10">
@@ -216,45 +131,49 @@
         </header>
 
         <!-- DEMO: SECCIÓN CTA COMPLETA -->
-        <section class="mb-12 fade-up" style="animation-delay:0.1s">
+        <section class="mb-4 fade-up" style="animation-delay:0.1s">
             <p class="sec-label">Demo 1 — Sección CTA Completa</p>
             <h2 class="text-2xl font-bold mb-5">El bloque "conversión" de una landing page</h2>
-            <div class="cta-seccion">
-                <span class="cta-badge">Disponible ahora</span>
-                <h2 class="cta-titulo">¿Listo para llevar tu<br>proyecto al siguiente nivel?</h2>
-                <p class="cta-desc">Transformamos tus ideas en experiencias digitales que generan resultados reales. El primer paso es una conversación.</p>
+            <div class="cta-seccion" data-hl="cta-seccion">
+                <span class="cta-badge" data-hl="cta-badge">Disponible ahora</span>
+                <h2 class="cta-titulo" data-hl="cta-titulo">¿Listo para llevar tu<br>proyecto al siguiente nivel?</h2>
+                <p class="cta-desc" data-hl="cta-desc">Transformamos tus ideas en experiencias digitales que generan resultados reales. El primer paso es una conversación.</p>
                 <div class="cta-botones">
-                    <a href="#" class="btn-primario">Comenzar ahora →</a>
-                    <a href="#" class="btn-secundario">Ver portfolio</a>
+                    <a href="#" class="btn-primario" data-hl="btn-primario">Comenzar ahora →</a>
+                    <a href="#" class="btn-secundario" data-hl="btn-secundario">Ver portfolio</a>
                 </div>
+            </div>
+            <div class="demo-hint-bar">
+                <span class="hint-dot"></span>
+                Haz clic en cualquier elemento para resaltar su código.
             </div>
         </section>
 
         <!-- DEMO: VARIANTES DE BOTÓN -->
         <section class="mb-12 fade-up" style="animation-delay:0.15s">
-            <p class="sec-label">Demo 2 — Variantes de Botón</p>
+            <p class="sec-label mt-8">Demo 2 — Variantes de Botón</p>
             <h2 class="text-2xl font-bold mb-5">Los 4 tipos de botón CTA</h2>
             <div class="glass p-7">
                 <div style="display:flex;flex-direction:column;gap:2rem;">
                     <div>
                         <p style="color:var(--dim);font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem;">Botón Primario — Acción principal</p>
                         <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;">
-                            <a href="#" class="btn-primario btn-sm">Pequeño</a>
-                            <a href="#" class="btn-primario">Normal</a>
-                            <a href="#" class="btn-primario btn-lg">Grande</a>
+                            <a href="#" class="btn-primario btn-sm" data-hl="btn-primario">Pequeño</a>
+                            <a href="#" class="btn-primario" data-hl="btn-primario">Normal</a>
+                            <a href="#" class="btn-primario btn-lg" data-hl="btn-primario">Grande</a>
                         </div>
                     </div>
                     <div>
                         <p style="color:var(--dim);font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem;">Botón Secundario — Acción alternativa</p>
-                        <a href="#" class="btn-secundario">Ver portfolio</a>
+                        <a href="#" class="btn-secundario" data-hl="btn-secundario">Ver portfolio</a>
                     </div>
                     <div>
                         <p style="color:var(--dim);font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem;">Botón Ghost (Outline) — Acción terciaria</p>
-                        <a href="#" class="btn-ghost">Saber más</a>
+                        <a href="#" class="btn-ghost" data-hl="btn-ghost">Saber más</a>
                     </div>
                     <div>
                         <p style="color:var(--dim);font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem;">Botón Gradiente — Impacto visual máximo</p>
-                        <a href="#" class="btn-gradiente"><span>Explorar ahora ✨</span></a>
+                        <a href="#" class="btn-gradiente" data-hl="btn-gradiente"><span>Explorar ahora ✨</span></a>
                     </div>
                 </div>
             </div>
@@ -270,29 +189,29 @@
                     <span style="color:#6b7280;font-size:0.75rem;margin-left:0.5rem;">cta.html</span>
                 </div>
                 <div class="code-body">
-<pre><span class="c"><!-- 1. Sección semántica de la CTA --></span>
-<span class="t">&lt;section</span> <span class="a">class</span>=<span class="v">"cta-seccion"</span><span class="t">&gt;</span>
+<pre><span class="hl-block" data-group="cta-seccion"><span class="c"><!-- 1. Sección semántica de la CTA --></span>
+<span class="t">&lt;section</span> <span class="a">class</span>=<span class="v">"cta-seccion"</span><span class="t">&gt;</span></span>
 
-  <span class="c"><!-- 2. Badge / etiqueta de contexto --></span>
-  <span class="t">&lt;span</span> <span class="a">class</span>=<span class="v">"cta-badge"</span><span class="t">&gt;</span>Disponible ahora<span class="t">&lt;/span&gt;</span>
+<span class="hl-block" data-group="cta-badge">  <span class="c"><!-- 2. Badge / etiqueta de contexto --></span>
+  <span class="t">&lt;span</span> <span class="a">class</span>=<span class="v">"cta-badge"</span><span class="t">&gt;</span>Disponible ahora<span class="t">&lt;/span&gt;</span></span>
 
-  <span class="c"><!-- 3. Título principal de la CTA --></span>
+<span class="hl-block" data-group="cta-titulo">  <span class="c"><!-- 3. Título principal de la CTA --></span>
   <span class="t">&lt;h2</span> <span class="a">class</span>=<span class="v">"cta-titulo"</span><span class="t">&gt;</span>
     ¿Listo para llevar tu proyecto al siguiente nivel?
-  <span class="t">&lt;/h2&gt;</span>
+  <span class="t">&lt;/h2&gt;</span></span>
 
-  <span class="c"><!-- 4. Descripción de apoyo --></span>
+<span class="hl-block" data-group="cta-desc">  <span class="c"><!-- 4. Descripción de apoyo --></span>
   <span class="t">&lt;p</span> <span class="a">class</span>=<span class="v">"cta-desc"</span><span class="t">&gt;</span>
     Transformamos tus ideas en experiencias digitales...
-  <span class="t">&lt;/p&gt;</span>
+  <span class="t">&lt;/p&gt;</span></span>
 
   <span class="c"><!-- 5. Grupo de botones de acción --></span>
   <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"cta-botones"</span><span class="t">&gt;</span>
-    <span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"contacto.html"</span> <span class="a">class</span>=<span class="v">"btn-primario"</span><span class="t">&gt;</span>Comenzar ahora →<span class="t">&lt;/a&gt;</span>
-    <span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"portfolio.html"</span> <span class="a">class</span>=<span class="v">"btn-secundario"</span><span class="t">&gt;</span>Ver portfolio<span class="t">&lt;/a&gt;</span>
+<span class="hl-block" data-group="btn-primario">    <span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"contacto.html"</span> <span class="a">class</span>=<span class="v">"btn-primario"</span><span class="t">&gt;</span>Comenzar ahora →<span class="t">&lt;/a&gt;</span></span>
+<span class="hl-block" data-group="btn-secundario">    <span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"portfolio.html"</span> <span class="a">class</span>=<span class="v">"btn-secundario"</span><span class="t">&gt;</span>Ver portfolio<span class="t">&lt;/a&gt;</span></span>
   <span class="t">&lt;/div&gt;</span>
 
-<span class="t">&lt;/section&gt;</span></pre>
+<span class="hl-block" data-group="cta-seccion"><span class="t">&lt;/section&gt;</span></span></pre>
                 </div>
             </div>
             <div class="exp-list">
@@ -302,7 +221,7 @@
                 </div>
                 <div class="exp-item">
                     <span class="exp-num">2</span>
-                    <div><p class="exp-desc"><code class="exp-tag">&lt;span class="cta-badge"&gt;</code> <strong>Etiqueta contextual pequeña sobre el título.</strong> El badge aporta urgencia o exclusividad ("Disponible ahora", "Oferta limitada"). Usar <code class="exp-tag">&lt;span&gt;</code> es correcto porque no es un encabezado ni párrafo, solo texto decorativo en línea.</p></div>
+                    <div><p class="exp-desc"><code class="exp-tag">&lt;span class="cta-badge"&gt;</code> <strong>Etiqueta contextual pequeña sobre el título.</strong> El badge aporta urgencia o exclusividad ("Disponible ahora", "Oferta limitada"). <code class="exp-tag">&lt;span&gt;</code> es correcto porque es texto decorativo en línea.</p></div>
                 </div>
                 <div class="exp-item">
                     <span class="exp-num">3</span>
@@ -325,7 +244,7 @@
                     <span style="color:#6b7280;font-size:0.75rem;margin-left:0.5rem;">cta.css</span>
                 </div>
                 <div class="code-body">
-<pre><span class="c">/* ── SECCIÓN CTA ─────────────────────────────── */</span>
+<pre><span class="hl-block" data-group="cta-seccion"><span class="c">/* ── SECCIÓN CTA ─────────────────────────────── */</span>
 <span class="p">.cta-seccion</span> {
   <span class="p">background</span>: <span class="pv">linear-gradient(135deg, #0f172a, #1a2744, #0f2a1f)</span>; <span class="c">/* [A] */</span>
   <span class="p">border-radius</span>: <span class="pv">1.5rem</span>;      <span class="c">/* [B] Esquinas muy redondeadas */</span>
@@ -334,8 +253,6 @@
   <span class="p">position</span>: <span class="pv">relative</span>;          <span class="c">/* [E] Para el pseudo-elemento ::before */</span>
   <span class="p">overflow</span>: <span class="pv">hidden</span>;            <span class="c">/* [F] Recorta el glow circular */</span>
 }
-
-<span class="c">/* Efecto de luz radial en el centro */</span>
 <span class="p">.cta-seccion::before</span> {
   <span class="p">content</span>: <span class="pv">''</span>;
   <span class="p">position</span>: <span class="pv">absolute</span>;
@@ -343,17 +260,26 @@
   <span class="p">width</span>: <span class="pv">600px</span>; <span class="p">height</span>: <span class="pv">600px</span>;
   <span class="p">background</span>: <span class="pv">radial-gradient(circle, rgba(16,185,129,0.08), transparent 70%)</span>; <span class="c">/* [G] */</span>
   <span class="p">pointer-events</span>: <span class="pv">none</span>;        <span class="c">/* [H] No bloquea clics */</span>
-}
+}</span>
 
-<span class="c">/* ── TÍTULO ──────────────────────────────────── */</span>
+<span class="hl-block" data-group="cta-titulo"><span class="c">/* ── TÍTULO ──────────────────────────────────── */</span>
 <span class="p">.cta-titulo</span> {
   <span class="p">font-size</span>: <span class="pv">clamp(1.75rem, 4vw, 2.5rem)</span>; <span class="c">/* [I] Tamaño fluido */</span>
   <span class="p">font-weight</span>: <span class="pv">800</span>;
   <span class="p">line-height</span>: <span class="pv">1.2</span>;            <span class="c">/* [J] Interlineado ajustado para títulos grandes */</span>
-  <span class="p">margin-bottom</span>: <span class="pv">1rem</span>;
-}
+}</span>
 
-<span class="c">/* ── BOTÓN PRIMARIO ──────────────────────────── */</span>
+<span class="hl-block" data-group="cta-badge"><span class="c">/* ── BADGE ───────────────────────────────────── */</span>
+<span class="p">.cta-badge</span> {
+  <span class="p">display</span>: <span class="pv">inline-block</span>;
+  <span class="p">background</span>: <span class="pv">rgba(16,185,129,0.15)</span>;
+  <span class="p">border</span>: <span class="pv">1px solid rgba(16,185,129,0.3)</span>;
+  <span class="p">border-radius</span>: <span class="pv">100px</span>;
+  <span class="p">text-transform</span>: <span class="pv">uppercase</span>;
+  <span class="p">letter-spacing</span>: <span class="pv">0.08em</span>;
+}</span>
+
+<span class="hl-block" data-group="btn-primario"><span class="c">/* ── BOTÓN PRIMARIO ──────────────────────────── */</span>
 <span class="p">.btn-primario</span> {
   <span class="p">background</span>: <span class="pv">#10b981</span>;
   <span class="p">color</span>: <span class="pv">#ffffff</span>;
@@ -367,52 +293,67 @@
 <span class="p">.btn-primario:hover</span> {
   <span class="p">transform</span>: <span class="pv">translateY(-3px)</span>; <span class="c">/* [L] Efecto flotante */</span>
   <span class="p">box-shadow</span>: <span class="pv">0 12px 28px rgba(16,185,129,0.45)</span>; <span class="c">/* [M] Glow */</span>
-}
+}</span>
 
-<span class="c">/* ── BOTÓN GRADIENTE ─────────────────────────── */</span>
-<span class="p">.btn-gradiente</span> {
-  <span class="p">background</span>: <span class="pv">linear-gradient(135deg, #10b981, #3b82f6)</span>; <span class="c">/* [N] */</span>
-  <span class="p">position</span>: <span class="pv">relative</span>;
-  <span class="p">overflow</span>: <span class="pv">hidden</span>;            <span class="c">/* [O] Recorta el ::before */</span>
+<span class="hl-block" data-group="btn-secundario"><span class="c">/* ── BOTÓN SECUNDARIO ────────────────────────── */</span>
+<span class="p">.btn-secundario</span> {
+  <span class="p">background</span>: <span class="pv">transparent</span>;
+  <span class="p">border</span>: <span class="pv">1.5px solid rgba(255,255,255,0.25)</span>; <span class="c">/* [N] Borde semitransparente */</span>
+  <span class="p">color</span>: <span class="pv">#f8fafc</span>;
+  <span class="p">border-radius</span>: <span class="pv">100px</span>;
 }
-<span class="p">.btn-gradiente::before</span> {         <span class="c">/* Gradiente oscuro oculto */</span>
+<span class="p">.btn-secundario:hover</span> {
+  <span class="p">border-color</span>: <span class="pv">rgba(255,255,255,0.6)</span>;
+  <span class="p">background</span>: <span class="pv">rgba(255,255,255,0.05)</span>; <span class="c">/* [O] Fondo muy sutil al hover */</span>
+}</span>
+
+<span class="hl-block" data-group="btn-ghost"><span class="c">/* ── BOTÓN GHOST ─────────────────────────────── */</span>
+<span class="p">.btn-ghost</span> {
+  <span class="p">background</span>: <span class="pv">transparent</span>;
+  <span class="p">color</span>: <span class="pv">#10b981</span>;             <span class="c">/* [P] Color del acento, no blanco */</span>
+  <span class="p">border</span>: <span class="pv">1.5px solid #10b981</span>; <span class="c">/* [Q] Borde del color del acento */</span>
+}</span>
+
+<span class="hl-block" data-group="btn-gradiente"><span class="c">/* ── BOTÓN GRADIENTE ─────────────────────────── */</span>
+<span class="p">.btn-gradiente</span> {
+  <span class="p">background</span>: <span class="pv">linear-gradient(135deg, #10b981, #3b82f6)</span>; <span class="c">/* [R] */</span>
+  <span class="p">position</span>: <span class="pv">relative</span>;
+  <span class="p">overflow</span>: <span class="pv">hidden</span>;            <span class="c">/* [S] Recorta el ::before */</span>
+}
+<span class="p">.btn-gradiente::before</span> {
   <span class="p">content</span>: <span class="pv">''</span>;
   <span class="p">position</span>: <span class="pv">absolute</span>; <span class="p">inset</span>: <span class="pv">0</span>;
   <span class="p">background</span>: <span class="pv">linear-gradient(135deg, #059669, #2563eb)</span>;
   <span class="p">opacity</span>: <span class="pv">0</span>;
-  <span class="p">transition</span>: <span class="pv">opacity 0.3s</span>;    <span class="c">/* [P] Solo anima opacidad */</span>
+  <span class="p">transition</span>: <span class="pv">opacity 0.3s</span>;    <span class="c">/* [T] Solo anima opacidad */</span>
 }
-<span class="p">.btn-gradiente:hover::before</span> { <span class="p">opacity</span>: <span class="pv">1</span>; }  <span class="c">/* [Q] Revela el gradiente oscuro */</span></pre>
+<span class="p">.btn-gradiente:hover::before</span> { <span class="p">opacity</span>: <span class="pv">1</span>; } <span class="c">/* [U] Revela gradiente más oscuro */</span></span></pre>
                 </div>
             </div>
             <div class="exp-list">
                 <div class="exp-item">
                     <span class="exp-num">A</span>
-                    <div><p class="exp-desc"><code class="exp-tag">linear-gradient(135deg, ...)</code> <strong>Gradiente diagonal (135° = esquina superior-izquierda → inferior-derecha).</strong> Puede recibir múltiples colores. Los degradados crean profundidad sin imágenes y son más ligeros para el navegador.</p></div>
+                    <div><p class="exp-desc"><code class="exp-tag">linear-gradient(135deg, ...)</code> <strong>Gradiente diagonal.</strong> Puede recibir múltiples colores. Los degradados crean profundidad sin imágenes y son más ligeros para el navegador.</p></div>
                 </div>
                 <div class="exp-item">
                     <span class="exp-num">E-F</span>
-                    <div><p class="exp-desc"><code class="exp-tag">position: relative</code> + <code class="exp-tag">overflow: hidden</code> <strong>El dúo para controlar pseudo-elementos.</strong> El padre necesita <code class="exp-tag">relative</code> para que el <code class="exp-tag">::before</code> absolute se posicione dentro de él. <code class="exp-tag">overflow: hidden</code> recorta todo lo que salga del borde.</p></div>
+                    <div><p class="exp-desc"><code class="exp-tag">position: relative</code> + <code class="exp-tag">overflow: hidden</code> <strong>El dúo para controlar pseudo-elementos.</strong> El padre necesita <code class="exp-tag">relative</code> para que el <code class="exp-tag">::before</code> absolute se posicione dentro. <code class="exp-tag">overflow: hidden</code> recorta todo lo que salga del borde.</p></div>
                 </div>
                 <div class="exp-item">
                     <span class="exp-num">G</span>
-                    <div><p class="exp-desc"><code class="exp-tag">radial-gradient(circle, rgba(16,185,129,0.08), transparent 70%)</code> <strong>Círculo de luz sutil.</strong> El gradiente radial va del color del acento (8% opacidad) hacia transparente. Crea la ilusión de una fuente de luz detrás del título, muy común en diseño dark mode.</p></div>
+                    <div><p class="exp-desc"><code class="exp-tag">radial-gradient(circle, rgba(16,185,129,0.08), transparent 70%)</code> <strong>Círculo de luz sutil.</strong> El gradiente radial va del acento (8% opacidad) hacia transparente. Crea la ilusión de una fuente de luz detrás del título — muy común en diseño dark mode.</p></div>
                 </div>
                 <div class="exp-item">
                     <span class="exp-num">I</span>
-                    <div><p class="exp-desc"><code class="exp-tag">clamp(1.75rem, 4vw, 2.5rem)</code> <strong>Tamaño de fuente fluido y responsivo.</strong> La función <code class="exp-tag">clamp(min, ideal, max)</code> hace que el tamaño crezca con la pantalla (<code class="exp-tag">4vw</code>) pero nunca baje de 1.75rem ni suba de 2.5rem. Sin media queries.</p></div>
-                </div>
-                <div class="exp-item">
-                    <span class="exp-num">J</span>
-                    <div><p class="exp-desc"><code class="exp-tag">line-height: 1.2</code> <strong>Interlineado comprimido para títulos grandes.</strong> En textos de cuerpo usamos ~1.6. En títulos grandes, la separación estándar se ve excesiva — 1.2 da un look más elegante y compacto.</p></div>
+                    <div><p class="exp-desc"><code class="exp-tag">clamp(1.75rem, 4vw, 2.5rem)</code> <strong>Tamaño de fuente fluido y responsivo.</strong> La función <code class="exp-tag">clamp(min, ideal, max)</code> hace que el tamaño crezca con la pantalla pero nunca baje de 1.75rem ni suba de 2.5rem. Sin media queries.</p></div>
                 </div>
                 <div class="exp-item">
                     <span class="exp-num">K</span>
-                    <div><p class="exp-desc"><code class="exp-tag">display: inline-block</code> <strong>Necesario para que el padding funcione correctamente en elementos <code class="exp-tag">&lt;a&gt;</code>.</strong> Los <code class="exp-tag">&lt;a&gt;</code> son inline por defecto; en modo inline, padding vertical no afecta el flujo. <code class="exp-tag">inline-block</code> lo arregla.</p></div>
+                    <div><p class="exp-desc"><code class="exp-tag">display: inline-block</code> <strong>Necesario para que el padding funcione en <code class="exp-tag">&lt;a&gt;</code>.</strong> Los <code class="exp-tag">&lt;a&gt;</code> son inline por defecto; en modo inline el padding vertical no afecta el flujo. <code class="exp-tag">inline-block</code> lo arregla.</p></div>
                 </div>
                 <div class="exp-item">
-                    <span class="exp-num">N-Q</span>
-                    <div><p class="exp-desc"><strong>Técnica del pseudo-elemento para animar gradientes.</strong> CSS no puede animar <code class="exp-tag">background-gradient</code> directamente. La solución es poner el gradiente oscuro en <code class="exp-tag">::before</code> con <code class="exp-tag">opacity:0</code> y animarlo a <code class="exp-tag">opacity:1</code> al hacer hover. Esto es más suave que cambiar el gradiente.</p></div>
+                    <span class="exp-num">R-U</span>
+                    <div><p class="exp-desc"><strong>Técnica del pseudo-elemento para animar gradientes.</strong> CSS no puede animar <code class="exp-tag">background-gradient</code> directamente. La solución: poner el gradiente oscuro en <code class="exp-tag">::before</code> con <code class="exp-tag">opacity:0</code> y animarlo a <code class="exp-tag">opacity:1</code> al hover. Mucho más suave.</p></div>
                 </div>
             </div>
         </section>
@@ -450,6 +391,29 @@
             if (html.getAttribute('data-theme') === 'light') { html.removeAttribute('data-theme'); localStorage.setItem('theme','dark'); btn.innerHTML='☀️ Modo Claro'; }
             else { html.setAttribute('data-theme','light'); localStorage.setItem('theme','light'); btn.innerHTML='🌙 Modo Oscuro'; }
         });
+
+        /* Highlight system */
+        let _justHL = false;
+        function clearHL() {
+            document.querySelectorAll('[data-hl].hl-selected').forEach(el => el.classList.remove('hl-selected'));
+            document.querySelectorAll('.hl-block.hl-active').forEach(el => el.classList.remove('hl-active'));
+        }
+        document.querySelectorAll('[data-hl]').forEach(el => {
+            el.addEventListener('click', () => {
+                _justHL = true;
+                setTimeout(() => { _justHL = false; }, 10);
+                const group = el.dataset.hl;
+                const already = el.classList.contains('hl-selected');
+                clearHL();
+                if (!already) {
+                    document.querySelectorAll(`[data-hl="${group}"]`).forEach(d => d.classList.add('hl-selected'));
+                    const blocks = document.querySelectorAll(`.hl-block[data-group="${group}"]`);
+                    blocks.forEach(b => b.classList.add('hl-active'));
+                    if (blocks.length) blocks[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+        });
+        document.addEventListener('click', () => { if (!_justHL) clearHL(); });
     </script>
 </body>
 </html>

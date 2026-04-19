@@ -29,31 +29,25 @@
         h1,h2,h3,h4 { font-family:'Outfit',sans-serif; }
         code, pre { font-family:'JetBrains Mono',monospace; }
 
-        /* ---- glass panel ---- */
         .glass { background:var(--card); backdrop-filter:blur(12px); border:1px solid var(--border); border-radius:1.25rem; }
 
-        /* ---- theme toggle ---- */
         #themeToggle { position:fixed; top:1.5rem; right:1.5rem; z-index:999; background:var(--card); border:1px solid var(--border); color:var(--text); padding:0.6rem 1.1rem; border-radius:100px; font-weight:600; font-family:'Inter',sans-serif; cursor:pointer; font-size:0.85rem; }
 
-        /* ---- section title ---- */
         .sec-label { color:var(--accent); font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:0.5rem; }
 
-        /* ---- code block ---- */
         .code-wrap { background:#0d1117; border:1px solid rgba(255,255,255,0.07); border-radius:0.875rem; overflow:hidden; }
         .code-header { background:rgba(255,255,255,0.04); padding:0.6rem 1.2rem; display:flex; align-items:center; gap:0.5rem; }
         .dot { width:12px; height:12px; border-radius:50%; }
         .dot-r { background:#ff5f57; } .dot-y { background:#febc2e; } .dot-g { background:#28c840; }
         .code-body { padding:1.25rem 1.5rem; overflow-x:auto; }
         .code-body pre { margin:0; font-size:0.82rem; line-height:1.7; color:#e2e8f0; white-space:pre; }
-        /* Pseudo syntax colors */
-        .t { color:#7dd3fc; } /* tag */
-        .a { color:#fbbf24; } /* attribute */
-        .v { color:#86efac; } /* value */
-        .c { color:#6b7280; font-style:italic; } /* comment */
-        .p { color:#c084fc; } /* property */
-        .pv { color:#f9a8d4; } /* prop value */
+        .t { color:#7dd3fc; }
+        .a { color:#fbbf24; }
+        .v { color:#86efac; }
+        .c { color:#6b7280; font-style:italic; }
+        .p { color:#c084fc; }
+        .pv { color:#f9a8d4; }
 
-        /* ---- explanation item ---- */
         .exp-list { display:flex; flex-direction:column; gap:0.875rem; margin-top:1.5rem; }
         .exp-item { display:flex; gap:1rem; align-items:flex-start; }
         .exp-num { background:var(--accent-dim); color:var(--accent); font-family:'JetBrains Mono',monospace; font-size:0.7rem; font-weight:700; padding:0.2rem 0.55rem; border-radius:6px; flex-shrink:0; margin-top:0.15rem; }
@@ -81,6 +75,55 @@
         .demo-cta { background:#10b981; color:#fff; padding:0.5rem 1.25rem; border-radius:100px; text-decoration:none; font-weight:600; font-size:0.875rem; transition:all 0.3s; display:inline-block; }
         .demo-cta:hover { background:#059669; transform:translateY(-2px); box-shadow:0 8px 20px rgba(16,185,129,0.4); }
         @media(max-width:640px){ .demo-links { display:none; } }
+
+        /* ---- highlight system ---- */
+        [data-hl] {
+            cursor: pointer;
+            outline: 2px solid transparent;
+            border-radius: 4px;
+            transition: outline 0.2s;
+        }
+        [data-hl]:hover {
+            outline: 2px solid rgba(16,185,129,0.5);
+        }
+        [data-hl].hl-selected {
+            outline: 2px solid #10b981;
+        }
+
+        .hl-block {
+            display: block;
+            border-left: 2px solid transparent;
+            padding-left: 0.5rem;
+            margin-left: -0.5rem;
+            border-radius: 3px;
+            transition: background 0.25s, border-color 0.25s;
+        }
+        .hl-block.hl-active {
+            background: rgba(16,185,129,0.15);
+            border-left-color: #10b981;
+        }
+
+        .demo-hint {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--dim);
+            font-size: 0.78rem;
+            margin-top: 0.75rem;
+            opacity: 0.8;
+        }
+        .hint-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: pulse 2s infinite;
+            flex-shrink: 0;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.85); }
+        }
 
         @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
         .fade-up { animation:fadeUp 0.5s ease both; }
@@ -111,18 +154,21 @@
             <p class="sec-label">Demo en Vivo</p>
             <h2 class="text-2xl font-bold mb-5">Así se ve el componente</h2>
             <div class="glass p-1">
-                <nav class="demo-navbar">
-                    <a href="#" class="demo-logo">MiSitio</a>
-                    <ul class="demo-links">
-                        <li><a href="#">Inicio</a></li>
-                        <li><a href="#">Sobre</a></li>
-                        <li><a href="#">Proyectos</a></li>
-                        <li><a href="#">Blog</a></li>
+                <nav class="demo-navbar" data-hl="nav-container">
+                    <a href="#" class="demo-logo" data-hl="logo">MiSitio</a>
+                    <ul class="demo-links" data-hl="links">
+                        <li><a href="#" data-hl="links-item">Inicio</a></li>
+                        <li><a href="#" data-hl="links-item">Sobre</a></li>
+                        <li><a href="#" data-hl="links-item">Proyectos</a></li>
+                        <li><a href="#" data-hl="links-item">Blog</a></li>
                     </ul>
-                    <a href="#" class="demo-cta">Contratar</a>
+                    <a href="#" class="demo-cta" data-hl="cta">Contratar</a>
                 </nav>
             </div>
-            <p style="color:var(--dim);font-size:0.82rem;margin-top:0.75rem;">⬆ Pasa el cursor sobre los links y el botón para ver las transiciones en acción.</p>
+            <div class="demo-hint">
+                <span class="hint-dot"></span>
+                Haz clic en cualquier elemento del demo para resaltar las líneas de código que lo controlan.
+            </div>
         </section>
 
         <!-- CÓDIGO HTML -->
@@ -135,24 +181,24 @@
                     <span style="color:#6b7280;font-size:0.75rem;margin-left:0.5rem;">navbar.html</span>
                 </div>
                 <div class="code-body">
-<pre><span class="c"><!-- 1. Elemento semántico que indica "zona de navegación" --></span>
-<span class="t">&lt;nav</span> <span class="a">class</span>=<span class="v">"navbar"</span><span class="t">&gt;</span>
+<pre><span class="hl-block" data-group="nav-container"><span class="c"><!-- 1. Elemento semántico que indica "zona de navegación" --></span>
+<span class="t">&lt;nav</span> <span class="a">class</span>=<span class="v">"navbar"</span><span class="t">&gt;</span></span>
 
-  <span class="c"><!-- 2. Marca / Logotipo del sitio --></span>
-  <span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"index.html"</span> <span class="a">class</span>=<span class="v">"logo"</span><span class="t">&gt;</span>MiSitio<span class="t">&lt;/a&gt;</span>
+<span class="hl-block" data-group="logo">  <span class="c"><!-- 2. Marca / Logotipo del sitio --></span>
+  <span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"index.html"</span> <span class="a">class</span>=<span class="v">"logo"</span><span class="t">&gt;</span>MiSitio<span class="t">&lt;/a&gt;</span></span>
 
-  <span class="c"><!-- 3. Lista de links de navegación --></span>
-  <span class="t">&lt;ul</span> <span class="a">class</span>=<span class="v">"navbar-links"</span><span class="t">&gt;</span>
-    <span class="t">&lt;li&gt;&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span><span class="t">&gt;</span>Inicio<span class="t">&lt;/a&gt;&lt;/li&gt;</span>
+<span class="hl-block" data-group="links">  <span class="c"><!-- 3. Lista de links de navegación --></span>
+  <span class="t">&lt;ul</span> <span class="a">class</span>=<span class="v">"navbar-links"</span><span class="t">&gt;</span></span>
+<span class="hl-block" data-group="links-item">    <span class="t">&lt;li&gt;&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span><span class="t">&gt;</span>Inicio<span class="t">&lt;/a&gt;&lt;/li&gt;</span>
     <span class="t">&lt;li&gt;&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span><span class="t">&gt;</span>Sobre<span class="t">&lt;/a&gt;&lt;/li&gt;</span>
     <span class="t">&lt;li&gt;&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span><span class="t">&gt;</span>Proyectos<span class="t">&lt;/a&gt;&lt;/li&gt;</span>
-    <span class="t">&lt;li&gt;&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span><span class="t">&gt;</span>Blog<span class="t">&lt;/a&gt;&lt;/li&gt;</span>
-  <span class="t">&lt;/ul&gt;</span>
+    <span class="t">&lt;li&gt;&lt;a</span> <span class="a">href</span>=<span class="v">"#"</span><span class="t">&gt;</span>Blog<span class="t">&lt;/a&gt;&lt;/li&gt;</span></span>
+<span class="hl-block" data-group="links">  <span class="t">&lt;/ul&gt;</span></span>
 
-  <span class="c"><!-- 4. Botón de llamada a la acción (CTA) --></span>
-  <span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"contacto.html"</span> <span class="a">class</span>=<span class="v">"navbar-cta"</span><span class="t">&gt;</span>Contratar<span class="t">&lt;/a&gt;</span>
+<span class="hl-block" data-group="cta">  <span class="c"><!-- 4. Botón de llamada a la acción (CTA) --></span>
+  <span class="t">&lt;a</span> <span class="a">href</span>=<span class="v">"contacto.html"</span> <span class="a">class</span>=<span class="v">"navbar-cta"</span><span class="t">&gt;</span>Contratar<span class="t">&lt;/a&gt;</span></span>
 
-<span class="t">&lt;/nav&gt;</span></pre>
+<span class="hl-block" data-group="nav-container"><span class="t">&lt;/nav&gt;</span></span></pre>
                 </div>
             </div>
 
@@ -194,7 +240,7 @@
                     <span style="color:#6b7280;font-size:0.75rem;margin-left:0.5rem;">navbar.css</span>
                 </div>
                 <div class="code-body">
-<pre><span class="c">/* ── CONTENEDOR PRINCIPAL ─────────────────── */</span>
+<pre><span class="hl-block" data-group="nav-container"><span class="c">/* ── CONTENEDOR PRINCIPAL ─────────────────── */</span>
 <span class="p">.navbar</span> {
   <span class="p">display</span>: <span class="pv">flex</span>;                    <span class="c">/* [A] */</span>
   <span class="p">justify-content</span>: <span class="pv">space-between</span>;  <span class="c">/* [B] */</span>
@@ -205,35 +251,35 @@
   <span class="p">top</span>: <span class="pv">0</span>;                          <span class="c">/* [G] */</span>
   <span class="p">z-index</span>: <span class="pv">100</span>;                    <span class="c">/* [H] */</span>
   <span class="p">border-bottom</span>: <span class="pv">1px solid rgba(255,255,255,0.1)</span>; <span class="c">/* [I] */</span>
-}
+}</span>
 
-<span class="c">/* ── LOGO ─────────────────────────────────── */</span>
+<span class="hl-block" data-group="logo"><span class="c">/* ── LOGO ─────────────────────────────────── */</span>
 <span class="p">.logo</span> {
   <span class="p">font-size</span>: <span class="pv">1.5rem</span>;              <span class="c">/* [J] */</span>
   <span class="p">font-weight</span>: <span class="pv">700</span>;               <span class="c">/* [K] */</span>
   <span class="p">color</span>: <span class="pv">#10b981</span>;                 <span class="c">/* [L] */</span>
   <span class="p">text-decoration</span>: <span class="pv">none</span>;          <span class="c">/* [M] */</span>
-}
+}</span>
 
-<span class="c">/* ── LISTA DE LINKS ───────────────────────── */</span>
+<span class="hl-block" data-group="links"><span class="c">/* ── LISTA DE LINKS ───────────────────────── */</span>
 <span class="p">.navbar-links</span> {
   <span class="p">display</span>: <span class="pv">flex</span>;                   <span class="c">/* [N] */</span>
   <span class="p">list-style</span>: <span class="pv">none</span>;               <span class="c">/* [O] */</span>
   <span class="p">gap</span>: <span class="pv">2rem</span>;                      <span class="c">/* [P] */</span>
   <span class="p">margin</span>: <span class="pv">0</span>;
   <span class="p">padding</span>: <span class="pv">0</span>;
-}
+}</span>
 
-<span class="c">/* ── LINKS INDIVIDUALES ───────────────────── */</span>
+<span class="hl-block" data-group="links-item"><span class="c">/* ── LINKS INDIVIDUALES ───────────────────── */</span>
 <span class="p">.navbar-links a</span> {
   <span class="p">color</span>: <span class="pv">#94a3b8</span>;                 <span class="c">/* [Q] */</span>
   <span class="p">text-decoration</span>: <span class="pv">none</span>;          <span class="c">/* [R] */</span>
   <span class="p">font-weight</span>: <span class="pv">500</span>;               <span class="c">/* [S] */</span>
   <span class="p">transition</span>: <span class="pv">color 0.3s ease</span>;   <span class="c">/* [T] */</span>
 }
-<span class="p">.navbar-links a:hover</span> { <span class="p">color</span>: <span class="pv">#f8fafc</span>; } <span class="c">/* [U] */</span>
+<span class="p">.navbar-links a:hover</span> { <span class="p">color</span>: <span class="pv">#f8fafc</span>; } <span class="c">/* [U] */</span></span>
 
-<span class="c">/* ── BOTÓN CTA ────────────────────────────── */</span>
+<span class="hl-block" data-group="cta"><span class="c">/* ── BOTÓN CTA ────────────────────────────── */</span>
 <span class="p">.navbar-cta</span> {
   <span class="p">background</span>: <span class="pv">#10b981</span>;            <span class="c">/* [V] */</span>
   <span class="p">color</span>: <span class="pv">#ffffff</span>;
@@ -247,7 +293,7 @@
   <span class="p">background</span>: <span class="pv">#059669</span>;           <span class="c">/* [Z] */</span>
   <span class="p">transform</span>: <span class="pv">translateY(-2px)</span>;   <span class="c">/* [AA] */</span>
   <span class="p">box-shadow</span>: <span class="pv">0 8px 20px rgba(16,185,129,0.4)</span>; <span class="c">/* [AB] */</span>
-}</pre>
+}</span></pre>
                 </div>
             </div>
 
@@ -334,6 +380,7 @@
     </div>
 
     <script>
+        // Theme toggle
         const btn = document.getElementById('themeToggle');
         const html = document.documentElement;
         if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme','light'); btn.innerHTML='🌙 Modo Oscuro'; }
@@ -341,6 +388,39 @@
             if (html.getAttribute('data-theme') === 'light') { html.removeAttribute('data-theme'); localStorage.setItem('theme','dark'); btn.innerHTML='☀️ Modo Claro'; }
             else { html.setAttribute('data-theme','light'); localStorage.setItem('theme','light'); btn.innerHTML='🌙 Modo Oscuro'; }
         });
+
+        // Highlight system
+        function clearHighlights() {
+            document.querySelectorAll('[data-hl].hl-selected').forEach(el => el.classList.remove('hl-selected'));
+            document.querySelectorAll('.hl-block.hl-active').forEach(el => el.classList.remove('hl-active'));
+        }
+
+        document.querySelectorAll('[data-hl]').forEach(el => {
+            el.addEventListener('click', e => {
+                e.stopPropagation();
+                const group = el.dataset.hl;
+                const isAlreadySelected = el.classList.contains('hl-selected');
+
+                clearHighlights();
+
+                if (!isAlreadySelected) {
+                    // Highlight all demo elements with same group
+                    document.querySelectorAll(`[data-hl="${group}"]`).forEach(d => d.classList.add('hl-selected'));
+
+                    // Highlight matching code blocks
+                    const blocks = document.querySelectorAll(`.hl-block[data-group="${group}"]`);
+                    blocks.forEach(b => b.classList.add('hl-active'));
+
+                    // Scroll to first highlighted code block
+                    if (blocks.length) {
+                        blocks[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+            });
+        });
+
+        // Click outside clears highlights
+        document.addEventListener('click', clearHighlights);
     </script>
 </body>
 </html>

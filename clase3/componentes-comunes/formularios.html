@@ -43,52 +43,26 @@
         /* ══ DEMO FORM STYLES ══ */
         .demo-form { display:flex; flex-direction:column; gap:1.25rem; }
         .campo { display:flex; flex-direction:column; gap:0.4rem; }
-        .campo label {
-            font-size:0.85rem; font-weight:600; color:var(--dim);
-            display:flex; align-items:center; gap:0.4rem;
-        }
+        .campo label { font-size:0.85rem; font-weight:600; color:var(--dim); display:flex; align-items:center; gap:0.4rem; }
         .campo label .requerido { color:#f87171; font-size:0.7rem; }
-        .campo input,
-        .campo textarea,
-        .campo select {
-            background: var(--input-bg);
-            border: 1.5px solid var(--border);
-            border-radius: 0.625rem;
-            padding: 0.7rem 1rem;
-            color: var(--text);
-            font-size: 0.9rem;
-            font-family:'Inter',sans-serif;
-            transition: border-color 0.25s, box-shadow 0.25s;
-            width: 100%;
-            outline: none;
+        .campo input, .campo textarea, .campo select {
+            background:var(--input-bg); border:1.5px solid var(--border); border-radius:0.625rem;
+            padding:0.7rem 1rem; color:var(--text); font-size:0.9rem; font-family:'Inter',sans-serif;
+            transition:border-color 0.25s, box-shadow 0.25s; width:100%; outline:none;
         }
-        .campo input::placeholder,
-        .campo textarea::placeholder { color: #475569; }
-        .campo input:focus,
-        .campo textarea:focus,
-        .campo select:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-dim);
-        }
-        .campo input:invalid:not(:placeholder-shown) {
-            border-color: #f87171;
-            box-shadow: 0 0 0 3px rgba(248,113,113,0.15);
-        }
-        .campo input:valid:not(:placeholder-shown) {
-            border-color: #34d399;
-        }
-        .campo textarea { resize: vertical; min-height: 100px; }
-        .campo select option { background: #1e293b; color: #f8fafc; }
+        .campo input::placeholder, .campo textarea::placeholder { color:#475569; }
+        .campo input:focus, .campo textarea:focus, .campo select:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-dim); }
+        .campo input:invalid:not(:placeholder-shown) { border-color:#f87171; box-shadow:0 0 0 3px rgba(248,113,113,0.15); }
+        .campo input:valid:not(:placeholder-shown) { border-color:#34d399; }
+        .campo textarea { resize:vertical; min-height:100px; }
+        .campo select option { background:#1e293b; color:#f8fafc; }
         .campo .hint { font-size:0.75rem; color:#64748b; margin-top:0.2rem; }
-        .campo .hint.error { color:#f87171; }
         .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
         @media(max-width:500px){ .form-grid { grid-template-columns:1fr; } }
         .btn-enviar {
-            background: var(--accent); color:#fff;
-            padding:0.75rem 2rem; border:none; border-radius:0.625rem;
-            font-weight:700; font-size:0.95rem; cursor:pointer;
-            font-family:'Inter',sans-serif;
-            transition: all 0.3s; align-self:flex-start;
+            background:var(--accent); color:#fff; padding:0.75rem 2rem; border:none;
+            border-radius:0.625rem; font-weight:700; font-size:0.95rem; cursor:pointer;
+            font-family:'Inter',sans-serif; transition:all 0.3s; align-self:flex-start;
         }
         .btn-enviar:hover { filter:brightness(1.1); transform:translateY(-2px); box-shadow:0 8px 20px var(--accent-dim); }
         .tabs { display:flex; gap:0.5rem; margin-bottom:1.5rem; }
@@ -96,6 +70,16 @@
         .tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
         .form-panel { display:none; }
         .form-panel.active { display:block; }
+
+        /* ---- highlight system ---- */
+        [data-hl] { cursor:pointer; outline:2px solid transparent; border-radius:4px; transition:outline 0.2s; }
+        [data-hl]:hover { outline:2px solid rgba(16,185,129,0.5); }
+        [data-hl].hl-selected { outline:2px solid #10b981; }
+        .hl-block { display:block; border-left:2px solid transparent; padding-left:0.5rem; margin-left:-0.5rem; border-radius:3px; transition:background 0.25s, border-color 0.25s; }
+        .hl-block.hl-active { background:rgba(16,185,129,0.15); border-left-color:#10b981; }
+        .demo-hint-bar { display:flex; align-items:center; gap:0.5rem; color:var(--dim); font-size:0.78rem; margin-top:0.75rem; }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
+        .hint-dot { width:8px; height:8px; border-radius:50%; background:#10b981; animation:pulse 2s infinite; flex-shrink:0; }
     </style>
 </head>
 <body class="p-5 md:p-10">
@@ -129,11 +113,11 @@
             <div class="glass p-7">
                 <!-- FORMULARIO CONTACTO -->
                 <div id="form-contacto" class="form-panel active">
-                    <form class="demo-form" onsubmit="return false">
+                    <form class="demo-form" data-hl="form-wrap" onsubmit="return false">
                         <div class="form-grid">
-                            <div class="campo">
-                                <label>Nombre <span class="requerido">*requerido</span></label>
-                                <input type="text" placeholder="Juan Pérez" required>
+                            <div class="campo" data-hl="campo">
+                                <label data-hl="label">Nombre <span class="requerido">*requerido</span></label>
+                                <input type="text" placeholder="Juan Pérez" required data-hl="input-text">
                             </div>
                             <div class="campo">
                                 <label>Apellido</label>
@@ -142,7 +126,7 @@
                         </div>
                         <div class="campo">
                             <label>Correo electrónico <span class="requerido">*requerido</span></label>
-                            <input type="email" placeholder="juan@correo.com" required>
+                            <input type="email" placeholder="juan@correo.com" required data-hl="input-states">
                             <span class="hint">Escribe un email inválido para ver el estado de error.</span>
                         </div>
                         <div class="campo">
@@ -156,9 +140,9 @@
                         </div>
                         <div class="campo">
                             <label>Mensaje <span class="requerido">*requerido</span></label>
-                            <textarea placeholder="Escribe tu mensaje aquí..." required></textarea>
+                            <textarea placeholder="Escribe tu mensaje aquí..." required data-hl="textarea"></textarea>
                         </div>
-                        <button type="submit" class="btn-enviar">Enviar mensaje →</button>
+                        <button type="submit" class="btn-enviar" data-hl="btn-submit">Enviar mensaje →</button>
                     </form>
                 </div>
                 <!-- FORMULARIO LOGIN -->
@@ -182,7 +166,10 @@
                     </form>
                 </div>
             </div>
-            <p style="color:var(--dim);font-size:0.82rem;margin-top:0.75rem;">Los campos requeridos muestran borde rojo si están vacíos y verde si son válidos al interactuar.</p>
+            <div class="demo-hint-bar">
+                <span class="hint-dot"></span>
+                Haz clic en cualquier elemento del formulario para resaltar las líneas de código que lo controlan.
+            </div>
         </section>
 
         <!-- CÓDIGO HTML -->
@@ -195,19 +182,19 @@
                     <span style="color:#6b7280;font-size:0.75rem;margin-left:0.5rem;">formulario.html</span>
                 </div>
                 <div class="code-body">
-<pre><span class="c"><!-- 1. El contenedor: define método y destino del envío --></span>
+<pre><span class="hl-block" data-group="form-wrap"><span class="c"><!-- 1. El contenedor: define método y destino del envío --></span>
 <span class="t">&lt;form</span>
   <span class="a">action</span>=<span class="v">"/enviar"</span>
   <span class="a">method</span>=<span class="v">"POST"</span>
-  <span class="a">novalidate</span><span class="t">&gt;</span>
+  <span class="a">novalidate</span><span class="t">&gt;</span></span>
 
-  <span class="c"><!-- 2. Grupo campo: label + input siempre juntos --></span>
-  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"campo"</span><span class="t">&gt;</span>
+<span class="hl-block" data-group="campo">  <span class="c"><!-- 2. Grupo campo: label + input siempre juntos --></span>
+  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"campo"</span><span class="t">&gt;</span></span>
 
-    <span class="c"><!-- 3. Label vinculado al input por 'for' e 'id' --></span>
-    <span class="t">&lt;label</span> <span class="a">for</span>=<span class="v">"nombre"</span><span class="t">&gt;</span>Nombre completo<span class="t">&lt;/label&gt;</span>
+<span class="hl-block" data-group="label">    <span class="c"><!-- 3. Label vinculado al input por 'for' e 'id' --></span>
+    <span class="t">&lt;label</span> <span class="a">for</span>=<span class="v">"nombre"</span><span class="t">&gt;</span>Nombre completo<span class="t">&lt;/label&gt;</span></span>
 
-    <span class="c"><!-- 4. Campo de texto con atributos de validación --></span>
+<span class="hl-block" data-group="input-text">    <span class="c"><!-- 4. Campo de texto con atributos de validación --></span>
     <span class="t">&lt;input</span>
       <span class="a">type</span>=<span class="v">"text"</span>
       <span class="a">id</span>=<span class="v">"nombre"</span>
@@ -215,9 +202,9 @@
       <span class="a">placeholder</span>=<span class="v">"Juan Pérez"</span>
       <span class="a">required</span>
       <span class="a">minlength</span>=<span class="v">"2"</span><span class="t">&gt;</span>
-  <span class="t">&lt;/div&gt;</span>
+  <span class="t">&lt;/div&gt;</span></span>
 
-  <span class="c"><!-- 5. Campo de email con validación automática --></span>
+<span class="hl-block" data-group="input-states">  <span class="c"><!-- 5. Campo de email con validación automática --></span>
   <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"campo"</span><span class="t">&gt;</span>
     <span class="t">&lt;label</span> <span class="a">for</span>=<span class="v">"email"</span><span class="t">&gt;</span>Correo electrónico<span class="t">&lt;/label&gt;</span>
     <span class="t">&lt;input</span>
@@ -226,9 +213,9 @@
       <span class="a">name</span>=<span class="v">"email"</span>
       <span class="a">placeholder</span>=<span class="v">"juan@correo.com"</span>
       <span class="a">required</span><span class="t">&gt;</span>
-  <span class="t">&lt;/div&gt;</span>
+  <span class="t">&lt;/div&gt;</span></span>
 
-  <span class="c"><!-- 6. Área de texto multi-línea --></span>
+<span class="hl-block" data-group="textarea">  <span class="c"><!-- 6. Área de texto multi-línea --></span>
   <span class="t">&lt;div</span> <span class="a">class</span>=<span class="v">"campo"</span><span class="t">&gt;</span>
     <span class="t">&lt;label</span> <span class="a">for</span>=<span class="v">"mensaje"</span><span class="t">&gt;</span>Mensaje<span class="t">&lt;/label&gt;</span>
     <span class="t">&lt;textarea</span>
@@ -237,12 +224,12 @@
       <span class="a">rows</span>=<span class="v">"5"</span>
       <span class="a">placeholder</span>=<span class="v">"Escribe tu mensaje..."</span><span class="t">&gt;</span>
     <span class="t">&lt;/textarea&gt;</span>
-  <span class="t">&lt;/div&gt;</span>
+  <span class="t">&lt;/div&gt;</span></span>
 
-  <span class="c"><!-- 7. Botón de envío --></span>
-  <span class="t">&lt;button</span> <span class="a">type</span>=<span class="v">"submit"</span><span class="t">&gt;</span>Enviar<span class="t">&lt;/button&gt;</span>
+<span class="hl-block" data-group="btn-submit">  <span class="c"><!-- 7. Botón de envío --></span>
+  <span class="t">&lt;button</span> <span class="a">type</span>=<span class="v">"submit"</span><span class="t">&gt;</span>Enviar<span class="t">&lt;/button&gt;</span></span>
 
-<span class="t">&lt;/form&gt;</span></pre>
+<span class="hl-block" data-group="form-wrap"><span class="t">&lt;/form&gt;</span></span></pre>
                 </div>
             </div>
             <div class="exp-list">
@@ -260,7 +247,7 @@
                 </div>
                 <div class="exp-item">
                     <span class="exp-num">4</span>
-                    <div><p class="exp-desc"><code class="exp-tag">type="text"</code> <strong>El tipo determina el comportamiento:</strong> <code class="exp-tag">text</code> = texto libre, <code class="exp-tag">email</code> = valida formato email, <code class="exp-tag">password</code> = oculta caracteres, <code class="exp-tag">number</code> = solo números, <code class="exp-tag">tel</code> = abre teclado numérico en móvil.</p></div>
+                    <div><p class="exp-desc"><code class="exp-tag">type="text"</code> <strong>El tipo determina el comportamiento:</strong> <code class="exp-tag">text</code> = texto libre, <code class="exp-tag">email</code> = valida formato email, <code class="exp-tag">password</code> = oculta caracteres, <code class="exp-tag">number</code> = solo números.</p></div>
                 </div>
                 <div class="exp-item">
                     <span class="exp-num">4b</span>
@@ -291,7 +278,7 @@
                     <span style="color:#6b7280;font-size:0.75rem;margin-left:0.5rem;">formulario.css</span>
                 </div>
                 <div class="code-body">
-<pre><span class="c">/* ── CAMPO BASE ──────────────────────────── */</span>
+<pre><span class="hl-block" data-group="input-text"><span class="c">/* ── CAMPO BASE ──────────────────────────── */</span>
 <span class="p">input, textarea, select</span> {
   <span class="p">width</span>: <span class="pv">100%</span>;              <span class="c">/* [A] Ocupa todo el ancho del contenedor */</span>
   <span class="p">padding</span>: <span class="pv">0.75rem 1rem</span>;   <span class="c">/* [B] Espacio interno */</span>
@@ -299,12 +286,11 @@
   <span class="p">border-radius</span>: <span class="pv">0.625rem</span>; <span class="c">/* [D] Bordes redondeados */</span>
   <span class="p">background</span>: <span class="pv">#0f172a</span>;    <span class="c">/* [E] Fondo oscuro */</span>
   <span class="p">color</span>: <span class="pv">#f8fafc</span>;          <span class="c">/* [F] Texto claro */</span>
-  <span class="p">font-size</span>: <span class="pv">0.9rem</span>;
   <span class="p">outline</span>: <span class="pv">none</span>;           <span class="c">/* [G] Elimina el outline del navegador */</span>
   <span class="p">transition</span>: <span class="pv">border-color 0.25s, box-shadow 0.25s</span>; <span class="c">/* [H] */</span>
-}
+}</span>
 
-<span class="c">/* ── ESTADO: FOCO (usuario está escribiendo) ── */</span>
+<span class="hl-block" data-group="input-states"><span class="c">/* ── ESTADO: FOCO (usuario está escribiendo) ── */</span>
 <span class="p">input:focus, textarea:focus</span> {
   <span class="p">border-color</span>: <span class="pv">#10b981</span>;  <span class="c">/* [I] Borde verde al enfocar */</span>
   <span class="p">box-shadow</span>: <span class="pv">0 0 0 3px rgba(16,185,129,0.15)</span>; <span class="c">/* [J] */</span>
@@ -319,21 +305,42 @@
 <span class="c">/* ── ESTADO: VÁLIDO (valor correcto) ─────────── */</span>
 <span class="p">input:valid:not(:placeholder-shown)</span> {
   <span class="p">border-color</span>: <span class="pv">#34d399</span>;  <span class="c">/* [L] Borde verde si el valor es correcto */</span>
-}
+}</span>
 
-<span class="c">/* ── PLACEHOLDER ─────────────────────────── */</span>
-<span class="p">input::placeholder</span> {
-  <span class="p">color</span>: <span class="pv">#475569</span>;          <span class="c">/* [M] Texto de ejemplo más tenue */</span>
-}
+<span class="hl-block" data-group="textarea"><span class="c">/* ── TEXTAREA ────────────────────────────── */</span>
+<span class="p">textarea</span> {
+  <span class="p">resize</span>: <span class="pv">vertical</span>;       <span class="c">/* [M] Solo redimensionable verticalmente */</span>
+  <span class="p">min-height</span>: <span class="pv">100px</span>;
+}</span>
 
-<span class="c">/* ── LABEL ────────────────────────────────── */</span>
+<span class="hl-block" data-group="label"><span class="c">/* ── LABEL ────────────────────────────────── */</span>
 <span class="p">label</span> {
   <span class="p">display</span>: <span class="pv">block</span>;          <span class="c">/* [N] Ocupa toda la línea */</span>
   <span class="p">font-size</span>: <span class="pv">0.85rem</span>;
   <span class="p">font-weight</span>: <span class="pv">600</span>;
   <span class="p">color</span>: <span class="pv">#94a3b8</span>;
   <span class="p">margin-bottom</span>: <span class="pv">0.4rem</span>;  <span class="c">/* [O] Separa el label del input */</span>
-}</pre>
+}</span>
+
+<span class="hl-block" data-group="btn-submit"><span class="c">/* ── BOTÓN ENVIAR ─────────────────────────── */</span>
+<span class="p">.btn-enviar</span> {
+  <span class="p">background</span>: <span class="pv">var(--accent)</span>;
+  <span class="p">color</span>: <span class="pv">#fff</span>;
+  <span class="p">padding</span>: <span class="pv">0.75rem 2rem</span>;
+  <span class="p">border</span>: <span class="pv">none</span>;            <span class="c">/* [P] Sin borde en botones de formulario */</span>
+  <span class="p">border-radius</span>: <span class="pv">0.625rem</span>;
+  <span class="p">font-weight</span>: <span class="pv">700</span>;
+  <span class="p">cursor</span>: <span class="pv">pointer</span>;
+  <span class="p">transition</span>: <span class="pv">all 0.3s</span>;
+  <span class="p">align-self</span>: <span class="pv">flex-start</span>; <span class="c">/* [Q] No ocupa todo el ancho */</span>
+}</span>
+
+<span class="hl-block" data-group="campo"><span class="c">/* ── GRUPO CAMPO ─────────────────────────── */</span>
+<span class="p">.campo</span> {
+  <span class="p">display</span>: <span class="pv">flex</span>;
+  <span class="p">flex-direction</span>: <span class="pv">column</span>; <span class="c">/* [R] Label encima del input */</span>
+  <span class="p">gap</span>: <span class="pv">0.4rem</span>;            <span class="c">/* [S] Espacio entre label e input */</span>
+}</span></pre>
                 </div>
             </div>
             <div class="exp-list">
@@ -347,28 +354,28 @@
                 </div>
                 <div class="exp-item">
                     <span class="exp-num">J</span>
-                    <div><p class="exp-desc"><code class="exp-tag">box-shadow: 0 0 0 3px rgba(16,185,129,0.15)</code> <strong>Crea un "anillo" de enfoque de 3px alrededor del campo.</strong> Los 4 valores son: offset-x | offset-y | blur | spread-radius. Con blur=0 y spread=3px, la sombra es un borde sólido exterior.</p></div>
+                    <div><p class="exp-desc"><code class="exp-tag">box-shadow: 0 0 0 3px rgba(16,185,129,0.15)</code> <strong>Crea un "anillo" de enfoque de 3px alrededor del campo.</strong> Con blur=0 y spread=3px, la sombra es un borde sólido exterior semitransparente. Reemplaza al <code class="exp-tag">outline</code> que quitamos.</p></div>
                 </div>
                 <div class="exp-item">
                     <span class="exp-num">K</span>
-                    <div><p class="exp-desc"><code class="exp-tag">:invalid:not(:placeholder-shown)</code> <strong>Pseudo-clase compuesta.</strong> <code class="exp-tag">:invalid</code> se activa cuando el valor no cumple las validaciones (required, email format, etc.). <code class="exp-tag">:not(:placeholder-shown)</code> excluye los campos vacíos, para no mostrar el error antes de que el usuario escriba.</p></div>
+                    <div><p class="exp-desc"><code class="exp-tag">:invalid:not(:placeholder-shown)</code> <strong>Pseudo-clase compuesta.</strong> <code class="exp-tag">:invalid</code> se activa cuando el valor no cumple las validaciones. <code class="exp-tag">:not(:placeholder-shown)</code> excluye los campos vacíos, para no mostrar el error antes de que el usuario escriba.</p></div>
                 </div>
                 <div class="exp-item">
                     <span class="exp-num">L</span>
                     <div><p class="exp-desc"><code class="exp-tag">:valid:not(:placeholder-shown)</code> <strong>Lo opuesto al anterior.</strong> Se activa cuando el valor cumple todas las validaciones HTML. El <code class="exp-tag">:not(:placeholder-shown)</code> evita mostrar el borde verde en campos vacíos no requeridos.</p></div>
                 </div>
                 <div class="exp-item">
-                    <span class="exp-num">M</span>
-                    <div><p class="exp-desc"><code class="exp-tag">::placeholder</code> <strong>Pseudo-elemento para estilizar el texto de ejemplo.</strong> El placeholder debe ser significativamente más tenue que el texto real para que el usuario sepa que no ha escrito nada todavía. Dos colons (<code class="exp-tag">::</code>) indica pseudo-elemento.</p></div>
-                </div>
-                <div class="exp-item">
                     <span class="exp-num">N</span>
                     <div><p class="exp-desc"><code class="exp-tag">display: block</code> en label <strong>Por defecto, el label es inline</strong> (como texto). Con <code class="exp-tag">block</code>, ocupa toda la línea y el input queda debajo. Si no, label e input aparecerían lado a lado en la misma línea.</p></div>
+                </div>
+                <div class="exp-item">
+                    <span class="exp-num">Q</span>
+                    <div><p class="exp-desc"><code class="exp-tag">align-self: flex-start</code> en el botón <strong>Cuando el form usa Flexbox column, los hijos se estiran al 100% del ancho por defecto.</strong> <code class="exp-tag">align-self: flex-start</code> hace que el botón se encoja a su contenido en lugar de ocupar todo el ancho.</p></div>
                 </div>
             </div>
         </section>
 
-        <!-- TIP ACCESIBILIDAD -->
+        <!-- TIP TIPOS DE INPUT -->
         <section class="glass p-7 mb-12 fade-up" style="animation-delay:0.25s;border-left:3px solid #f59e0b;">
             <h3 class="text-xl font-bold mb-2" style="color:#f59e0b;">Tipos de input más usados</h3>
             <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem;margin-top:1rem;">
@@ -408,6 +415,7 @@
             document.getElementById('form-' + id).classList.add('active');
             tabEl.classList.add('active');
         }
+
         const btn = document.getElementById('themeToggle');
         const html = document.documentElement;
         if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme','light'); btn.innerHTML='🌙 Modo Oscuro'; }
@@ -415,6 +423,29 @@
             if (html.getAttribute('data-theme') === 'light') { html.removeAttribute('data-theme'); localStorage.setItem('theme','dark'); btn.innerHTML='☀️ Modo Claro'; }
             else { html.setAttribute('data-theme','light'); localStorage.setItem('theme','light'); btn.innerHTML='🌙 Modo Oscuro'; }
         });
+
+        /* Highlight system */
+        let _justHL = false;
+        function clearHL() {
+            document.querySelectorAll('[data-hl].hl-selected').forEach(el => el.classList.remove('hl-selected'));
+            document.querySelectorAll('.hl-block.hl-active').forEach(el => el.classList.remove('hl-active'));
+        }
+        document.querySelectorAll('[data-hl]').forEach(el => {
+            el.addEventListener('click', () => {
+                _justHL = true;
+                setTimeout(() => { _justHL = false; }, 10);
+                const group = el.dataset.hl;
+                const already = el.classList.contains('hl-selected');
+                clearHL();
+                if (!already) {
+                    document.querySelectorAll(`[data-hl="${group}"]`).forEach(d => d.classList.add('hl-selected'));
+                    const blocks = document.querySelectorAll(`.hl-block[data-group="${group}"]`);
+                    blocks.forEach(b => b.classList.add('hl-active'));
+                    if (blocks.length) blocks[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+        });
+        document.addEventListener('click', () => { if (!_justHL) clearHL(); });
     </script>
 </body>
 </html>
