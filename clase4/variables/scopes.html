@@ -7,13 +7,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --bg-color: #0b1120; --card-bg: rgba(15, 23, 42, 0.7); --accent: #f59e0b; --text-main: #f8fafc; --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        [data-theme="light"] { --bg-color: #f1f5f9; --card-bg: rgba(255, 255, 255, 0.85); --text-main: #0f172a; --accent: #d97706; }
+        :root { --bg-color: #0b1120; --card-bg: rgba(15, 23, 42, 0.7); --accent: #38bdf8; --text-main: #f8fafc; --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        [data-theme="light"] { --bg-color: #f1f5f9; --card-bg: rgba(255, 255, 255, 0.85); --text-main: #0f172a; --accent: #0284c7; }
         [data-theme="light"] h1 { background-image: linear-gradient(to right, #1e293b, var(--accent)) !important; }
         [data-theme="light"] .text-slate-400, [data-theme="light"] .text-slate-300 { color: #475569 !important; }
         [data-theme="light"] .glass-panel { border-color: rgba(0,0,0,0.1) !important; }
         .tecnicismo { border-bottom: 2px dashed var(--accent); cursor: help; position: relative; font-weight: 600; color: var(--accent); }
-        .tecnicismo::after { content: attr(data-tooltip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #0f172a; color: #f8fafc; padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.8rem; font-weight: 400; width: 260px; white-space: normal; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; border: 1px solid rgba(245,158,11,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.4); pointer-events: none; font-family: 'Outfit', sans-serif; }
+        .tecnicismo::after { content: attr(data-tooltip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #0f172a; color: #f8fafc; padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.8rem; font-weight: 400; width: 260px; white-space: normal; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; border: 1px solid rgba(56,189,248,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.4); pointer-events: none; font-family: 'Outfit', sans-serif; }
         .tecnicismo::before { content: ''; position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: #0f172a; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; pointer-events: none; }
         .tecnicismo:hover::after, .tecnicismo:hover::before { opacity: 1; visibility: visible; }
         body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); min-height: 100vh; font-size: 1.25rem; }
@@ -25,7 +25,7 @@
         .string { color: #fbbf24; }
         .number { color: #818cf8; }
         .comment { color: #64748b; font-style: italic; }
-        .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.3), transparent); margin: 6rem 0; }
+        .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.3), transparent); margin: 6rem 0; }
     </style>
 </head>
 <body class="p-6 md:p-12 pb-32">
@@ -35,13 +35,13 @@
         <!-- HEADER -->
         <header class="mb-24 text-center">
             <nav class="mb-12 flex justify-center gap-6 text-sm font-semibold uppercase tracking-widest">
-                <a href="../index.html" class="text-amber-500 hover:text-amber-400 transition-colors font-bold">← Módulo 04</a>
+                <a href="../index.html" class="text-sky-400 hover:text-sky-300 transition-colors font-bold">← Módulo 04</a>
                 <span class="text-slate-700">|</span>
-                <a href="index.html" class="text-amber-500 hover:text-amber-400 transition-colors font-bold">Variables Hub</a>
+                <a href="index.html" class="text-sky-400 hover:text-sky-300 transition-colors font-bold">Variables Hub</a>
                 <span class="text-slate-700">|</span>
                 <span class="text-slate-500">Contextos y Entornos</span>
             </nav>
-            <h1 class="text-5xl md:text-7xl font-black bg-gradient-to-r from-white to-amber-500 bg-clip-text text-transparent mb-8 leading-tight">
+            <h1 class="text-5xl md:text-7xl font-black bg-gradient-to-r from-white to-sky-400 bg-clip-text text-transparent mb-8 leading-tight">
                 Contextos de Ejecución
             </h1>
             <p class="text-slate-400 text-2xl font-light max-w-2xl mx-auto leading-relaxed">
@@ -51,13 +51,13 @@
 
         <!-- SECTION 1: EXECUTION CONTEXT -->
         <section class="mb-32">
-            <h2 class="text-3xl font-bold text-amber-500 mb-8 border-b border-amber-500/20 pb-4 inline-block">1. El Concepto de Contexto</h2>
+            <h2 class="text-3xl font-bold text-sky-400 mb-8 border-b border-sky-400/20 pb-4 inline-block">1. El Concepto de Contexto</h2>
             <div class="space-y-8">
                 <p class="text-slate-300 leading-relaxed text-xl">
                     Antes de que JavaScript ejecute una sola línea de código, el motor crea un <strong>Execution Context</strong>. Este es el entorno que contiene toda la información necesaria para ejecutar el código actual: variables, funciones y el valor de <code>this</code>.
                 </p>
                 <div class="glass-panel p-10">
-                    <h4 class="text-amber-500 font-bold mb-6 uppercase text-sm tracking-widest text-center">Tipos de Contextos</h4>
+                    <h4 class="text-sky-400 font-bold mb-6 uppercase text-sm tracking-widest text-center">Tipos de Contextos</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="p-6 bg-blue-500/5 border border-blue-500/10 rounded-2xl">
                             <strong class="text-blue-400 block mb-2">Global Context</strong>
@@ -76,7 +76,7 @@
 
         <!-- SECTION 2: PHASES -->
         <section class="mb-32">
-            <h2 class="text-3xl font-bold text-amber-500 mb-12 border-b border-amber-500/20 pb-4 inline-block">2. Las Fases de Vida</h2>
+            <h2 class="text-3xl font-bold text-sky-400 mb-12 border-b border-sky-400/20 pb-4 inline-block">2. Las Fases de Vida</h2>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
                 <div class="space-y-12">
                     <div class="relative pl-8 border-l-2 border-white/5">
@@ -86,9 +86,9 @@
                             El motor escanea el código, reserva espacio en memoria para variables y funciones. Aquí es donde ocurre el <strong>Hoisting</strong>: las declaraciones de <code>var</code> se inicializan como <code>undefined</code>.
                         </p>
                     </div>
-                    <div class="relative pl-8 border-l-2 border-amber-500/30">
-                        <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.5)]"></div>
-                        <h4 class="text-xl font-bold text-amber-500 mb-4">Fase de Ejecución</h4>
+                    <div class="relative pl-8 border-l-2 border-sky-400/30">
+                        <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.5)]"></div>
+                        <h4 class="text-xl font-bold text-sky-400 mb-4">Fase de Ejecución</h4>
                         <p class="text-slate-400 text-base leading-relaxed">
                             El motor procesa el código línea por línea. Asigna valores reales a las variables calculando expresiones y ejecutando las llamadas a funciones.
                         </p>
@@ -111,7 +111,7 @@
 
         <!-- SECTION 3: SCOPE CHAIN -->
         <section class="mb-32">
-            <h2 class="text-3xl font-bold text-amber-500 mb-12 border-b border-amber-500/20 pb-4 inline-block">3. The Scope Chain</h2>
+            <h2 class="text-3xl font-bold text-sky-400 mb-12 border-b border-sky-400/20 pb-4 inline-block">3. The Scope Chain</h2>
             <div class="space-y-12">
                 <p class="text-slate-300 text-xl leading-relaxed max-w-3xl">
                     Cuando una función necesita una variable que no está en su entorno actual, JavaScript utiliza la <strong>Scope Chain</strong>. Esta cadena conecta el entorno actual con todos sus entornos padres hasta llegar al Global.
@@ -121,8 +121,8 @@
                         <span class="text-xs font-bold uppercase text-blue-400 tracking-widest">Global Environment</span>
                         <div class="scope-box function border-purple-500/20">
                             <span class="text-xs font-bold uppercase text-purple-400 tracking-widest">Parent Lexical Context</span>
-                            <div class="scope-box block border-amber-500/40 bg-amber-500/5 shadow-2xl">
-                                <span class="text-xs font-bold uppercase text-amber-500 tracking-widest">Inner Block Record</span>
+                            <div class="scope-box block border-sky-400/40 bg-sky-400/5 shadow-2xl">
+                                <span class="text-xs font-bold uppercase text-sky-400 tracking-widest">Inner Block Record</span>
                                 <p class="text-sm mt-4 text-slate-400 leading-relaxed italic">
                                     Si busco 'X' aquí y no está, escalo al Parent. Si tampoco está, llego al Global.
                                 </p>
