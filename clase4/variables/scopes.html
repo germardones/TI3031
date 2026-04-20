@@ -3,136 +3,296 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contextos de Ejecución | Módulo 4</title>
+    <title>Tipos de Datos | Módulo 4</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --bg-color: #0b1120; --card-bg: rgba(15, 23, 42, 0.7); --accent: #38bdf8; --text-main: #f8fafc; --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        [data-theme="light"] { --bg-color: #f1f5f9; --card-bg: rgba(255, 255, 255, 0.85); --text-main: #0f172a; --accent: #0284c7; }
+        :root { --bg-color: #0b1120; --card-bg: rgba(15, 23, 42, 0.7); --accent: #8b5cf6; --accent-glow: rgba(139, 92, 246, 0.2); --text-main: #f8fafc; --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        [data-theme="light"] { --bg-color: #f1f5f9; --card-bg: rgba(255, 255, 255, 0.85); --text-main: #0f172a; --accent: #7c3aed; --accent-glow: rgba(124, 58, 237, 0.2); }
         [data-theme="light"] h1 { background-image: linear-gradient(to right, #1e293b, var(--accent)) !important; }
         [data-theme="light"] .text-slate-400, [data-theme="light"] .text-slate-300 { color: #475569 !important; }
         [data-theme="light"] .glass-panel { border-color: rgba(0,0,0,0.1) !important; }
-        .tecnicismo { border-bottom: 2px dashed var(--accent); cursor: help; position: relative; font-weight: 600; color: var(--accent); }
-        .tecnicismo::after { content: attr(data-tooltip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #0f172a; color: #f8fafc; padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.8rem; font-weight: 400; width: 260px; white-space: normal; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; border: 1px solid rgba(56,189,248,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.4); pointer-events: none; font-family: 'Outfit', sans-serif; }
-        .tecnicismo::before { content: ''; position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: #0f172a; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; pointer-events: none; }
-        .tecnicismo:hover::after, .tecnicismo:hover::before { opacity: 1; visibility: visible; }
         body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); min-height: 100vh; font-size: 1.25rem; }
-        .glass-panel { background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 2.5rem; }
-        .code-snippet { background: #010409; border-radius: 1.5rem; padding: 2rem; border: 1px solid rgba(255, 255, 255, 0.1); font-family: 'JetBrains Mono', monospace; font-size: 1rem; }
-        .scope-box { border: 2px solid; padding: 2.5rem; margin: 2rem 0; border-radius: 1.5rem; transition: transform 0.3s ease; }
+        .glass-panel { background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 2.5rem; transition: var(--transition); }
+        .glass-panel:hover { border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow); }
+        .code-snippet { background: #010409; border-radius: 1.5rem; padding: 2rem; border: 1px solid rgba(255, 255, 255, 0.1); font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; line-height: 1.8; }
         #themeToggle { position: fixed; bottom: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-main); padding: 1rem 2rem; border-radius: 100px; cursor: pointer; font-weight: 600; }
         .keyword { color: #f472b6; }
         .string { color: #fbbf24; }
         .number { color: #818cf8; }
         .comment { color: #64748b; font-style: italic; }
-        .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.3), transparent); margin: 6rem 0; }
+        .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.3), transparent); margin: 6rem 0; }
+        .tech-tag { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; display: inline-block; margin-bottom: 0.75rem; }
+        .tecnicismo { border-bottom: 2px dashed var(--accent); cursor: help; position: relative; font-weight: 600; color: var(--accent); }
+        .tecnicismo::after { content: attr(data-tooltip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #0f172a; color: #f8fafc; padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.8rem; font-weight: 400; width: 260px; white-space: normal; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; border: 1px solid rgba(139,92,246,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.4); pointer-events: none; font-family: 'Outfit', sans-serif; }
+        .tecnicismo::before { content: ''; position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: #0f172a; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; pointer-events: none; }
+        .tecnicismo:hover::after, .tecnicismo:hover::before { opacity: 1; visibility: visible; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: rgba(139,92,246,0.1); color: #8b5cf6; padding: 0.75rem 1rem; text-align: left; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        td { padding: 0.75rem 1rem; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: #94a3b8; }
+        tr:hover td { background: rgba(255,255,255,0.02); }
+        .tipo-chip { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 6px; }
     </style>
 </head>
 <body class="p-6 md:p-12 pb-32">
     <button id="themeToggle">Modo Claro</button>
 
     <div class="max-w-6xl mx-auto">
-        <!-- HEADER -->
         <header class="mb-24 text-center">
-            <nav class="mb-12 flex justify-center gap-6 text-sm font-semibold uppercase tracking-widest">
-                <a href="../index.html" class="text-sky-400 hover:text-sky-300 transition-colors font-bold">← Módulo 04</a>
+            <nav class="mb-12 flex justify-center gap-6 text-sm font-semibold uppercase tracking-widest flex-wrap">
+                <a href="../index.html" class="text-violet-400 hover:text-violet-300 transition-colors font-bold">← Módulo 04</a>
                 <span class="text-slate-700">|</span>
-                <a href="index.html" class="text-sky-400 hover:text-sky-300 transition-colors font-bold">Variables Hub</a>
+                <a href="index.html" class="text-violet-400 hover:text-violet-300 transition-colors">Variables Hub</a>
                 <span class="text-slate-700">|</span>
-                <span class="text-slate-500">Contextos y Entornos</span>
+                <span class="text-slate-500">Tipos de Datos</span>
             </nav>
-            <h1 class="text-5xl md:text-7xl font-black bg-gradient-to-r from-white to-sky-400 bg-clip-text text-transparent mb-8 leading-tight">
-                Contextos de Ejecución
+            <h1 class="text-5xl md:text-7xl font-black bg-gradient-to-r from-white to-violet-500 bg-clip-text text-transparent mb-8 leading-tight">
+                Tipos de Datos
             </h1>
             <p class="text-slate-400 text-2xl font-light max-w-2xl mx-auto leading-relaxed">
-                Resolución de Scopes y la arquitectura del motor de compilación Just-In-Time.
+                Los datos tienen diferentes formas: números, textos, verdadero/falso y más. Conocer cada uno es esencial.
             </p>
         </header>
 
-        <!-- SECTION 1: EXECUTION CONTEXT -->
+        <!-- SECTION 1: RESUMEN -->
         <section class="mb-32">
-            <h2 class="text-3xl font-bold text-sky-400 mb-8 border-b border-sky-400/20 pb-4 inline-block">1. El Concepto de Contexto</h2>
-            <div class="space-y-8">
-                <p class="text-slate-300 leading-relaxed text-xl">
-                    Antes de que JavaScript ejecute una sola línea de código, el motor crea un <strong>Execution Context</strong>. Este es el entorno que contiene toda la información necesaria para ejecutar el código actual: variables, funciones y el valor de <code>this</code>.
-                </p>
-                <div class="glass-panel p-10">
-                    <h4 class="text-sky-400 font-bold mb-6 uppercase text-sm tracking-widest text-center">Tipos de Contextos</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="p-6 bg-blue-500/5 border border-blue-500/10 rounded-2xl">
-                            <strong class="text-blue-400 block mb-2">Global Context</strong>
-                            <p class="text-sm text-slate-400 italic">El entorno base que se crea al iniciar el script. Es el "padre" de todos los demás.</p>
-                        </div>
-                        <div class="p-6 bg-purple-500/5 border border-purple-500/10 rounded-2xl">
-                            <strong class="text-purple-400 block mb-2">Functional Context</strong>
-                            <p class="text-sm text-slate-400 italic">Cada vez que invocas una función, se genera un nuevo contexto privado e independiente.</p>
+            <h2 class="text-3xl font-bold text-violet-400 mb-8 border-b border-violet-500/20 pb-4 inline-block">1. Panorama General</h2>
+            <p class="text-slate-300 text-xl leading-relaxed mt-8 mb-10">
+                JavaScript maneja <strong>tipos primitivos</strong> y los <strong>objetos</strong>. Los primitivos son los bloques básicos; los objetos permiten agrupar datos.
+            </p>
+            <div class="overflow-x-auto rounded-2xl mb-10">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Ejemplo</th>
+                            <th>typeof devuelve</th>
+                            <th>Para qué sirve</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="tipo-chip" style="background:rgba(129,140,248,0.2);color:#818cf8;">number</span></td>
+                            <td><code class="font-mono text-purple-300">42, 3.14, -7</code></td>
+                            <td><code class="font-mono text-yellow-400">"number"</code></td>
+                            <td>Cantidades, precios, edades, cálculos</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tipo-chip" style="background:rgba(251,191,36,0.2);color:#fbbf24;">string</span></td>
+                            <td><code class="font-mono text-yellow-300">"Hola", 'Ana'</code></td>
+                            <td><code class="font-mono text-yellow-400">"string"</code></td>
+                            <td>Textos, nombres, mensajes</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tipo-chip" style="background:rgba(52,211,153,0.2);color:#34d399;">boolean</span></td>
+                            <td><code class="font-mono text-emerald-300">true, false</code></td>
+                            <td><code class="font-mono text-yellow-400">"boolean"</code></td>
+                            <td>Condiciones, estados (activo/inactivo)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tipo-chip" style="background:rgba(100,116,139,0.2);color:#94a3b8;">undefined</span></td>
+                            <td><code class="font-mono text-slate-300">undefined</code></td>
+                            <td><code class="font-mono text-yellow-400">"undefined"</code></td>
+                            <td>Variable declarada sin valor</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tipo-chip" style="background:rgba(239,68,68,0.2);color:#f87171;">null</span></td>
+                            <td><code class="font-mono text-red-300">null</code></td>
+                            <td><code class="font-mono text-yellow-400">"object"</code> ⚠</td>
+                            <td>Ausencia intencional de valor</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tipo-chip" style="background:rgba(56,189,248,0.2);color:#38bdf8;">object</span></td>
+                            <td><code class="font-mono text-sky-300">&#123; nombre: "Ana" &#125;</code></td>
+                            <td><code class="font-mono text-yellow-400">"object"</code></td>
+                            <td>Agrupar datos relacionados</td>
+                        </tr>
+                        <tr>
+                            <td><span class="tipo-chip" style="background:rgba(249,115,22,0.2);color:#fb923c;">array</span></td>
+                            <td><code class="font-mono text-orange-300">[1, 2, 3]</code></td>
+                            <td><code class="font-mono text-yellow-400">"object"</code></td>
+                            <td>Listas ordenadas de elementos</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECTION 2: PRIMITIVOS -->
+        <section class="mb-32">
+            <h2 class="text-3xl font-bold text-violet-400 mb-8 border-b border-violet-500/20 pb-4 inline-block">2. Los Tipos Primitivos</h2>
+
+            <!-- Number -->
+            <div class="glass-panel p-8 mb-8">
+                <div class="tech-tag">number</div>
+                <h4 class="text-2xl font-bold text-violet-300 mb-3">Números</h4>
+                <p class="text-slate-400 text-base leading-relaxed mb-4">JavaScript usa un solo tipo para todos los números: enteros y decimales. Incluye valores especiales como <code class="font-mono text-fuchsia-400">Infinity</code> y <code class="font-mono text-fuchsia-400">NaN</code>.</p>
+                <div class="code-snippet text-sm">
+                    <span class="keyword">const</span> entero = <span class="number">42</span>;<br>
+                    <span class="keyword">const</span> decimal = <span class="number">3.14</span>;<br>
+                    <span class="keyword">const</span> negativo = <span class="number">-100</span>;<br><br>
+                    <span class="comment">// Operaciones básicas</span><br>
+                    <span class="keyword">const</span> suma = <span class="number">10</span> + <span class="number">5</span>;    <span class="comment">// 15</span><br>
+                    <span class="keyword">const</span> resto = <span class="number">10</span> % <span class="number">3</span>;    <span class="comment">// 1 (módulo: lo que sobra al dividir)</span><br>
+                    <span class="keyword">const</span> potencia = <span class="number">2</span> ** <span class="number">8</span>; <span class="comment">// 256</span><br><br>
+                    <span class="comment">// Valores especiales</span><br>
+                    console.log(<span class="number">1</span> / <span class="number">0</span>);        <span class="comment">// Infinity</span><br>
+                    console.log(<span class="string">"abc"</span> * <span class="number">2</span>);  <span class="comment">// NaN (Not a Number)</span>
+                </div>
+                <div class="mt-4 p-4 bg-violet-500/10 border border-violet-500/20 rounded-xl">
+                    <p class="text-violet-300 text-sm"><strong>NaN</strong> es un número que dice "esto no es un número válido". Aparece cuando intentas hacer una operación matemática con texto.</p>
+                </div>
+            </div>
+
+            <!-- String -->
+            <div class="glass-panel p-8 mb-8">
+                <div class="tech-tag" style="background:rgba(251,191,36,0.1);color:#fbbf24;">string</div>
+                <h4 class="text-2xl font-bold text-yellow-300 mb-3">Texto (String)</h4>
+                <p class="text-slate-400 text-base leading-relaxed mb-4">Cualquier texto va entre comillas: simples <code class="font-mono">'...'</code>, dobles <code class="font-mono">"..."</code>, o backticks <code class="font-mono">` `</code>. Los backticks permiten insertar variables directamente con <code class="font-mono text-fuchsia-400">${variable}</code>.</p>
+                <div class="code-snippet text-sm">
+                    <span class="keyword">const</span> nombre = <span class="string">"Carlos"</span>;<br>
+                    <span class="keyword">const</span> apellido = <span class="string">'Soto'</span>;<br><br>
+                    <span class="comment">// Concatenar (unir textos con +)</span><br>
+                    <span class="keyword">const</span> completo = nombre + <span class="string">" "</span> + apellido; <span class="comment">// "Carlos Soto"</span><br><br>
+                    <span class="comment">// Template literal (más cómodo)</span><br>
+                    <span class="keyword">const</span> saludo = <span class="string">`Hola, ${nombre}!`</span>;  <span class="comment">// "Hola, Carlos!"</span><br><br>
+                    <span class="comment">// Propiedades útiles</span><br>
+                    console.log(nombre.length);        <span class="comment">// 6 (cantidad de letras)</span><br>
+                    console.log(nombre.toUpperCase()); <span class="comment">// "CARLOS"</span><br>
+                    console.log(nombre.includes(<span class="string">"arl"</span>)); <span class="comment">// true</span>
+                </div>
+            </div>
+
+            <!-- Boolean -->
+            <div class="glass-panel p-8 mb-8">
+                <div class="tech-tag" style="background:rgba(52,211,153,0.1);color:#34d399;">boolean</div>
+                <h4 class="text-2xl font-bold text-emerald-300 mb-3">Booleano</h4>
+                <p class="text-slate-400 text-base leading-relaxed mb-4">Solo dos valores posibles: <code class="font-mono text-fuchsia-400">true</code> o <code class="font-mono text-fuchsia-400">false</code>. Es el resultado de cualquier comparación y controla el flujo del programa.</p>
+                <div class="code-snippet text-sm">
+                    <span class="keyword">const</span> mayorDeEdad = <span class="keyword">true</span>;<br>
+                    <span class="keyword">const</span> estaLogueado = <span class="keyword">false</span>;<br><br>
+                    <span class="comment">// Las comparaciones devuelven boolean</span><br>
+                    console.log(<span class="number">10</span> > <span class="number">5</span>);     <span class="comment">// true</span><br>
+                    console.log(<span class="number">10</span> === <span class="number">10</span>);  <span class="comment">// true  (igual en valor y tipo)</span><br>
+                    console.log(<span class="number">10</span> === <span class="string">"10"</span>); <span class="comment">// false (diferente tipo)</span><br>
+                    console.log(<span class="number">10</span> == <span class="string">"10"</span>);  <span class="comment">// true  (== convierte tipos, evitar)</span>
+                </div>
+            </div>
+
+            <!-- null vs undefined -->
+            <div class="glass-panel p-8 mb-8">
+                <div class="flex gap-3 mb-4 flex-wrap">
+                    <div class="tech-tag" style="background:rgba(100,116,139,0.1);color:#94a3b8;">undefined</div>
+                    <div class="tech-tag" style="background:rgba(239,68,68,0.1);color:#f87171;">null</div>
+                </div>
+                <h4 class="text-2xl font-bold text-slate-300 mb-3">La diferencia entre null y undefined</h4>
+                <p class="text-slate-400 text-base leading-relaxed mb-6">Ambos representan "ausencia de valor", pero con intenciones distintas.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <p class="text-slate-400 font-bold mb-2 text-sm uppercase tracking-widest">undefined — JavaScript no asignó nada</p>
+                        <div class="code-snippet text-sm">
+                            <span class="keyword">let</span> usuario;<br>
+                            console.log(usuario); <span class="comment">// undefined</span><br><br>
+                            <span class="comment">// JavaScript lo pone solo</span><br>
+                            <span class="comment">// cuando no asignas nada</span>
                         </div>
                     </div>
+                    <div>
+                        <p class="text-slate-400 font-bold mb-2 text-sm uppercase tracking-widest">null — tú decidiste que está vacío</p>
+                        <div class="code-snippet text-sm">
+                            <span class="keyword">let</span> sesion = <span class="keyword">null</span>;<br>
+                            <span class="comment">// Sesión cerrada intencionalmente</span><br><br>
+                            sesion = { usuario: <span class="string">"Ana"</span> };<br>
+                            <span class="comment">// Ahora hay sesión activa</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">
+                    <p class="text-amber-300 text-sm"><strong>Regla simple:</strong> <code class="font-mono">undefined</code> lo pone JavaScript automáticamente. <code class="font-mono">null</code> lo pones tú cuando quieres decir "esto no tiene valor ahora".</p>
                 </div>
             </div>
         </section>
 
         <div class="section-divider"></div>
 
-        <!-- SECTION 2: PHASES -->
+        <!-- SECTION 3: OBJETOS Y ARREGLOS -->
         <section class="mb-32">
-            <h2 class="text-3xl font-bold text-sky-400 mb-12 border-b border-sky-400/20 pb-4 inline-block">2. Las Fases de Vida</h2>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
-                <div class="space-y-12">
-                    <div class="relative pl-8 border-l-2 border-white/5">
-                        <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-500 shadow-lg"></div>
-                        <h4 class="text-xl font-bold text-slate-200 mb-4">Fase de Creación</h4>
-                        <p class="text-slate-400 text-base leading-relaxed">
-                            El motor escanea el código, reserva espacio en memoria para variables y funciones. Aquí es donde ocurre el <strong>Hoisting</strong>: las declaraciones de <code>var</code> se inicializan como <code>undefined</code>.
-                        </p>
-                    </div>
-                    <div class="relative pl-8 border-l-2 border-sky-400/30">
-                        <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-sky-400 shadow-[0_0_15px_rgba(56,189,248,0.5)]"></div>
-                        <h4 class="text-xl font-bold text-sky-400 mb-4">Fase de Ejecución</h4>
-                        <p class="text-slate-400 text-base leading-relaxed">
-                            El motor procesa el código línea por línea. Asigna valores reales a las variables calculando expresiones y ejecutando las llamadas a funciones.
-                        </p>
-                    </div>
+            <h2 class="text-3xl font-bold text-violet-400 mb-8 border-b border-violet-500/20 pb-4 inline-block">3. Objetos y Arreglos</h2>
+            <p class="text-slate-300 text-xl leading-relaxed mb-10">
+                Cuando necesitas guardar <strong>varios datos juntos</strong>, usas objetos o arreglos.
+            </p>
+
+            <!-- Objeto -->
+            <div class="glass-panel p-8 mb-8">
+                <div class="tech-tag" style="background:rgba(56,189,248,0.1);color:#38bdf8;">object</div>
+                <h4 class="text-2xl font-bold text-sky-300 mb-3">Objeto — datos con nombre (clave: valor)</h4>
+                <p class="text-slate-400 text-base leading-relaxed mb-4">Un objeto agrupa datos relacionados. Cada dato tiene un nombre (<span class="tecnicismo" data-tooltip="Propiedad: par clave-valor dentro de un objeto. La clave es el nombre y el valor es el dato que guarda.">propiedad</span>) y un valor.</p>
+                <div class="code-snippet text-sm">
+                    <span class="keyword">const</span> estudiante = {<br>
+                    &nbsp;&nbsp;nombre: <span class="string">"María"</span>,<br>
+                    &nbsp;&nbsp;edad: <span class="number">20</span>,<br>
+                    &nbsp;&nbsp;activa: <span class="keyword">true</span><br>
+                    };<br><br>
+                    <span class="comment">// Acceder a propiedades</span><br>
+                    console.log(estudiante.nombre);      <span class="comment">// "María"</span><br>
+                    console.log(estudiante[<span class="string">"edad"</span>]);   <span class="comment">// 20</span><br><br>
+                    <span class="comment">// Modificar una propiedad</span><br>
+                    estudiante.edad = <span class="number">21</span>; <span class="comment">// ok aunque sea const</span>
                 </div>
-                <div>
-                    <div class="code-snippet group">
-                        <div class="text-[10px] uppercase text-slate-600 mb-4 font-bold tracking-widest border-b border-white/5 pb-2">V8 Trace: Temporal Dead Zone</div>
-                        <span class="keyword">console</span>.log(x); <span class="comment">// Error!</span><br>
-                        <span class="keyword">let</span> x = <span class="number">10</span>; <br><br>
-                        <span class="comment">// En fase de creación, 'x' se registra </span><br>
-                        <span class="comment">// pero no se puede acceder hasta que </span><br>
-                        <span class="comment">// la fase de ejecución llegue a la línea.</span>
-                    </div>
+            </div>
+
+            <!-- Array -->
+            <div class="glass-panel p-8 mb-8">
+                <div class="tech-tag" style="background:rgba(249,115,22,0.1);color:#fb923c;">array</div>
+                <h4 class="text-2xl font-bold text-orange-300 mb-3">Arreglo — lista ordenada de elementos</h4>
+                <p class="text-slate-400 text-base leading-relaxed mb-4">Un arreglo guarda varios valores en orden. Cada elemento tiene una posición (<span class="tecnicismo" data-tooltip="Índice: número que identifica la posición de un elemento en el arreglo. Empieza en 0, no en 1.">índice</span>) que empieza en <strong>0</strong>.</p>
+                <div class="code-snippet text-sm">
+                    <span class="keyword">const</span> notas = [<span class="number">6.5</span>, <span class="number">5.8</span>, <span class="number">7.0</span>, <span class="number">6.2</span>];<br><br>
+                    <span class="comment">// Acceder por posición (empieza en 0)</span><br>
+                    console.log(notas[<span class="number">0</span>]); <span class="comment">// 6.5 (primera)</span><br>
+                    console.log(notas[<span class="number">2</span>]); <span class="comment">// 7.0 (tercera)</span><br><br>
+                    <span class="comment">// Propiedades y métodos útiles</span><br>
+                    console.log(notas.length);   <span class="comment">// 4 (cantidad de elementos)</span><br>
+                    notas.push(<span class="number">6.8</span>);          <span class="comment">// agrega al final</span><br>
+                    notas.pop();              <span class="comment">// elimina el último</span>
                 </div>
             </div>
         </section>
 
         <div class="section-divider"></div>
 
-        <!-- SECTION 3: SCOPE CHAIN -->
-        <section class="mb-32">
-            <h2 class="text-3xl font-bold text-sky-400 mb-12 border-b border-sky-400/20 pb-4 inline-block">3. The Scope Chain</h2>
-            <div class="space-y-12">
-                <p class="text-slate-300 text-xl leading-relaxed max-w-3xl">
-                    Cuando una función necesita una variable que no está en su entorno actual, JavaScript utiliza la <strong>Scope Chain</strong>. Esta cadena conecta el entorno actual con todos sus entornos padres hasta llegar al Global.
-                </p>
-                <div class="glass-panel p-12 bg-white/5">
-                    <div class="scope-box global border-blue-500/20">
-                        <span class="text-xs font-bold uppercase text-blue-400 tracking-widest">Global Environment</span>
-                        <div class="scope-box function border-purple-500/20">
-                            <span class="text-xs font-bold uppercase text-purple-400 tracking-widest">Parent Lexical Context</span>
-                            <div class="scope-box block border-sky-400/40 bg-sky-400/5 shadow-2xl">
-                                <span class="text-xs font-bold uppercase text-sky-400 tracking-widest">Inner Block Record</span>
-                                <p class="text-sm mt-4 text-slate-400 leading-relaxed italic">
-                                    Si busco 'X' aquí y no está, escalo al Parent. Si tampoco está, llego al Global.
-                                </p>
-                            </div>
-                        </div>
+        <!-- SECTION 4: == vs === -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-violet-400 mb-8 border-b border-violet-500/20 pb-4 inline-block">4. Comparar: == vs ===</h2>
+            <p class="text-slate-300 text-xl leading-relaxed mb-10">
+                JavaScript tiene dos formas de comparar. La diferencia puede causar bugs silenciosos.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div class="glass-panel p-8 border-l-4 border-red-500">
+                    <h4 class="text-red-400 font-bold text-xl mb-3 font-mono">== Igualdad débil</h4>
+                    <p class="text-slate-400 text-base leading-relaxed mb-4">Compara el valor, pero <strong>convierte el tipo</strong> si son distintos. Produce resultados inesperados.</p>
+                    <div class="code-snippet text-sm">
+                        console.log(<span class="number">5</span> == <span class="string">"5"</span>);   <span class="comment">// true  ← peligroso</span><br>
+                        console.log(<span class="number">0</span> == <span class="keyword">false</span>); <span class="comment">// true  ← confuso</span><br>
+                        console.log(<span class="string">""</span> == <span class="keyword">false</span>); <span class="comment">// true  ← muy confuso</span>
+                    </div>
+                </div>
+                <div class="glass-panel p-8 border-l-4 border-emerald-500">
+                    <h4 class="text-emerald-400 font-bold text-xl mb-3 font-mono">=== Igualdad estricta</h4>
+                    <p class="text-slate-400 text-base leading-relaxed mb-4">Compara valor <strong>y tipo</strong>. Si no son del mismo tipo, devuelve false. Siempre usa esta.</p>
+                    <div class="code-snippet text-sm">
+                        console.log(<span class="number">5</span> === <span class="string">"5"</span>);   <span class="comment">// false ← correcto</span><br>
+                        console.log(<span class="number">0</span> === <span class="keyword">false</span>); <span class="comment">// false ← correcto</span><br>
+                        console.log(<span class="number">5</span> === <span class="number">5</span>);     <span class="comment">// true  ← como esperamos</span>
                     </div>
                 </div>
             </div>
+            <div class="glass-panel p-6 border border-violet-500/30 text-center">
+                <p class="text-violet-300 font-bold text-lg">Regla: Siempre usa <code class="font-mono">===</code> para comparar. Nunca <code class="font-mono">==</code>.</p>
+            </div>
         </section>
-
     </div>
 
     <script>

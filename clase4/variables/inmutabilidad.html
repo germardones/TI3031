@@ -3,77 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protección de Estructuras | Módulo 4</title>
+    <title>Scope y Contexto | Módulo 4</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --bg-color: #0b1120; --card-bg: rgba(15, 23, 42, 0.7); --accent: #8b5cf6; --text-main: #f8fafc; --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        [data-theme="light"] { --bg-color: #f1f5f9; --card-bg: rgba(255, 255, 255, 0.85); --text-main: #0f172a; --accent: #7c3aed; }
+        :root { --bg-color: #0b1120; --card-bg: rgba(15, 23, 42, 0.7); --accent: #38bdf8; --accent-glow: rgba(56, 189, 248, 0.2); --text-main: #f8fafc; --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        [data-theme="light"] { --bg-color: #f1f5f9; --card-bg: rgba(255, 255, 255, 0.85); --text-main: #0f172a; --accent: #0284c7; --accent-glow: rgba(2, 132, 199, 0.2); }
         [data-theme="light"] h1 { background-image: linear-gradient(to right, #1e293b, var(--accent)) !important; }
         [data-theme="light"] .text-slate-400, [data-theme="light"] .text-slate-300 { color: #475569 !important; }
         [data-theme="light"] .glass-panel { border-color: rgba(0,0,0,0.1) !important; }
-        .tecnicismo { border-bottom: 2px dashed var(--accent); cursor: help; position: relative; font-weight: 600; color: var(--accent); }
-        .tecnicismo::after { content: attr(data-tooltip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #0f172a; color: #f8fafc; padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.8rem; font-weight: 400; width: 260px; white-space: normal; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; border: 1px solid rgba(56,189,248,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.4); pointer-events: none; font-family: 'Outfit', sans-serif; }
-        .tecnicismo::before { content: ''; position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: #0f172a; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; pointer-events: none; }
-        .tecnicismo:hover::after, .tecnicismo:hover::before { opacity: 1; visibility: visible; }
         body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); min-height: 100vh; font-size: 1.25rem; }
-        .glass-panel { background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 2.5rem; }
-        .code-snippet { background: #010409; border-radius: 1.5rem; padding: 2rem; border: 1px solid rgba(255, 255, 255, 0.1); font-family: 'JetBrains Mono', monospace; font-size: 1rem; }
+        .glass-panel { background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 2.5rem; transition: var(--transition); }
+        .glass-panel:hover { border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow); }
+        .code-snippet { background: #010409; border-radius: 1.5rem; padding: 2rem; border: 1px solid rgba(255, 255, 255, 0.1); font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; line-height: 1.8; }
         #themeToggle { position: fixed; bottom: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-main); padding: 1rem 2rem; border-radius: 100px; cursor: pointer; font-weight: 600; }
         .keyword { color: #f472b6; }
         .string { color: #fbbf24; }
         .number { color: #818cf8; }
         .comment { color: #64748b; font-style: italic; }
-        .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.3), transparent); margin: 6rem 0; }
-        .compare-box { border-left: 4px solid; padding-left: 2rem; margin: 2rem 0; }
+        .error { color: #f87171; }
+        .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.3), transparent); margin: 6rem 0; }
+        .tech-tag { background: rgba(56, 189, 248, 0.1); color: #38bdf8; padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; display: inline-block; margin-bottom: 0.75rem; }
+        .tecnicismo { border-bottom: 2px dashed var(--accent); cursor: help; position: relative; font-weight: 600; color: var(--accent); }
+        .tecnicismo::after { content: attr(data-tooltip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #0f172a; color: #f8fafc; padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.8rem; font-weight: 400; width: 260px; white-space: normal; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; border: 1px solid rgba(56,189,248,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.4); pointer-events: none; font-family: 'Outfit', sans-serif; }
+        .tecnicismo::before { content: ''; position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: #0f172a; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; pointer-events: none; }
+        .tecnicismo:hover::after, .tecnicismo:hover::before { opacity: 1; visibility: visible; }
+
+        /* Scope visual */
+        .scope-box { border-radius: 1.5rem; padding: 1.5rem 2rem; position: relative; }
+        .scope-global { border: 2px dashed rgba(56,189,248,0.4); background: rgba(56,189,248,0.04); }
+        .scope-funcion { border: 2px dashed rgba(139,92,246,0.4); background: rgba(139,92,246,0.04); margin: 1rem; }
+        .scope-bloque { border: 2px dashed rgba(16,185,129,0.4); background: rgba(16,185,129,0.04); margin: 1rem; }
+        .scope-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; }
     </style>
 </head>
 <body class="p-6 md:p-12 pb-32">
     <button id="themeToggle">Modo Claro</button>
 
     <div class="max-w-6xl mx-auto">
-        <!-- HEADER -->
         <header class="mb-24 text-center">
-            <nav class="mb-12 flex justify-center gap-6 text-sm font-semibold uppercase tracking-widest">
-                <a href="../index.html" class="text-purple-500 hover:text-purple-400 transition-colors font-bold">← Módulo 04</a>
+            <nav class="mb-12 flex justify-center gap-6 text-sm font-semibold uppercase tracking-widest flex-wrap">
+                <a href="../index.html" class="text-sky-400 hover:text-sky-300 transition-colors font-bold">← Módulo 04</a>
                 <span class="text-slate-700">|</span>
-                <a href="index.html" class="text-purple-500 hover:text-purple-400 transition-colors font-bold">Variables Hub</a>
+                <a href="index.html" class="text-sky-400 hover:text-sky-300 transition-colors">Variables Hub</a>
                 <span class="text-slate-700">|</span>
-                <span class="text-slate-500">Integridad de Objetos</span>
+                <span class="text-slate-500">Scope y Contexto</span>
             </nav>
-            <h1 class="text-5xl md:text-7xl font-black bg-gradient-to-r from-white to-purple-500 bg-clip-text text-transparent mb-8 leading-tight">
-                Protección de Estructuras
+            <h1 class="text-5xl md:text-7xl font-black bg-gradient-to-r from-white to-sky-400 bg-clip-text text-transparent mb-8 leading-tight">
+                Scope y Contexto
             </h1>
             <p class="text-slate-400 text-2xl font-light max-w-2xl mx-auto leading-relaxed">
-                Estrategias avanzadas para la preservación de la integridad del estado y el control de descriptores.
+                ¿Desde dónde puedes ver una variable? Eso es el scope. Es la pregunta más importante al trabajar con variables.
             </p>
         </header>
 
-        <!-- SECTION 1: STACK vs HEAP MUTATION -->
+        <!-- SECTION 1: QUÉ ES SCOPE -->
         <section class="mb-32">
-            <h2 class="text-3xl font-bold text-purple-400 mb- aggregation-8 border-b border-purple-500/20 pb-4 inline-block">1. Reasignación vs Mutabilidad</h2>
-            <p class="text-slate-300 text-xl leading-relaxed mt-8 mb-12">
-                Es fundamental distinguir entre la protección del identificador en el <strong>Stack</strong> y la protección del contenido en el <strong>Heap</strong>.
+            <h2 class="text-3xl font-bold text-sky-400 mb-8 border-b border-sky-500/20 pb-4 inline-block">1. ¿Qué es el Scope?</h2>
+            <p class="text-slate-300 text-xl leading-relaxed mt-8 mb-6">
+                <span class="tecnicismo" data-tooltip="Scope (alcance): la región del código desde donde una variable es visible y accesible. Fuera de ese alcance, la variable no existe.">Scope</span> es el <strong>alcance</strong> de una variable: desde qué partes del código puedes leerla o modificarla.
             </p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <div class="compare-box border-purple-500 bg-purple-500/5 p-8 rounded-r-2xl">
-                    <h4 class="text-purple-400 font-bold mb-4 uppercase text-xs tracking-widest">Pila (Stack)</h4>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        Impide que la variable apunte a una dirección de memoria diferente. Esta es la función principal de <code>const</code>.
-                    </p>
-                    <div class="code-snippet p-4 text-xs">
-                        <span class="keyword">const</span> x = [<span class="number">1</span>];<br>
-                        x = [<span class="number">2</span>]; <span class="comment">// Error: Assignment to const</span>
+            <p class="text-slate-300 text-xl leading-relaxed mb-10">
+                Imagina el scope como habitaciones dentro de una casa. Lo que está en el pasillo (global) lo ven todos. Lo que está dentro de una habitación (local) solo lo ve quien está en esa habitación.
+            </p>
+
+            <!-- Visualización scope -->
+            <div class="scope-box scope-global mb-10">
+                <div class="scope-label text-sky-400">Scope Global — visible desde cualquier parte</div>
+                <div class="font-mono text-sm text-sky-300 mb-4">const app = "MiApp";</div>
+
+                <div class="scope-box scope-funcion">
+                    <div class="scope-label text-violet-400">Scope de Función — solo visible dentro de esta función</div>
+                    <div class="font-mono text-sm text-violet-300 mb-4">let usuario = "Ana"; // solo existe aquí</div>
+
+                    <div class="scope-box scope-bloque">
+                        <div class="scope-label text-emerald-400">Scope de Bloque — solo dentro de este if/for</div>
+                        <div class="font-mono text-sm text-emerald-300">const temporal = true; // solo existe aquí</div>
                     </div>
                 </div>
-                <div class="compare-box border-slate-500 bg-slate-500/5 p-8 rounded-r-2xl">
-                    <h4 class="text-slate-500 font-bold mb-4 uppercase text-xs tracking-widest">Montón (Heap)</h4>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        Los valores internos del objeto siguen siendo modificables. <code>const</code> NO protege las propiedades internas.
-                    </p>
-                    <div class="code-snippet p-4 text-xs">
-                        <span class="keyword">const</span> x = [<span class="number">1</span>];<br>
-                        x.push(<span class="number">2</span>); <span class="comment">// Operación permitida</span>
+            </div>
+
+            <div class="code-snippet mb-8">
+                <span class="keyword">const</span> app = <span class="string">"MiApp"</span>; <span class="comment">// global: todos lo ven</span><br><br>
+                <span class="keyword">function</span> saludar() {<br>
+                &nbsp;&nbsp;<span class="keyword">let</span> usuario = <span class="string">"Ana"</span>; <span class="comment">// local: solo existe dentro de saludar()</span><br>
+                &nbsp;&nbsp;console.log(app);    <span class="comment">// ok — puede ver el global</span><br>
+                &nbsp;&nbsp;console.log(usuario); <span class="comment">// ok — está en su propio scope</span><br>
+                }<br><br>
+                saludar();<br>
+                console.log(app);    <span class="comment">// ok</span><br>
+                console.log(usuario); <span class="comment">// ❌ ReferenceError: usuario no existe aquí</span>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECTION 2: LET CONST VAR -->
+        <section class="mb-32">
+            <h2 class="text-3xl font-bold text-sky-400 mb-8 border-b border-sky-500/20 pb-4 inline-block">2. var, let y const: sus diferencias reales</h2>
+            <p class="text-slate-300 text-xl leading-relaxed mb-10">
+                La diferencia clave entre <code class="font-mono text-fuchsia-400">var</code>, <code class="font-mono text-fuchsia-400">let</code> y <code class="font-mono text-fuchsia-400">const</code> está en su <strong>scope</strong> y si permiten reasignación.
+            </p>
+
+            <!-- let -->
+            <div class="glass-panel p-8 mb-8">
+                <div class="tech-tag">let — scope de bloque</div>
+                <h4 class="text-2xl font-bold text-sky-300 mb-3">let</h4>
+                <p class="text-slate-400 text-base leading-relaxed mb-4">Existe solo dentro del bloque <code class="font-mono">{}</code> donde fue declarada. Puede ser reasignada.</p>
+                <div class="code-snippet text-sm">
+                    <span class="keyword">let</span> contador = <span class="number">0</span>;<br>
+                    contador = <span class="number">1</span>; <span class="comment">// ok — reasignación permitida</span><br><br>
+                    <span class="keyword">if</span> (<span class="keyword">true</span>) {<br>
+                    &nbsp;&nbsp;<span class="keyword">let</span> dentro = <span class="string">"solo aquí"</span>;<br>
+                    &nbsp;&nbsp;console.log(dentro); <span class="comment">// ok</span><br>
+                    }<br>
+                    console.log(dentro); <span class="comment">// ❌ ReferenceError — fuera del bloque</span>
+                </div>
+            </div>
+
+            <!-- const -->
+            <div class="glass-panel p-8 mb-8">
+                <div class="tech-tag" style="background:rgba(16,185,129,0.1);color:#10b981;">const — scope de bloque + no reasignable</div>
+                <h4 class="text-2xl font-bold text-emerald-300 mb-3">const</h4>
+                <p class="text-slate-400 text-base leading-relaxed mb-4">Igual que <code class="font-mono">let</code>, pero la referencia no puede cambiar. Para objetos y arreglos, su contenido sí puede modificarse.</p>
+                <div class="code-snippet text-sm">
+                    <span class="keyword">const</span> nombre = <span class="string">"Ana"</span>;<br>
+                    nombre = <span class="string">"Luis"</span>; <span class="comment">// ❌ TypeError — no se puede reasignar</span><br><br>
+                    <span class="comment">// Con objetos: la variable no cambia, el contenido sí</span><br>
+                    <span class="keyword">const</span> user = { nombre: <span class="string">"Ana"</span> };<br>
+                    user.nombre = <span class="string">"Luis"</span>; <span class="comment">// ok — modificar propiedad</span><br>
+                    user = {}; <span class="comment">// ❌ TypeError — no puedes reemplazar el objeto</span>
+                </div>
+                <div class="mt-4 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
+                    <p class="text-emerald-300 text-sm"><strong>const no congela el objeto</strong>, solo evita que la variable apunte a otro lugar. El contenido del objeto puede cambiar.</p>
+                </div>
+            </div>
+
+            <!-- var -->
+            <div class="glass-panel p-8 mb-8">
+                <div class="tech-tag" style="background:rgba(239,68,68,0.1);color:#f87171;">var — scope de función (evitar)</div>
+                <h4 class="text-2xl font-bold text-red-300 mb-3">var (el problemático)</h4>
+                <p class="text-slate-400 text-base leading-relaxed mb-4"><code class="font-mono">var</code> ignora los bloques <code class="font-mono">{}</code> — su scope es la función completa, no el bloque. Esto causa bugs difíciles de encontrar.</p>
+                <div class="code-snippet text-sm">
+                    <span class="keyword">if</span> (<span class="keyword">true</span>) {<br>
+                    &nbsp;&nbsp;<span class="keyword">var</span> x = <span class="string">"escapé del bloque"</span>;<br>
+                    }<br>
+                    console.log(x); <span class="comment">// "escapé del bloque" ← var se sale del if</span><br><br>
+                    <span class="keyword">if</span> (<span class="keyword">true</span>) {<br>
+                    &nbsp;&nbsp;<span class="keyword">let</span> y = <span class="string">"me quedo aquí"</span>;<br>
+                    }<br>
+                    console.log(y); <span class="comment">// ❌ ReferenceError ← let se queda en el bloque</span>
+                </div>
+            </div>
+
+            <!-- Tabla comparativa -->
+            <div class="glass-panel p-8">
+                <h4 class="text-sky-400 font-bold text-xl mb-6 text-center">Resumen comparativo</h4>
+                <div class="overflow-x-auto">
+                    <table style="width:100%;border-collapse:collapse;">
+                        <thead>
+                            <tr>
+                                <th style="background:rgba(56,189,248,0.1);color:#38bdf8;padding:0.75rem 1rem;text-align:left;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;"></th>
+                                <th style="background:rgba(56,189,248,0.1);color:#38bdf8;padding:0.75rem 1rem;text-align:left;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;">Scope</th>
+                                <th style="background:rgba(56,189,248,0.1);color:#38bdf8;padding:0.75rem 1rem;text-align:left;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;">Reasignable</th>
+                                <th style="background:rgba(56,189,248,0.1);color:#38bdf8;padding:0.75rem 1rem;text-align:left;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.05em;">Usar en código moderno</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding:0.75rem 1rem;border-top:1px solid rgba(255,255,255,0.05);"><code class="font-mono text-fuchsia-400 font-bold">const</code></td>
+                                <td style="padding:0.75rem 1rem;border-top:1px solid rgba(255,255,255,0.05);color:#94a3b8;">Bloque <code class="font-mono">{}</code></td>
+                                <td style="padding:0.75rem 1rem;border-top:1px solid rgba(255,255,255,0.05);color:#f87171;">No</td>
+                                <td style="padding:0.75rem 1rem;border-top:1px solid rgba(255,255,255,0.05);color:#34d399;">Sí — por defecto</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:0.75rem 1rem;border-top:1px solid rgba(255,255,255,0.05);"><code class="font-mono text-fuchsia-400 font-bold">let</code></td>
+                                <td style="padding:0.75rem 1rem;border-top:1px solid rgba(255,255,255,0.05);color:#94a3b8;">Bloque <code class="font-mono">{}</code></td>
+                                <td style="padding:0.75rem 1rem;border-top:1px solid rgba(255,255,255,0.05);color:#34d399;">Sí</td>
+                                <td style="padding:0.75rem 1rem;border-top:1px solid rgba(255,255,255,0.05);color:#34d399;">Sí — cuando necesites cambiar el valor</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:0.75rem 1rem;border-top:1px solid rgba(255,255,255,0.05);"><code class="font-mono text-fuchsia-400 font-bold">var</code></td>
+                                <td style="padding:0.75rem 1rem;border-top:1px solid rgba(255,255,255,0.05);color:#94a3b8;">Función</td>
+                                <td style="padding:0.75rem 1rem;border-top:1px solid rgba(255,255,255,0.05);color:#34d399;">Sí</td>
+                                <td style="padding:0.75rem 1rem;border-top:1px solid rgba(255,255,255,0.05);color:#f87171;">No — comportamiento impredecible</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECTION 3: HOISTING -->
+        <section class="mb-32">
+            <h2 class="text-3xl font-bold text-sky-400 mb-8 border-b border-sky-500/20 pb-4 inline-block">3. Hoisting: el comportamiento raro de var</h2>
+            <p class="text-slate-300 text-xl leading-relaxed mb-10">
+                <span class="tecnicismo" data-tooltip="Hoisting: JavaScript 'sube' mentalmente las declaraciones al inicio del bloque antes de ejecutar el código. Con var, la variable existe desde el inicio pero sin valor (undefined). Con let/const, existe pero no se puede usar antes de declararse.">Hoisting</span> es por qué <code class="font-mono text-fuchsia-400">var</code> puede causar bugs. JavaScript procesa las declaraciones antes de ejecutar el código.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                <div class="glass-panel p-8 border-l-4 border-red-500">
+                    <h4 class="text-red-400 font-bold mb-4 font-mono">var — hoisting peligroso</h4>
+                    <div class="code-snippet text-sm">
+                        console.log(x); <span class="comment">// undefined — no da error!</span><br>
+                        <span class="keyword">var</span> x = <span class="number">5</span>;<br>
+                        console.log(x); <span class="comment">// 5</span><br><br>
+                        <span class="comment">// JavaScript lo ve así internamente:</span><br>
+                        <span class="keyword">var</span> x; <span class="comment">// declaración sube</span><br>
+                        console.log(x); <span class="comment">// undefined</span><br>
+                        x = <span class="number">5</span>; <span class="comment">// asignación se queda</span>
+                    </div>
+                </div>
+                <div class="glass-panel p-8 border-l-4 border-emerald-500">
+                    <h4 class="text-emerald-400 font-bold mb-4 font-mono">let/const — error claro</h4>
+                    <div class="code-snippet text-sm">
+                        console.log(y); <span class="comment">// ❌ ReferenceError</span><br>
+                        <span class="comment">// let/const están en la</span><br>
+                        <span class="comment">// "zona muerta temporal"</span><br>
+                        <span class="comment">// hasta esta línea</span><br>
+                        <span class="keyword">let</span> y = <span class="number">5</span>;<br>
+                        console.log(y); <span class="comment">// 5</span>
+                    </div>
+                    <div class="mt-4 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl">
+                        <p class="text-emerald-300 text-sm">El error es mejor que el silencio. Con <code class="font-mono">let</code>/<code class="font-mono">const</code> sabes exactamente dónde está el problema.</p>
                     </div>
                 </div>
             </div>
@@ -81,57 +234,70 @@
 
         <div class="section-divider"></div>
 
-        <!-- SECTION 2: DESCRIPTORS -->
-        <section class="mb-32">
-            <h2 class="text-3xl font-bold text-purple-400 mb-12 border-b border-purple-500/20 pb-4 inline-block">2. Property Descriptors</h2>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                <div class="space-y-6">
-                    <p class="text-slate-300 text-lg leading-relaxed">
-                        Para un control granular del motor V8, podemos definir metadatos sobre cada propiedad mediante descriptores.
-                    </p>
-                    <ul class="space-y-4 text-sm text-slate-400">
-                        <li>• <strong class="text-purple-400">Writable:</strong> ¿El valor puede ser alterado?</li>
-                        <li>• <strong class="text-purple-400">Enumerable:</strong> ¿Aparece en bucles como <code>for...in</code>?</li>
-                        <li>• <strong class="text-purple-400">Configurable:</strong> ¿Se puede borrar o redefinir el descriptor?</li>
-                    </ul>
-                </div>
-                <div class="code-snippet">
-                    <span class="keyword">Object</span>.defineProperty(obj, <span class="string">'secret'</span>, {<br>
-                    &nbsp;&nbsp;value: <span class="number">999</span>,<br>
-                    &nbsp;&nbsp;writable: <span class="keyword">false</span>,<br>
-                    &nbsp;&nbsp;configurable: <span class="keyword">false</span><br>
-                    });
-                </div>
-            </div>
-        </section>
-
-        <div class="section-divider"></div>
-
-        <!-- SECTION 3: SEAL & FREEZE -->
-        <section class="mb-32">
-            <h2 class="text-3xl font-bold text-purple-400 mb-12 border-b border-purple-500/20 pb-4 inline-block">3. Estrategias de Congelación</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="glass-panel p-10 hover:border-purple-500/30 transition-all">
-                    <h4 class="text-slate-200 font-bold text-xl mb-4 italic">Object.seal()</h4>
-                    <p class="text-slate-400 text-base leading-relaxed mb-6">
-                        "Sella" el objeto: no se pueden añadir ni borrar propiedades, pero las existentes siguen siendo editables si eran mutables.
-                    </p>
-                    <div class="code-snippet text-xs p-4 bg-black/40">
-                        <span class="comment">// Estructura fija, valores editables.</span>
+        <!-- SECTION 4: BUENAS PRÁCTICAS -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-sky-400 mb-8 border-b border-sky-500/20 pb-4 inline-block">4. Guía Práctica: ¿Cuál uso?</h2>
+            <p class="text-slate-300 text-xl leading-relaxed mb-10">
+                Con estos tres criterios puedes tomar la decisión correcta siempre:
+            </p>
+            <div class="space-y-6 mb-10">
+                <div class="glass-panel p-8 flex gap-6 items-start">
+                    <div class="w-14 h-14 bg-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center text-2xl font-black shrink-0">1</div>
+                    <div>
+                        <h4 class="text-emerald-400 font-bold text-xl mb-2">¿El valor va a cambiar? No → usa <code class="font-mono">const</code></h4>
+                        <p class="text-slate-400 text-base leading-relaxed">Si declaras algo y no necesitas cambiarlo, usa <code class="font-mono text-fuchsia-400">const</code>. Hace el código más predecible y comunica intención.</p>
+                        <div class="code-snippet text-sm mt-4">
+                            <span class="keyword">const</span> URL_API = <span class="string">"https://api.ejemplo.com"</span>;<br>
+                            <span class="keyword">const</span> MAX_INTENTOS = <span class="number">3</span>;<br>
+                            <span class="keyword">const</span> usuario = { nombre: <span class="string">"Ana"</span> }; <span class="comment">// const aunque sea objeto</span>
+                        </div>
                     </div>
                 </div>
-                <div class="glass-panel p-10 bg-purple-500/5 border-purple-500/20">
-                    <h4 class="text-purple-400 font-bold text-xl mb-4 italic">Object.freeze()</h4>
-                    <p class="text-slate-300 text-base leading-relaxed mb-6">
-                        Inmutabilidad total (superficial). El objeto se convierte en solo lectura. Ideal para configuraciones de sistema invariables.
-                    </p>
-                    <div class="code-snippet text-xs p-4 bg-black/40">
-                        <span class="comment">// Estructura fija, valores bloqueados.</span>
+                <div class="glass-panel p-8 flex gap-6 items-start">
+                    <div class="w-14 h-14 bg-sky-500/20 text-sky-400 rounded-2xl flex items-center justify-center text-2xl font-black shrink-0">2</div>
+                    <div>
+                        <h4 class="text-sky-400 font-bold text-xl mb-2">¿El valor va a cambiar? Sí → usa <code class="font-mono">let</code></h4>
+                        <p class="text-slate-400 text-base leading-relaxed">Contadores, acumuladores, estados que cambian con el tiempo.</p>
+                        <div class="code-snippet text-sm mt-4">
+                            <span class="keyword">let</span> puntos = <span class="number">0</span>;<br>
+                            <span class="keyword">let</span> intentos = <span class="number">3</span>;<br>
+                            <span class="keyword">let</span> estaActivo = <span class="keyword">true</span>;<br><br>
+                            puntos += <span class="number">10</span>; <span class="comment">// suma y reasigna</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-panel p-8 flex gap-6 items-start">
+                    <div class="w-14 h-14 bg-red-500/20 text-red-400 rounded-2xl flex items-center justify-center text-2xl font-black shrink-0">3</div>
+                    <div>
+                        <h4 class="text-red-400 font-bold text-xl mb-2">¿Código legado con var? → migra a let/const</h4>
+                        <p class="text-slate-400 text-base leading-relaxed">Si ves <code class="font-mono text-fuchsia-400">var</code> en código que estás editando, cámbialo. El comportamiento de <code class="font-mono">let</code>/<code class="font-mono">const</code> es más claro y predecible.</p>
                     </div>
                 </div>
             </div>
-        </section>
 
+            <!-- Mini ejercicio mental -->
+            <div class="glass-panel p-10 border border-sky-500/30">
+                <h4 class="text-sky-400 font-bold text-xl mb-6 text-center">Ejercicio mental: ¿qué imprime este código?</h4>
+                <div class="code-snippet mb-6">
+                    <span class="keyword">const</span> mensaje = <span class="string">"global"</span>;<br><br>
+                    <span class="keyword">function</span> mostrar() {<br>
+                    &nbsp;&nbsp;<span class="keyword">let</span> mensaje = <span class="string">"local"</span>; <span class="comment">// variable distinta, mismo nombre</span><br>
+                    &nbsp;&nbsp;console.log(mensaje);<br>
+                    }<br><br>
+                    mostrar();<br>
+                    console.log(mensaje);
+                </div>
+                <details class="cursor-pointer">
+                    <summary class="text-sky-400 font-bold text-base hover:text-sky-300 transition-colors">Ver respuesta</summary>
+                    <div class="mt-4 p-4 bg-sky-500/10 border border-sky-500/20 rounded-xl">
+                        <p class="text-slate-300 text-base leading-relaxed">
+                            Imprime <code class="font-mono text-yellow-400">"local"</code> y luego <code class="font-mono text-yellow-400">"global"</code>.<br>
+                            Dentro de <code class="font-mono">mostrar()</code>, el <code class="font-mono">let mensaje</code> local <strong>sombrea</strong> al global. Fuera de la función, solo existe el <code class="font-mono">const mensaje = "global"</code>.
+                        </p>
+                    </div>
+                </details>
+            </div>
+        </section>
     </div>
 
     <script>
