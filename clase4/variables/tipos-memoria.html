@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arquitectura de Memoria | Módulo 4</title>
+    <title>¿Qué es una Variable? | Módulo 4</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
@@ -15,8 +15,7 @@
         body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); min-height: 100vh; font-size: 1.25rem; }
         .glass-panel { background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 2.5rem; transition: var(--transition); }
         .glass-panel:hover { border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow); }
-        .code-snippet { background: #010409; border-radius: 1.5rem; padding: 2rem; border: 1px solid rgba(255, 255, 255, 0.1); font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; }
-        .memory-slot { background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.05); margin: 0.75rem 0; padding: 1.25rem; border-radius: 1rem; display: flex; justify-content: space-between; align-items: center; }
+        .code-snippet { background: #010409; border-radius: 1.5rem; padding: 2rem; border: 1px solid rgba(255, 255, 255, 0.1); font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; line-height: 1.8; }
         #themeToggle { position: fixed; bottom: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-main); padding: 1rem 2rem; border-radius: 100px; cursor: pointer; font-weight: 600; }
         .keyword { color: #f472b6; }
         .string { color: #fbbf24; }
@@ -28,10 +27,19 @@
         .tecnicismo::after { content: attr(data-tooltip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #0f172a; color: #f8fafc; padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.8rem; font-weight: 400; width: 260px; white-space: normal; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; border: 1px solid rgba(16,185,129,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.4); pointer-events: none; font-family: 'Outfit', sans-serif; }
         .tecnicismo::before { content: ''; position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: #0f172a; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; pointer-events: none; }
         .tecnicismo:hover::after, .tecnicismo:hover::before { opacity: 1; visibility: visible; }
-        table { width: 100%; border-collapse: collapse; }
-        th { background: rgba(16,185,129,0.1); color: #10b981; padding: 0.75rem 1rem; text-align: left; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        td { padding: 0.75rem 1rem; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; color: #94a3b8; vertical-align: top; }
-        tr:hover td { background: rgba(255,255,255,0.02); }
+
+        /* Caja visual */
+        .caja-container { display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-start; justify-content: center; margin: 2rem 0; }
+        .caja { border: 3px solid var(--accent); border-radius: 1rem; padding: 1.5rem 2rem; text-align: center; min-width: 160px; position: relative; transition: all 0.3s; }
+        .caja:hover { box-shadow: 0 0 20px var(--accent-glow); transform: translateY(-4px); }
+        .caja-etiqueta { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; font-size: 0.7rem; font-weight: bold; padding: 0.2rem 0.75rem; border-radius: 100px; white-space: nowrap; }
+        .caja-valor { font-family: 'JetBrains Mono', monospace; font-size: 1.4rem; font-weight: bold; color: var(--text-main); }
+        .caja-tipo { font-size: 0.7rem; color: #64748b; margin-top: 0.25rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        /* Reglas naming */
+        .regla { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 1.25rem; border-radius: 1rem; margin: 0.5rem 0; }
+        .regla-ok { background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); }
+        .regla-no { background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); }
     </style>
 </head>
 <body class="p-6 md:p-12 pb-32">
@@ -44,46 +52,140 @@
                 <span class="text-slate-700">|</span>
                 <a href="index.html" class="text-emerald-500 hover:text-emerald-400 transition-colors">Variables Hub</a>
                 <span class="text-slate-700">|</span>
-                <span class="text-slate-500">Arquitectura de Memoria</span>
+                <span class="text-slate-500">¿Qué es una Variable?</span>
             </nav>
             <h1 class="text-5xl md:text-7xl font-black bg-gradient-to-r from-white to-emerald-500 bg-clip-text text-transparent mb-8 leading-tight">
-                Gestión de Memoria y Tipado
+                ¿Qué es una Variable?
             </h1>
             <p class="text-slate-400 text-2xl font-light max-w-2xl mx-auto leading-relaxed">
-                Del valor primitivo al motor V8: cómo JavaScript gestiona cada byte de tu programa.
+                La variable es el concepto más fundamental de la programación. Todo lo demás se construye sobre esto.
             </p>
         </header>
 
-        <!-- SECTION 1: TIPOS -->
+        <!-- SECTION 1: LA ANALOGÍA -->
         <section class="mb-32">
-            <h2 class="text-3xl font-bold text-emerald-400 mb-8 border-b border-emerald-500/20 pb-4 inline-block">1. Catálogo de Tipos en JavaScript</h2>
-            <p class="text-slate-300 text-xl leading-relaxed mt-8 mb-10">
-                JavaScript es un lenguaje de <span class="tecnicismo" data-tooltip="Tipado dinámico: el tipo de una variable se determina en tiempo de ejecución, no al escribir el código. Contrario a lenguajes como Java o C# donde debes declarar el tipo explícitamente.">tipado dinámico</span>. Las variables no tienen tipo fijo — los valores sí.
+            <h2 class="text-3xl font-bold text-emerald-400 mb-8 border-b border-emerald-500/20 pb-4 inline-block">1. La Caja Etiquetada</h2>
+            <p class="text-slate-300 text-xl leading-relaxed mt-8 mb-6">
+                Imagina que tu programa es un cuarto lleno de <strong>cajas etiquetadas</strong>. Cada caja tiene un nombre (la etiqueta) y guarda algo dentro (el valor).
             </p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <p class="text-slate-300 text-xl leading-relaxed mb-10">
+                Una <span class="tecnicismo" data-tooltip="Variable: espacio con nombre en la memoria del programa que guarda un valor. Ese valor puede cambiar mientras el programa corre.">variable</span> es exactamente eso: un espacio con nombre que guarda un dato.
+            </p>
+
+            <!-- Visualización cajas -->
+            <div class="glass-panel p-10 mb-10">
+                <p class="text-center text-slate-400 text-sm uppercase tracking-widest mb-8">Así se ven las variables en memoria (de forma simplificada)</p>
+                <div class="caja-container">
+                    <div class="caja">
+                        <span class="caja-etiqueta">nombre</span>
+                        <div class="caja-valor">"Ana"</div>
+                        <div class="caja-tipo">texto (string)</div>
+                    </div>
+                    <div class="caja">
+                        <span class="caja-etiqueta">edad</span>
+                        <div class="caja-valor">22</div>
+                        <div class="caja-tipo">número (number)</div>
+                    </div>
+                    <div class="caja">
+                        <span class="caja-etiqueta">estaActivo</span>
+                        <div class="caja-valor">true</div>
+                        <div class="caja-tipo">booleano (boolean)</div>
+                    </div>
+                    <div class="caja" style="border-color:#64748b;">
+                        <span class="caja-etiqueta" style="background:#64748b;">sinUsar</span>
+                        <div class="caja-valor" style="color:#64748b; font-size:1rem;">undefined</div>
+                        <div class="caja-tipo">sin valor asignado</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-snippet mb-8">
+                <span class="comment">// Declarar = crear la caja y ponerle etiqueta</span><br>
+                <span class="comment">// Asignar  = meter algo dentro de la caja</span><br><br>
+                <span class="keyword">let</span> nombre = <span class="string">"Ana"</span>;       <span class="comment">// caja "nombre" → guarda "Ana"</span><br>
+                <span class="keyword">let</span> edad = <span class="number">22</span>;           <span class="comment">// caja "edad" → guarda 22</span><br>
+                <span class="keyword">let</span> estaActivo = <span class="keyword">true</span>;  <span class="comment">// caja "estaActivo" → guarda true</span><br>
+                <span class="keyword">let</span> sinUsar;               <span class="comment">// caja creada, pero vacía → undefined</span>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECTION 2: DECLARAR vs ASIGNAR -->
+        <section class="mb-32">
+            <h2 class="text-3xl font-bold text-emerald-400 mb-8 border-b border-emerald-500/20 pb-4 inline-block">2. Declarar vs. Asignar</h2>
+            <p class="text-slate-300 text-xl leading-relaxed mb-10">
+                Son dos pasos distintos. Puedes hacerlos juntos o por separado.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                <div class="glass-panel p-8 border-l-4 border-emerald-500">
+                    <div class="tech-tag">Declarar</div>
+                    <p class="text-slate-300 text-base leading-relaxed mb-4">Le dices al programa "existe una caja con este nombre". Usas una <span class="tecnicismo" data-tooltip="Palabra reservada: palabra especial que JavaScript usa para su sintaxis. No puedes usarla como nombre de variable.">palabra reservada</span>: <code class="text-fuchsia-400 font-mono">let</code>, <code class="text-fuchsia-400 font-mono">const</code>, o <code class="text-fuchsia-400 font-mono">var</code>.</p>
+                    <div class="code-snippet text-sm">
+                        <span class="keyword">let</span> puntuacion; <span class="comment">// caja creada, vacía</span><br>
+                        console.log(puntuacion); <span class="comment">// undefined</span>
+                    </div>
+                </div>
+                <div class="glass-panel p-8 border-l-4 border-sky-500">
+                    <div class="tech-tag" style="background:rgba(56,189,248,0.1);color:#38bdf8;">Asignar</div>
+                    <p class="text-slate-300 text-base leading-relaxed mb-4">Le metes un valor a la caja usando el operador <code class="text-fuchsia-400 font-mono">=</code>. Puedes hacerlo al momento de declarar o después.</p>
+                    <div class="code-snippet text-sm">
+                        <span class="keyword">let</span> puntuacion; <span class="comment">// declarar</span><br>
+                        puntuacion = <span class="number">100</span>; <span class="comment">// asignar</span><br><br>
+                        <span class="comment">// O todo junto:</span><br>
+                        <span class="keyword">let</span> vidas = <span class="number">3</span>;
+                    </div>
+                </div>
+            </div>
+            <div class="glass-panel p-8 border-l-4 border-amber-500">
+                <p class="text-amber-400 font-bold mb-2">El <code>=</code> no significa "igual", significa "guardar"</p>
+                <p class="text-slate-400 text-base leading-relaxed">En matemáticas <code>x = 5</code> dice que x <em>es</em> 5. En JavaScript dice "mete el valor 5 dentro de la caja x". Por eso <code>x = x + 1</code> tiene sentido: toma el valor actual, súmale 1, y guarda el resultado de nuevo.</p>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECTION 3: LET / CONST / VAR -->
+        <section class="mb-32">
+            <h2 class="text-3xl font-bold text-emerald-400 mb-8 border-b border-emerald-500/20 pb-4 inline-block">3. let, const y var</h2>
+            <p class="text-slate-300 text-xl leading-relaxed mb-10">
+                Hay tres formas de declarar una variable. Cada una tiene un comportamiento diferente. Por ahora, la regla práctica:
+            </p>
+            <div class="glass-panel p-8 mb-10 border border-emerald-500/30">
+                <p class="text-emerald-400 font-bold text-xl text-center mb-2">Regla práctica</p>
+                <p class="text-slate-300 text-center text-lg">Usa <code class="text-fuchsia-400 font-mono">const</code> por defecto. Cambia a <code class="text-fuchsia-400 font-mono">let</code> si necesitas reasignar. Evita <code class="text-fuchsia-400 font-mono">var</code>.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="glass-panel p-8">
-                    <div class="tech-tag">Primitivos (By Value)</div>
-                    <p class="text-slate-400 text-sm mb-4 leading-relaxed">Se copian por valor: cada variable tiene su propia copia independiente en el <span class="tecnicismo" data-tooltip="Stack (Pila): zona de memoria de tamaño fijo, muy rápida, donde se almacenan valores primitivos y referencias a objetos.">Stack</span>.</p>
-                    <div class="code-snippet p-4 text-xs">
-                        <span class="keyword">let</span> num = <span class="number">42</span>; <span class="comment">// Number</span><br>
-                        <span class="keyword">let</span> str = <span class="string">"Pro"</span>; <span class="comment">// String</span><br>
-                        <span class="keyword">let</span> bool = <span class="keyword">true</span>; <span class="comment">// Boolean</span><br>
-                        <span class="keyword">let</span> empty = <span class="keyword">null</span>; <span class="comment">// Nulo intencional</span><br>
-                        <span class="keyword">let</span> undef; <span class="comment">// Undefined</span><br>
-                        <span class="keyword">let</span> big = <span class="number">9007n</span>; <span class="comment">// BigInt</span><br>
-                        <span class="keyword">let</span> sym = <span class="keyword">Symbol</span>(); <span class="comment">// ID único</span>
+                    <div class="text-center text-4xl mb-4">🔒</div>
+                    <h4 class="text-emerald-400 font-bold text-xl mb-3 text-center font-mono">const</h4>
+                    <p class="text-slate-400 text-base leading-relaxed mb-4">La caja queda <strong>sellada</strong>: no puedes cambiar qué guarda. Ideal para valores que no cambian.</p>
+                    <div class="code-snippet text-sm">
+                        <span class="keyword">const</span> PI = <span class="number">3.14159</span>;<br>
+                        <span class="keyword">const</span> sitio = <span class="string">"INACAP"</span>;<br><br>
+                        <span class="comment">// Esto lanza error:</span><br>
+                        PI = <span class="number">3</span>; <span class="comment">// ❌ TypeError</span>
                     </div>
                 </div>
                 <div class="glass-panel p-8">
-                    <div class="tech-tag" style="background:rgba(6,182,212,0.1);color:#06b6d4;">Estructuras (By Reference)</div>
-                    <p class="text-slate-400 text-sm mb-4 leading-relaxed">Se pasan por referencia: la variable guarda una <span class="tecnicismo" data-tooltip="Referencia: dirección de memoria que apunta al objeto real en el Heap. Dos variables pueden apuntar al mismo objeto.">referencia (puntero)</span> al objeto en el Heap.</p>
-                    <div class="code-snippet p-4 text-xs">
-                        <span class="comment">// Objetos</span><br>
-                        <span class="keyword">const</span> user = { id: <span class="number">1</span>, name: <span class="string">"Ana"</span> };<br><br>
-                        <span class="comment">// Arreglos</span><br>
-                        <span class="keyword">const</span> list = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>];<br><br>
-                        <span class="comment">// Funciones</span><br>
-                        <span class="keyword">const</span> run = () => <span class="keyword">true</span>;
+                    <div class="text-center text-4xl mb-4">🔄</div>
+                    <h4 class="text-sky-400 font-bold text-xl mb-3 text-center font-mono">let</h4>
+                    <p class="text-slate-400 text-base leading-relaxed mb-4">La caja se puede <strong>vaciar y rellenar</strong>. Úsalo cuando el valor va a cambiar.</p>
+                    <div class="code-snippet text-sm">
+                        <span class="keyword">let</span> puntos = <span class="number">0</span>;<br>
+                        puntos = <span class="number">10</span>; <span class="comment">// ok</span><br>
+                        puntos = puntos + <span class="number">5</span>; <span class="comment">// ok</span><br><br>
+                        <span class="comment">// puntos ahora vale 15</span>
+                    </div>
+                </div>
+                <div class="glass-panel p-8">
+                    <div class="text-center text-4xl mb-4">⚠️</div>
+                    <h4 class="text-slate-500 font-bold text-xl mb-3 text-center font-mono">var</h4>
+                    <p class="text-slate-400 text-base leading-relaxed mb-4">La forma antigua. Tiene comportamientos <span class="tecnicismo" data-tooltip="Hoisting: var 'sube' su declaración al inicio del bloque de función sin asignar valor. Puede causar bugs difíciles de detectar.">raros (hoisting)</span> que generan bugs. No la uses en código nuevo.</p>
+                    <div class="code-snippet text-sm">
+                        <span class="comment">// ⚠ Evitar en código moderno</span><br>
+                        <span class="keyword">var</span> viejo = <span class="string">"anticuado"</span>;<br><br>
+                        <span class="comment">// Usa let o const en su lugar</span>
                     </div>
                 </div>
             </div>
@@ -91,219 +193,73 @@
 
         <div class="section-divider"></div>
 
-        <!-- SECTION 2: LIFO / FIFO -->
+        <!-- SECTION 4: NOMBRES -->
         <section class="mb-32">
-            <h2 class="text-3xl font-bold text-emerald-400 mb-12 border-b border-emerald-500/20 pb-4 inline-block">2. Estructuras Dinámicas: LIFO y FIFO</h2>
+            <h2 class="text-3xl font-bold text-emerald-400 mb-8 border-b border-emerald-500/20 pb-4 inline-block">4. Cómo Nombrar Variables</h2>
             <p class="text-slate-300 text-xl leading-relaxed mb-10">
-                JavaScript no guarda datos aleatoriamente. Usa dos reglas de acceso fundamentales según el contexto de ejecución.
+                JavaScript tiene reglas para los nombres. Además, hay convenciones que hacen el código más legible.
             </p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
                 <div class="glass-panel p-8">
-                    <h4 class="text-emerald-400 font-bold text-xl mb-3"><span class="tecnicismo" data-tooltip="LIFO: Last In, First Out. El último elemento en entrar es el primero en salir. Como una pila de platos.">LIFO</span> — El Call Stack</h4>
-                    <p class="text-slate-400 text-base leading-relaxed mb-4">Cada vez que llamas a una función, JS apila un nuevo <span class="tecnicismo" data-tooltip="Execution Context: entorno creado por el motor que contiene las variables locales, el valor de 'this', y la referencia al scope padre.">execution context</span> encima. Cuando la función termina, se extrae de la cima.</p>
-                    <div class="code-snippet text-xs p-4">
-                        <span class="comment">// A llama B, B llama C</span><br>
-                        <span class="comment">// Stack: [Global → A → B → C]</span><br>
-                        <span class="comment">// C termina: [Global → A → B]</span><br>
-                        <span class="comment">// B termina: [Global → A]</span>
-                    </div>
-                    <div class="mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
-                        <p class="text-red-400 text-sm font-bold">⚠ Stack Overflow</p>
-                        <p class="text-slate-400 text-xs mt-1 leading-relaxed">Si una función se llama a sí misma sin condición de parada (<span class="tecnicismo" data-tooltip="Recursión infinita: función que se llama a sí misma sin nunca detenerse. El Call Stack llena toda la memoria asignada y el motor lanza RangeError.">recursión infinita</span>), la pila supera su límite y el motor lanza <code>RangeError: Maximum call stack size exceeded</code>.</p>
-                    </div>
+                    <h4 class="text-emerald-400 font-bold mb-4">Reglas obligatorias</h4>
+                    <div class="regla regla-ok"><span class="text-emerald-400 font-bold text-xl">✓</span><p class="text-slate-300 text-sm">Puede empezar con letra, <code class="font-mono text-fuchsia-400">_</code> o <code class="font-mono text-fuchsia-400">$</code></p></div>
+                    <div class="regla regla-ok"><span class="text-emerald-400 font-bold text-xl">✓</span><p class="text-slate-300 text-sm">Puede tener números (pero no al inicio)</p></div>
+                    <div class="regla regla-no"><span class="text-red-400 font-bold text-xl">✗</span><p class="text-slate-300 text-sm">No puede empezar con número: <code class="font-mono text-red-400">1nombre</code></p></div>
+                    <div class="regla regla-no"><span class="text-red-400 font-bold text-xl">✗</span><p class="text-slate-300 text-sm">No puede tener espacios: <code class="font-mono text-red-400">mi nombre</code></p></div>
+                    <div class="regla regla-no"><span class="text-red-400 font-bold text-xl">✗</span><p class="text-slate-300 text-sm">No puede ser una palabra reservada: <code class="font-mono text-red-400">let</code>, <code class="font-mono text-red-400">if</code>, <code class="font-mono text-red-400">for</code>...</p></div>
                 </div>
                 <div class="glass-panel p-8">
-                    <h4 class="text-cyan-400 font-bold text-xl mb-3"><span class="tecnicismo" data-tooltip="FIFO: First In, First Out. El primero en entrar es el primero en salir. Como la fila de un banco.">FIFO</span> — El Event Loop</h4>
-                    <p class="text-slate-400 text-base leading-relaxed mb-4">Las operaciones <span class="tecnicismo" data-tooltip="Asíncrono: operación que no bloquea el hilo principal. Se programa para ejecutarse después, cuando el resultado esté listo (setTimeout, fetch, etc.).">asíncronas</span> (setTimeout, fetch) se encolan en una cola FIFO. El <span class="tecnicismo" data-tooltip="Event Loop: mecanismo que monitorea el Call Stack y las colas. Cuando el Stack está vacío, toma la siguiente tarea de la cola y la ejecuta.">Event Loop</span> las procesa en orden cuando el Call Stack está vacío.</p>
-                    <div class="code-snippet text-xs p-4">
-                        <span class="comment">// Macrotask Queue (FIFO)</span><br>
-                        <span class="keyword">setTimeout</span>(() => console.log(<span class="string">"A"</span>), <span class="number">0</span>);<br>
-                        <span class="keyword">setTimeout</span>(() => console.log(<span class="string">"B"</span>), <span class="number">0</span>);<br>
-                        <span class="comment">// Siempre: A luego B</span><br><br>
-                        <span class="comment">// Microtask Queue (mayor prioridad)</span><br>
-                        <span class="keyword">Promise</span>.resolve().then(() => console.log(<span class="string">"Micro"</span>));
+                    <h4 class="text-sky-400 font-bold mb-4">Convenciones de estilo</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">JavaScript usa <span class="tecnicismo" data-tooltip="camelCase: escribir la primera palabra en minúscula y cada palabra siguiente con su primera letra en mayúscula. Ej: nombreCompleto, edadUsuario.">camelCase</span> para variables y funciones.</p>
+                    <div class="code-snippet text-sm">
+                        <span class="comment">// Bien — camelCase</span><br>
+                        <span class="keyword">let</span> nombreUsuario = <span class="string">"Ana"</span>;<br>
+                        <span class="keyword">let</span> precioTotal = <span class="number">1500</span>;<br><br>
+                        <span class="comment">// Evitar — confuso</span><br>
+                        <span class="keyword">let</span> NombreUsuario = <span class="string">"Ana"</span>; <span class="comment">// PascalCase (para clases)</span><br>
+                        <span class="keyword">let</span> nombre_usuario = <span class="string">"Ana"</span>; <span class="comment">// snake_case (Python, no JS)</span>
                     </div>
                 </div>
             </div>
             <div class="glass-panel p-8 border-l-4 border-emerald-500">
-                <h5 class="text-emerald-400 font-bold uppercase tracking-widest text-sm mb-4">Orden real de ejecución</h5>
-                <div class="flex flex-wrap gap-3 items-center text-sm">
-                    <div class="bg-blue-500/20 text-blue-300 px-3 py-2 rounded-lg font-mono">1. Call Stack (síncrono)</div>
-                    <span class="text-slate-600">→</span>
-                    <div class="bg-purple-500/20 text-purple-300 px-3 py-2 rounded-lg font-mono">2. Microtasks (Promises)</div>
-                    <span class="text-slate-600">→</span>
-                    <div class="bg-amber-500/20 text-amber-300 px-3 py-2 rounded-lg font-mono">3. Macrotasks (setTimeout)</div>
+                <p class="text-emerald-400 font-bold mb-2">Nombres descriptivos hacen código legible</p>
+                <div class="code-snippet text-sm">
+                    <span class="comment">// Mal: nadie sabe qué significa esto</span><br>
+                    <span class="keyword">let</span> x = <span class="number">86400</span>;<br><br>
+                    <span class="comment">// Bien: se entiende sin comentario</span><br>
+                    <span class="keyword">const</span> SEGUNDOS_POR_DIA = <span class="number">86400</span>;
                 </div>
             </div>
         </section>
 
         <div class="section-divider"></div>
 
-        <!-- SECTION 3: EL HEAP -->
-        <section class="mb-32">
-            <h2 class="text-3xl font-bold text-emerald-400 mb-12 border-b border-emerald-500/20 pb-4 inline-block">3. El Heap: Memoria Dinámica</h2>
-            <p class="text-slate-300 text-xl leading-relaxed mb-10">
-                El <span class="tecnicismo" data-tooltip="Heap: región de memoria dinámica y grande donde se almacenan objetos, arreglos y funciones. Sin orden estructurado, los datos se asignan y liberan en cualquier posición.">Heap</span> es la memoria donde viven todos los objetos de tu programa. A diferencia del Stack, no tiene un tamaño fijo ni un orden de acceso rígido.
-            </p>
-            <div class="overflow-x-auto rounded-2xl mb-10">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Característica</th>
-                            <th>Stack (Pila)</th>
-                            <th>Heap (Montón)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="text-slate-300 font-semibold">¿Qué guarda?</td>
-                            <td>Primitivos, referencias, marcos de función</td>
-                            <td>Objetos, arreglos, funciones</td>
-                        </tr>
-                        <tr>
-                            <td class="text-slate-300 font-semibold">Tamaño</td>
-                            <td>Fijo y pequeño (~1-8 MB según entorno)</td>
-                            <td>Dinámico y grande (límite del SO)</td>
-                        </tr>
-                        <tr>
-                            <td class="text-slate-300 font-semibold">Velocidad</td>
-                            <td>Muy rápido (acceso directo)</td>
-                            <td>Más lento (necesita seguir puntero)</td>
-                        </tr>
-                        <tr>
-                            <td class="text-slate-300 font-semibold">Liberación</td>
-                            <td>Automática al salir de la función</td>
-                            <td>El Garbage Collector decide cuándo</td>
-                        </tr>
-                        <tr>
-                            <td class="text-slate-300 font-semibold">Estructura</td>
-                            <td>LIFO ordenado</td>
-                            <td>Sin orden (fragmentado)</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="glass-panel p-8">
-                <h5 class="text-emerald-400 font-bold uppercase tracking-widest text-sm mb-6 text-center">Cómo interactúan Stack y Heap</h5>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                        <div class="text-xs uppercase font-bold text-slate-500 mb-3 tracking-widest">Stack (por variable)</div>
-                        <div class="memory-slot"><span class="text-slate-300 font-mono text-sm">nombre</span><span class="text-fuchsia-400 font-mono text-xs">"Ana"</span></div>
-                        <div class="memory-slot"><span class="text-slate-300 font-mono text-sm">edad</span><span class="text-purple-400 font-mono text-xs">25</span></div>
-                        <div class="memory-slot bg-emerald-500/5 border-emerald-500/30"><span class="text-slate-300 font-mono text-sm">user</span><span class="text-emerald-400 font-mono text-xs">→ #0x4A1F</span></div>
-                    </div>
-                    <div>
-                        <div class="text-xs uppercase font-bold text-slate-500 mb-3 tracking-widest">Heap (el objeto real)</div>
-                        <div class="memory-slot bg-emerald-500/5 border-emerald-500/30 flex-col items-start gap-2">
-                            <span class="text-emerald-400 font-mono text-xs">#0x4A1F</span>
-                            <span class="text-slate-300 font-mono text-sm">&#123; id: 1, rol: "admin", permisos: [...] &#125;</span>
-                        </div>
-                        <p class="text-slate-500 text-xs mt-3 italic">El Stack solo guarda la dirección. El objeto vive aquí.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="section-divider"></div>
-
-        <!-- SECTION 4: PUNTEROS -->
-        <section class="mb-32">
-            <h2 class="text-3xl font-bold text-emerald-400 mb-12 border-b border-emerald-500/20 pb-4 inline-block">4. Punteros y Referencias</h2>
-            <div class="space-y-10">
-                <div class="glass-panel p-10 border-l-8 border-cyan-500">
-                    <h4 class="text-2xl font-bold mb-4">El problema de las referencias compartidas</h4>
-                    <p class="text-slate-300 text-lg leading-relaxed mb-6">
-                        Cuando asignas un objeto a otra variable, ambas apuntan al <strong>mismo lugar en el Heap</strong>. Modificar uno cambia el otro — un error común para quien viene de trabajar con primitivos.
-                    </p>
-                    <div class="code-snippet">
-                        <span class="keyword">const</span> a = { valor: <span class="number">1</span> };<br>
-                        <span class="keyword">const</span> b = a; <span class="comment">// b apunta al MISMO objeto</span><br>
-                        b.valor = <span class="number">99</span>;<br>
-                        console.log(a.valor); <span class="comment">// 99 — a también cambió!</span><br><br>
-                        <span class="comment">// Solución: clonar para romper la referencia</span><br>
-                        <span class="keyword">const</span> c = { ...a }; <span class="comment">// copia superficial</span><br>
-                        <span class="keyword">const</span> d = <span class="keyword">structuredClone</span>(a); <span class="comment">// copia profunda</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="section-divider"></div>
-
-        <!-- SECTION 5: GC -->
-        <section class="mb-32">
-            <h2 class="text-3xl font-bold text-emerald-400 mb-12 border-b border-emerald-500/20 pb-4 inline-block">5. El Motor de Recolección (GC)</h2>
-            <p class="text-slate-300 text-xl leading-relaxed mb-10">
-                JavaScript gestiona la memoria automáticamente. El <span class="tecnicismo" data-tooltip="Garbage Collector (GC): proceso que corre en segundo plano y libera la memoria de objetos que ya no son accesibles desde ninguna parte del código.">Garbage Collector</span> usa un algoritmo llamado <strong>Mark-and-Sweep</strong> para identificar y liberar objetos sin referencias activas.
-            </p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-                <div class="glass-panel p-8 border-l-4 border-emerald-500">
-                    <h4 class="font-bold text-slate-200 mb-4"><span class="tecnicismo" data-tooltip="Young Generation: espacio pequeño donde nacen todos los objetos nuevos. El GC pasa con alta frecuencia (Minor GC) porque la mayoría de objetos mueren aquí.">Young Generation</span></h4>
-                    <p class="text-sm text-slate-400 leading-relaxed">Objetos nuevos nacen aquí. El GC visita con alta frecuencia porque la mayoría de objetos temporales (variables de funciones) mueren en su primera o segunda iteración.</p>
-                </div>
-                <div class="glass-panel p-8 border-l-4 border-slate-600">
-                    <h4 class="font-bold text-slate-200 mb-4"><span class="tecnicismo" data-tooltip="Old Generation: objetos que sobrevivieron varios ciclos de GC se promueven aquí. La recolección es menos frecuente (Major GC) pero más costosa en tiempo.">Old Generation</span></h4>
-                    <p class="text-sm text-slate-400 leading-relaxed">Si un objeto sobrevive varios ciclos, se "promueve" al Old Space. Aquí el GC es menos frecuente pero más costoso. Un Major GC puede causar micro-pausas perceptibles.</p>
-                </div>
-            </div>
-            <div class="p-10 bg-slate-900 border border-emerald-500/20 rounded-3xl">
-                <h5 class="text-emerald-400 font-black mb-6 uppercase tracking-widest text-center text-sm">Algoritmo Mark-and-Sweep</h5>
-                <div class="space-y-6">
-                    <div class="flex gap-6"><div class="w-12 h-12 bg-emerald-500/20 text-emerald-500 rounded-full flex items-center justify-center font-bold text-xl shrink-0">1</div><p class="text-base text-slate-400 leading-relaxed"><strong class="text-slate-200">Root Scanning:</strong> El GC identifica todos los objetos raíz: variables globales, variables activas en el Stack.</p></div>
-                    <div class="flex gap-6"><div class="w-12 h-12 bg-emerald-500/20 text-emerald-500 rounded-full flex items-center justify-center font-bold text-xl shrink-0">2</div><p class="text-base text-slate-400 leading-relaxed"><strong class="text-slate-200">Marking:</strong> Recorre todas las referencias recursivamente. Cada objeto alcanzado recibe una marca de "vivo".</p></div>
-                    <div class="flex gap-6"><div class="w-12 h-12 bg-emerald-500/20 text-emerald-500 rounded-full flex items-center justify-center font-bold text-xl shrink-0">3</div><p class="text-base text-slate-400 leading-relaxed"><strong class="text-slate-200">Sweeping:</strong> Todo objeto sin marca = sin referencias = memoria libre. Se recicla el espacio.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <div class="section-divider"></div>
-
-        <!-- SECTION 6: V8 -->
+        <!-- SECTION 5: TYPEOF -->
         <section class="mb-16">
-            <h2 class="text-3xl font-bold text-emerald-400 mb-12 border-b border-emerald-500/20 pb-4 inline-block">6. El Motor V8 de JavaScript</h2>
+            <h2 class="text-3xl font-bold text-emerald-400 mb-8 border-b border-emerald-500/20 pb-4 inline-block">5. Leer el Tipo: typeof</h2>
             <p class="text-slate-300 text-xl leading-relaxed mb-10">
-                <span class="tecnicismo" data-tooltip="V8: motor de JavaScript open-source desarrollado por Google. Usado en Chrome y Node.js. Compila JavaScript a código máquina nativo usando compilación JIT.">V8</span> es el motor que ejecuta tu código. No interpreta JavaScript línea por línea — lo <strong>compila a código máquina</strong> de forma inteligente usando una técnica llamada <span class="tecnicismo" data-tooltip="JIT (Just-In-Time): compilación que ocurre en tiempo de ejecución. V8 detecta qué partes del código se ejecutan frecuentemente y las optimiza a código máquina nativo.">JIT (Just-In-Time)</span>.
+                JavaScript es de <span class="tecnicismo" data-tooltip="Tipado dinámico: el lenguaje determina el tipo del dato automáticamente según lo que guardes. No tienes que declararlo explícitamente como en Java o C.">tipado dinámico</span>: no debes declarar el tipo, JavaScript lo detecta solo. Puedes consultarlo con <code class="font-mono text-fuchsia-400">typeof</code>.
             </p>
-            <div class="glass-panel p-10 mb-10">
-                <h5 class="text-emerald-400 font-bold uppercase tracking-widest text-sm mb-8 text-center">Pipeline de Compilación V8</h5>
-                <div class="flex flex-wrap justify-center items-center gap-3">
-                    <div class="text-center p-4 bg-slate-900 rounded-xl border border-white/5 min-w-[120px]">
-                        <div class="text-2xl mb-2">📝</div>
-                        <div class="text-xs font-bold text-slate-300 uppercase tracking-wider">Código JS</div>
-                    </div>
-                    <span class="text-emerald-500 font-bold text-xl">→</span>
-                    <div class="text-center p-4 bg-blue-500/10 rounded-xl border border-blue-500/20 min-w-[120px]">
-                        <div class="text-2xl mb-2">🔍</div>
-                        <div class="text-xs font-bold text-blue-400 uppercase tracking-wider">Parser</div>
-                        <div class="text-xs text-slate-500 mt-1">→ AST</div>
-                    </div>
-                    <span class="text-emerald-500 font-bold text-xl">→</span>
-                    <div class="text-center p-4 bg-purple-500/10 rounded-xl border border-purple-500/20 min-w-[120px]">
-                        <div class="text-2xl mb-2">⚡</div>
-                        <div class="text-xs font-bold text-purple-400 uppercase tracking-wider">Ignition</div>
-                        <div class="text-xs text-slate-500 mt-1">Bytecode</div>
-                    </div>
-                    <span class="text-emerald-500 font-bold text-xl">→</span>
-                    <div class="text-center p-4 bg-amber-500/10 rounded-xl border border-amber-500/20 min-w-[120px]">
-                        <div class="text-2xl mb-2">🚀</div>
-                        <div class="text-xs font-bold text-amber-400 uppercase tracking-wider">TurboFan</div>
-                        <div class="text-xs text-slate-500 mt-1">Código Máquina</div>
-                    </div>
+            <div class="glass-panel p-10 mb-8">
+                <div class="code-snippet">
+                    <span class="keyword">let</span> nombre = <span class="string">"Carlos"</span>;<br>
+                    <span class="keyword">let</span> edad = <span class="number">25</span>;<br>
+                    <span class="keyword">let</span> activo = <span class="keyword">true</span>;<br>
+                    <span class="keyword">let</span> nada;<br><br>
+                    console.log(<span class="keyword">typeof</span> nombre);  <span class="comment">// "string"</span><br>
+                    console.log(<span class="keyword">typeof</span> edad);    <span class="comment">// "number"</span><br>
+                    console.log(<span class="keyword">typeof</span> activo);  <span class="comment">// "boolean"</span><br>
+                    console.log(<span class="keyword">typeof</span> nada);    <span class="comment">// "undefined"</span>
                 </div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="glass-panel p-6">
-                    <h4 class="text-blue-400 font-bold mb-3"><span class="tecnicismo" data-tooltip="AST (Abstract Syntax Tree): árbol que representa la estructura gramatical del código. El parser convierte texto JS en este árbol de nodos que el motor puede entender y procesar.">Parser → AST</span></h4>
-                    <p class="text-slate-400 text-sm leading-relaxed">El código fuente se transforma en un árbol de sintaxis abstracta. Aquí se detectan errores de sintaxis antes de ejecutar.</p>
-                </div>
-                <div class="glass-panel p-6">
-                    <h4 class="text-purple-400 font-bold mb-3"><span class="tecnicismo" data-tooltip="Ignition: intérprete de V8 que genera bytecode (instrucciones intermedias) a partir del AST. El bytecode es más compacto que el JS original y más rápido de ejecutar que interpretar texto.">Ignition</span></h4>
-                    <p class="text-slate-400 text-sm leading-relaxed">Intérprete que convierte el AST a bytecode. Rápido de generar. También recoge datos sobre qué funciones se llaman más.</p>
-                </div>
-                <div class="glass-panel p-6">
-                    <h4 class="text-amber-400 font-bold mb-3"><span class="tecnicismo" data-tooltip="TurboFan: compilador optimizador de V8. Toma el bytecode de funciones 'calientes' (muy ejecutadas) y las compila a código máquina nativo ultra-optimizado.">TurboFan</span></h4>
-                    <p class="text-slate-400 text-sm leading-relaxed">Para funciones "calientes" (frecuentes), TurboFan genera código máquina nativo. Usa <span class="tecnicismo" data-tooltip="Hidden Classes: V8 crea clases internas para objetos con la misma forma (mismas propiedades en mismo orden). Permite optimizar el acceso a propiedades como en lenguajes tipados estáticos.">Hidden Classes</span> e <span class="tecnicismo" data-tooltip="Inline Caching: V8 recuerda el tipo de los argumentos en llamadas anteriores. Si la función siempre recibe el mismo tipo, evita verificaciones repetidas y acelera la ejecución.">Inline Caching</span> para optimizar al máximo.</p>
-                </div>
+            <p class="text-slate-400 text-lg leading-relaxed">
+                El tipo de una variable puede cambiar porque en JavaScript la variable no tiene tipo fijo, <strong>el valor sí lo tiene</strong>. Esto se llama tipado dinámico.
+            </p>
+            <div class="code-snippet mt-6">
+                <span class="keyword">let</span> dato = <span class="number">42</span>;<br>
+                console.log(<span class="keyword">typeof</span> dato); <span class="comment">// "number"</span><br><br>
+                dato = <span class="string">"ahora soy texto"</span>;<br>
+                console.log(<span class="keyword">typeof</span> dato); <span class="comment">// "string"  — cambió el tipo</span>
             </div>
         </section>
     </div>
