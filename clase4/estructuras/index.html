@@ -46,9 +46,9 @@
                 </a>
             </nav>
             <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-sky-400 bg-clip-text text-transparent">
-                Control de Flujo Pro
+                Estructuras de Control
             </h1>
-            <p class="text-slate-400 text-lg mt-2 font-medium italic">"Ternarios, cortocircuito, manejo de errores y bucles modernos para código profesional."</p>
+            <p class="text-slate-400 text-lg mt-2 font-medium italic">"if, switch, for, while, forEach — las estructuras que dirigen cada programa."</p>
         </header>
 
         <!-- CODE EXPLORER -->
@@ -58,34 +58,41 @@
                     <div class="w-3 h-3 rounded-full bg-red-500"></div>
                     <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
                     <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                    <span class="ml-4 text-xs text-slate-400 font-mono">modern_control.js</span>
+                    <span class="ml-4 text-xs text-slate-400 font-mono">control_flow.js</span>
                 </div>
                 <div class="py-4 space-y-0 text-sm md:text-base">
-                    <div class="line" data-step="0"><span class="ln">1</span><span><span class="keyword">const</span> msg = (edad >= <span class="number">18</span>) ? <span class="string">"Pasa"</span> : <span class="string">"Espera"</span>;</span></div>
-                    <div class="line" data-step="1"><span class="ln">2</span><span>&nbsp;</span></div>
-                    <div class="line" data-step="2"><span class="ln">3</span><span><span class="keyword">const</span> user = nombre || <span class="string">"Anónimo"</span>;</span></div>
-                    <div class="line" data-step="3"><span class="ln">4</span><span>esVIP && imprimirInvitacion();</span></div>
-                    <div class="line" data-step="4"><span class="ln">5</span><span><span class="keyword">const</span> val = data ?? <span class="string">"default"</span>;</span></div>
-                    <div class="line" data-step="5"><span class="ln">6</span><span>&nbsp;</span></div>
-                    <div class="line" data-step="6"><span class="ln">7</span><span><span class="keyword">for</span> (<span class="keyword">const</span> item <span class="keyword">of</span> carrito) {</span></div>
-                    <div class="line" data-step="7"><span class="ln">8</span><span>&nbsp;&nbsp;console.log(item.nombre);</span></div>
-                    <div class="line" data-step="8"><span class="ln">9</span><span>}</span></div>
+                    <div class="line" data-step="0"><span class="ln">1</span><span><span class="keyword">if</span> (stock > <span class="number">0</span>) vender();</span></div>
+                    <div class="line" data-step="1"><span class="ln">2</span><span><span class="keyword">else if</span> (stock === <span class="number">0</span>) notificar();</span></div>
+                    <div class="line" data-step="2"><span class="ln">3</span><span><span class="keyword">else</span> cancelar();</span></div>
+                    <div class="line" data-step="3"><span class="ln">4</span><span>&nbsp;</span></div>
+                    <div class="line" data-step="4"><span class="ln">5</span><span><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i < lista.length; i++) {</span></div>
+                    <div class="line" data-step="5"><span class="ln">6</span><span>&nbsp;&nbsp;procesar(lista[i]);</span></div>
+                    <div class="line" data-step="6"><span class="ln">7</span><span>}</span></div>
+                    <div class="line" data-step="7"><span class="ln">8</span><span>&nbsp;</span></div>
+                    <div class="line" data-step="8"><span class="ln">9</span><span><span class="keyword">while</span> (intentos < MAX) {</span></div>
+                    <div class="line" data-step="9"><span class="ln">10</span><span>&nbsp;&nbsp;<span class="keyword">if</span> (conectar()) <span class="keyword">break</span>;</span></div>
+                    <div class="line" data-step="10"><span class="ln">11</span><span>&nbsp;&nbsp;intentos++;</span></div>
+                    <div class="line" data-step="11"><span class="ln">12</span><span>}</span></div>
+                    <div class="line" data-step="12"><span class="ln">13</span><span>&nbsp;</span></div>
+                    <div class="line" data-step="13"><span class="ln">14</span><span>carrito.<span class="keyword">forEach</span>(item => {</span></div>
+                    <div class="line" data-step="14"><span class="ln">15</span><span>&nbsp;&nbsp;total += item.precio;</span></div>
+                    <div class="line" data-step="15"><span class="ln">16</span><span>});</span></div>
                 </div>
             </div>
 
             <div class="space-y-6">
                 <div class="glass-panel p-8 border-l-4 border-sky-400 min-h-[250px] flex flex-col justify-center">
-                    <h3 id="stepTitle" class="text-2xl font-bold mb-4 text-sky-400">Haz clic en una técnica</h3>
-                    <p id="stepDesc" class="text-slate-400 leading-relaxed">JavaScript ofrece herramientas sintácticas para reducir código repetitivo y hacer las decisiones más compactas y legibles.</p>
+                    <h3 id="stepTitle" class="text-2xl font-bold mb-4 text-sky-400">Haz clic en una línea</h3>
+                    <p id="stepDesc" class="text-slate-400 leading-relaxed">Cada línea del editor representa una estructura de control fundamental. Haz clic para ver su explicación.</p>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div class="glass-panel p-4 bg-sky-400/5">
-                        <div class="text-[0.6rem] uppercase tracking-widest text-slate-500 mb-1">Rendimiento</div>
-                        <p id="stepPerf" class="text-xs italic text-slate-400">Cortocircuito</p>
+                        <div class="text-[0.6rem] uppercase tracking-widest text-slate-500 mb-1">Tipo</div>
+                        <p id="stepPerf" class="text-xs italic text-slate-400">Estructura</p>
                     </div>
                     <div class="glass-panel p-4 bg-sky-400/5">
                         <div class="text-[0.6rem] uppercase tracking-widest text-slate-500 mb-1">Sintaxis</div>
-                        <p id="stepSyn" class="text-xs font-bold text-sky-400">Modern JS</p>
+                        <p id="stepSyn" class="text-xs font-bold text-sky-400">JS</p>
                     </div>
                 </div>
             </div>
@@ -93,13 +100,88 @@
 
         <div class="section-divider"></div>
 
-        <!-- SECCIÓN: OPERADORES DE DECISIÓN -->
+        <!-- SECCIÓN: IF / ELSE -->
         <section class="mb-16">
-            <h2 class="text-3xl font-bold text-sky-400 mb-8">Operadores de Decisión en Profundidad</h2>
+            <h2 class="text-3xl font-bold text-sky-400 mb-8">Condicional: if / else if / else</h2>
+            <p class="text-slate-300 text-lg leading-relaxed mb-8">
+                La estructura más fundamental del control de flujo. Evalúa una <span class="tecnicismo" data-tooltip="Expresión booleana: cualquier expresión que JavaScript evalúa como true o false. Incluye comparaciones (===, >, <), operadores lógicos (&&, ||) y valores truthy/falsy.">expresión booleana</span> y ejecuta el bloque correspondiente. Puedes encadenar múltiples condiciones con <code>else if</code>.
+            </p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <div>
+                    <h4 class="text-slate-200 font-bold mb-4">Estructura completa</h4>
+                    <div class="code-block text-sm">
+                        <span class="keyword">const</span> nota = <span class="number">75</span>;<br><br>
+                        <span class="keyword">if</span> (nota >= <span class="number">90</span>) {<br>
+                        &nbsp;&nbsp;console.log(<span class="string">"Excelente"</span>);<br>
+                        } <span class="keyword">else if</span> (nota >= <span class="number">60</span>) {<br>
+                        &nbsp;&nbsp;console.log(<span class="string">"Aprobado"</span>);<br>
+                        } <span class="keyword">else</span> {<br>
+                        &nbsp;&nbsp;console.log(<span class="string">"Reprobado"</span>);<br>
+                        }
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="glass-panel p-5">
+                        <h5 class="text-sky-300 font-bold text-sm mb-3">Guard Clauses (cláusulas de guarda)</h5>
+                        <p class="text-slate-400 text-xs leading-relaxed mb-3">Retornan temprano cuando una condición falla. Evitan el anidamiento profundo (<span class="tecnicismo" data-tooltip="Pyramid of doom: código con muchos if anidados que forma una pirámide hacia la derecha. Difícil de leer y mantener.">pyramid of doom</span>).</p>
+                        <div class="code-block text-xs">
+                            <span class="comment">// ❌ Anidado</span><br>
+                            <span class="keyword">function</span> pagar(user) {<br>
+                            &nbsp;&nbsp;<span class="keyword">if</span> (user) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (user.saldo > <span class="number">0</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;procesar();<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;}<br>
+                            }<br><br>
+                            <span class="comment">// ✅ Guard clauses</span><br>
+                            <span class="keyword">function</span> pagar(user) {<br>
+                            &nbsp;&nbsp;<span class="keyword">if</span> (!user) <span class="keyword">return</span>;<br>
+                            &nbsp;&nbsp;<span class="keyword">if</span> (user.saldo <= <span class="number">0</span>) <span class="keyword">return</span>;<br>
+                            &nbsp;&nbsp;procesar();<br>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-panel p-6 border-l-4 border-sky-400">
+                <h4 class="text-sky-300 font-bold mb-4">Operadores de comparación</h4>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr><th>Operador</th><th>Significado</th><th>Ejemplo</th><th>Nota</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code class="text-pink-400">===</code></td><td>Igual estricto (valor y tipo)</td><td><code>5 === "5"</code> → false</td><td>Preferir siempre sobre ==</td></tr>
+                            <tr><td><code class="text-pink-400">!==</code></td><td>Distinto estricto</td><td><code>5 !== "5"</code> → true</td><td>Par de ===</td></tr>
+                            <tr><td><code class="text-pink-400">&gt;</code> / <code class="text-pink-400">&lt;</code></td><td>Mayor / menor que</td><td><code>10 > 3</code> → true</td><td>—</td></tr>
+                            <tr><td><code class="text-pink-400">&gt;=</code> / <code class="text-pink-400">&lt;=</code></td><td>Mayor/menor o igual</td><td><code>5 >= 5</code> → true</td><td>—</td></tr>
+                            <tr><td><code class="text-pink-400">&&</code></td><td>Y lógico (ambas verdaderas)</td><td><code>edad > 18 && tiene_dni</code></td><td>Cortocircuito</td></tr>
+                            <tr><td><code class="text-pink-400">||</code></td><td>O lógico (al menos una)</td><td><code>esAdmin || esMod</code></td><td>Cortocircuito</td></tr>
+                            <tr><td><code class="text-pink-400">!</code></td><td>Negación lógica</td><td><code>!activo</code></td><td>—</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECCIÓN: OPERADORES DE DECISIÓN AVANZADOS -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-sky-400 mb-8">Decisiones Compactas: Ternario y Cortocircuito</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div class="glass-panel p-6">
+                    <h4 class="text-sky-300 font-bold mb-3">Ternario <code>? :</code></h4>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">El <code>if/else</code> de una línea. Úsalo para asignaciones condicionales simples — no lo anides, pierde legibilidad.</p>
+                    <div class="code-block text-xs">
+                        <span class="keyword">const</span> msg = edad >= <span class="number">18</span><br>
+                        &nbsp;&nbsp;? <span class="string">"Pasa"</span><br>
+                        &nbsp;&nbsp;: <span class="string">"Espera"</span>;
+                    </div>
+                </div>
+                <div class="glass-panel p-6">
                     <h4 class="text-sky-300 font-bold mb-3">Operador OR <code>||</code></h4>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Retorna el primer valor <span class="tecnicismo" data-tooltip="Truthy: cualquier valor que JavaScript evalúa como verdadero en un contexto booleano. Todo excepto: false, 0, '', null, undefined, NaN.">truthy</span>. Úsalo para valores por defecto, pero cuidado con 0 o cadenas vacías válidas — los trata como falsos.</p>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Retorna el primer valor <span class="tecnicismo" data-tooltip="Truthy: cualquier valor que JavaScript evalúa como verdadero en un contexto booleano. Todo excepto: false, 0, '', null, undefined, NaN.">truthy</span>. Cuidado con 0 o cadenas vacías válidas — los trata como falsos.</p>
                     <div class="code-block text-xs">
                         <span class="keyword">const</span> n = config.port || <span class="number">3000</span>;<br>
                         <span class="comment">// Si config.port = 0, usa 3000 (bug!)</span>
@@ -107,28 +189,30 @@
                 </div>
                 <div class="glass-panel p-6">
                     <h4 class="text-sky-300 font-bold mb-3">Nullish <code>??</code></h4>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Solo considera <code>null</code> y <code>undefined</code> como ausentes. Respeta <code>0</code>, <code>false</code> y <code>""</code> como valores válidos. La opción segura para defaults.</p>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Solo considera <code>null</code> y <code>undefined</code> como ausentes. Respeta <code>0</code>, <code>false</code> y <code>""</code> como valores válidos.</p>
                     <div class="code-block text-xs">
                         <span class="keyword">const</span> n = config.port ?? <span class="number">3000</span>;<br>
                         <span class="comment">// Si port = 0, usa 0 (correcto!)</span>
                     </div>
                 </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="glass-panel p-6">
                     <h4 class="text-sky-300 font-bold mb-3">Optional Chaining <code>?.</code></h4>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Accede a propiedades profundas sin crashear si algún nivel es <code>null</code> o <code>undefined</code>. Esencial para datos de APIs que pueden ser incompletos.</p>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Accede a propiedades profundas sin crashear si algún nivel es <code>null</code> o <code>undefined</code>. Esencial para datos de APIs.</p>
                     <div class="code-block text-xs">
                         <span class="keyword">const</span> city = user?.address?.city;<br>
                         <span class="comment">// No lanza error si address es null</span>
                     </div>
                 </div>
-            </div>
-            <div class="glass-panel p-6 border-l-4 border-sky-400">
-                <h4 class="text-sky-300 font-bold mb-4">Asignación Lógica (ES2021)</h4>
-                <p class="text-slate-400 text-sm leading-relaxed mb-4">Combina un operador lógico con asignación. Asigna <strong>solo si</strong> se cumple la condición — evita sobreescribir valores existentes.</p>
-                <div class="code-block text-sm">
-                    config.timeout <span class="keyword">||=</span> <span class="number">5000</span>;&nbsp;&nbsp;<span class="comment">// Asigna si es falsy</span><br>
-                    config.debug <span class="keyword">&&=</span> process.env.DEV;&nbsp;&nbsp;<span class="comment">// Asigna si es truthy</span><br>
-                    config.cache <span class="keyword">??=</span> <span class="keyword">new</span> Map();&nbsp;&nbsp;<span class="comment">// Asigna si es null/undefined</span>
+                <div class="glass-panel p-6">
+                    <h4 class="text-sky-300 font-bold mb-3">Asignación Lógica (ES2021)</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Combina operador lógico con asignación. Asigna <strong>solo si</strong> se cumple la condición.</p>
+                    <div class="code-block text-xs">
+                        config.timeout <span class="keyword">||=</span> <span class="number">5000</span>;&nbsp;&nbsp;<span class="comment">// si es falsy</span><br>
+                        config.debug <span class="keyword">&&=</span> process.env.DEV;<br>
+                        config.cache <span class="keyword">??=</span> <span class="keyword">new</span> Map();
+                    </div>
                 </div>
             </div>
         </section>
@@ -141,27 +225,50 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                 <div>
                     <h4 class="text-slate-200 font-bold mb-4">Switch tradicional</h4>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Útil para múltiples valores de una misma variable. Importante: sin <code>break</code> ocurre <span class="tecnicismo" data-tooltip="Fall-through: en switch, si una case no tiene 'break', la ejecución continúa al siguiente case automáticamente. Puede ser un bug o usarse intencionalmente para agrupar casos.">fall-through</span> — el código sigue al siguiente case.</p>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Compara una variable contra múltiples valores con igualdad estricta. Sin <code>break</code> ocurre <span class="tecnicismo" data-tooltip="Fall-through: en switch, si una case no tiene 'break', la ejecución continúa al siguiente case automáticamente. Puede ser un bug o usarse intencionalmente para agrupar casos.">fall-through</span>.</p>
                     <div class="code-block text-sm">
                         <span class="keyword">switch</span> (estado) {<br>
-                        &nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"activo"</span>: color = <span class="string">"green"</span>; <span class="keyword">break</span>;<br>
-                        &nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"pausado"</span>: color = <span class="string">"yellow"</span>; <span class="keyword">break</span>;<br>
-                        &nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"error"</span>: color = <span class="string">"red"</span>; <span class="keyword">break</span>;<br>
-                        &nbsp;&nbsp;<span class="keyword">default</span>: color = <span class="string">"gray"</span>;<br>
+                        &nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"activo"</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;color = <span class="string">"green"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                        &nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"pausado"</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;color = <span class="string">"yellow"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                        &nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"error"</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;color = <span class="string">"red"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                        &nbsp;&nbsp;<span class="keyword">default</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;color = <span class="string">"gray"</span>;<br>
                         }
                     </div>
                 </div>
                 <div>
                     <h4 class="text-sky-300 font-bold mb-4">Object Lookup (patrón moderno)</h4>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Reemplaza switch con un objeto donde cada clave es un caso. Más declarativo, <span class="tecnicismo" data-tooltip="Inmutable en este contexto: el mapa de opciones se declara const y no se modifica. Facilita el testing y evita efectos secundarios.">inmutable</span>, y fácil de extender sin tocar la lógica principal.</p>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Reemplaza switch con un objeto donde cada clave es un caso. Más declarativo, <span class="tecnicismo" data-tooltip="Inmutable en este contexto: el mapa de opciones se declara const y no se modifica. Facilita el testing y evita efectos secundarios.">inmutable</span>, y fácil de extender.</p>
                     <div class="code-block text-sm">
                         <span class="keyword">const</span> colors = {<br>
                         &nbsp;&nbsp;activo: <span class="string">"green"</span>,<br>
                         &nbsp;&nbsp;pausado: <span class="string">"yellow"</span>,<br>
                         &nbsp;&nbsp;error: <span class="string">"red"</span><br>
-                        };<br>
-                        <span class="keyword">const</span> color = colors[estado] ?? <span class="string">"gray"</span>;
+                        };<br><br>
+                        <span class="keyword">const</span> color = colors[estado] ?? <span class="string">"gray"</span>;<br>
+                        <span class="comment">// ?? para el default, respeta false y 0</span>
                     </div>
+                </div>
+            </div>
+            <div class="glass-panel p-6 border-l-4 border-sky-400">
+                <h4 class="text-sky-300 font-bold mb-3">¿Cuándo usar switch vs if/else vs object lookup?</h4>
+                <div class="overflow-x-auto">
+                    <table>
+                        <thead>
+                            <tr><th>Estructura</th><th>Ideal cuando...</th><th>Evitar si...</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code class="text-pink-400">if / else if</code></td><td>Condiciones complejas con rangos o lógica booleana</td><td>Hay más de 4-5 ramas simples de un mismo valor</td></tr>
+                            <tr><td><code class="text-pink-400">switch</code></td><td>Comparar un mismo valor contra muchos casos exactos</td><td>Las condiciones no son de igualdad simple</td></tr>
+                            <tr><td><code class="text-pink-400">Object lookup</code></td><td>Mapear un valor a otro de forma estática y extensible</td><td>Los casos tienen lógica compleja (usa switch o if)</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
@@ -215,49 +322,194 @@
 
         <div class="section-divider"></div>
 
-        <!-- SECCIÓN: BUCLES MODERNOS -->
+        <!-- SECCIÓN: BUCLES COMPLETOS -->
         <section class="mb-16">
-            <h2 class="text-3xl font-bold text-sky-400 mb-8">Iteración Moderna: for...of vs for...in</h2>
+            <h2 class="text-3xl font-bold text-sky-400 mb-8">Bucles: de lo Clásico a lo Moderno</h2>
             <p class="text-slate-300 text-lg leading-relaxed mb-8">
-                El <code>for</code> clásico con índices numéricos es <span class="tecnicismo" data-tooltip="Imperativo: estilo donde describes paso a paso CÓMO hacer algo. Contrario al estilo declarativo donde describes QUÉ quieres. Los bucles for clásicos son imperativos; map/filter son declarativos.">imperativo</span> y verboso. ES6 introdujo alternativas más legibles y seguras.
+                JavaScript tiene múltiples formas de iterar. Cada una sirve un propósito distinto. Conocer cuándo usar cada una es la diferencia entre código legible y código <span class="tecnicismo" data-tooltip="Imperativo: estilo donde describes paso a paso CÓMO hacer algo. Los bucles for clásicos son imperativos. Contrario al estilo declarativo (map/filter) donde describes QUÉ quieres.">imperativo</span> verboso.
             </p>
-            <div class="overflow-x-auto rounded-2xl mb-8">
+
+            <!-- for clásico -->
+            <div class="glass-panel p-8 mb-6">
+                <div class="flex items-start gap-6 flex-col md:flex-row">
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-slate-200 mb-1">Bucle <code class="text-pink-400">for</code> clásico</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">Tres partes: <strong>inicialización</strong>, <strong>condición</strong> y <strong>actualización</strong>. Control total sobre el índice — útil cuando necesitas el índice, iterar al revés, o saltar elementos con <code>continue</code>.</p>
+                        <div class="code-block text-sm">
+                            <span class="comment">// Recorrer array con índice</span><br>
+                            <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; alumnos.length; i++) {<br>
+                            &nbsp;&nbsp;console.log(i, alumnos[i].nombre);<br>
+                            }<br><br>
+                            <span class="comment">// Iterar al revés</span><br>
+                            <span class="keyword">for</span> (<span class="keyword">let</span> i = alumnos.length - <span class="number">1</span>; i >= <span class="number">0</span>; i--) {<br>
+                            &nbsp;&nbsp;console.log(alumnos[i]);<br>
+                            }<br><br>
+                            <span class="comment">// Saltar pares con continue</span><br>
+                            <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {<br>
+                            &nbsp;&nbsp;<span class="keyword">if</span> (i % <span class="number">2</span> === <span class="number">0</span>) <span class="keyword">continue</span>;<br>
+                            &nbsp;&nbsp;console.log(i); <span class="comment">// solo impares</span><br>
+                            }
+                        </div>
+                    </div>
+                    <div class="glass-panel p-5 bg-sky-400/5 md:w-52 shrink-0">
+                        <div class="text-[0.6rem] uppercase tracking-widest text-slate-500 mb-2">Usa cuando</div>
+                        <ul class="text-slate-400 text-xs space-y-2">
+                            <li>✓ Necesitas el índice</li>
+                            <li>✓ Iterar al revés</li>
+                            <li>✓ Saltar elementos</li>
+                            <li>✓ Romper con break</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- while -->
+            <div class="glass-panel p-8 mb-6">
+                <div class="flex items-start gap-6 flex-col md:flex-row">
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-slate-200 mb-1">Bucle <code class="text-pink-400">while</code></h3>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">Repite un bloque <strong>mientras</strong> la condición sea verdadera. Evalúa la condición <em>antes</em> de cada iteración — si es falsa desde el inicio, el cuerpo no se ejecuta. Ideal cuando no sabes de antemano cuántas vueltas necesitas.</p>
+                        <div class="code-block text-sm">
+                            <span class="comment">// Reintentar conexión hasta lograrlo</span><br>
+                            <span class="keyword">let</span> intentos = <span class="number">0</span>;<br>
+                            <span class="keyword">const</span> MAX = <span class="number">3</span>;<br><br>
+                            <span class="keyword">while</span> (intentos &lt; MAX) {<br>
+                            &nbsp;&nbsp;<span class="keyword">const</span> ok = conectarServidor();<br>
+                            &nbsp;&nbsp;<span class="keyword">if</span> (ok) <span class="keyword">break</span>;<br>
+                            &nbsp;&nbsp;intentos++;<br>
+                            &nbsp;&nbsp;console.log(<span class="string">`Reintento ${intentos}...`</span>);<br>
+                            }<br><br>
+                            <span class="comment">// Leer input hasta valor válido</span><br>
+                            <span class="keyword">let</span> valor = <span class="keyword">null</span>;<br>
+                            <span class="keyword">while</span> (valor === <span class="keyword">null</span> || valor &lt; <span class="number">0</span>) {<br>
+                            &nbsp;&nbsp;valor = obtenerInput();<br>
+                            }
+                        </div>
+                    </div>
+                    <div class="glass-panel p-5 bg-sky-400/5 md:w-52 shrink-0">
+                        <div class="text-[0.6rem] uppercase tracking-widest text-slate-500 mb-2">Usa cuando</div>
+                        <ul class="text-slate-400 text-xs space-y-2">
+                            <li>✓ Iteraciones desconocidas</li>
+                            <li>✓ Esperar una condición</li>
+                            <li>✓ Reintentar operaciones</li>
+                            <li>⚠ Cuidar bucle infinito</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- do...while -->
+            <div class="glass-panel p-8 mb-6">
+                <div class="flex items-start gap-6 flex-col md:flex-row">
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-slate-200 mb-1">Bucle <code class="text-pink-400">do...while</code></h3>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">Como <code>while</code>, pero evalúa la condición <em>después</em> del primer ciclo. Garantiza que el cuerpo se ejecute <strong>al menos una vez</strong>. Perfecto para validaciones de input donde siempre hay una primera solicitud.</p>
+                        <div class="code-block text-sm">
+                            <span class="comment">// Pedir contraseña al menos una vez</span><br>
+                            <span class="keyword">let</span> password;<br><br>
+                            <span class="keyword">do</span> {<br>
+                            &nbsp;&nbsp;password = prompt(<span class="string">"Ingresa tu contraseña:"</span>);<br>
+                            } <span class="keyword">while</span> (!esValida(password));<br><br>
+                            <span class="comment">// Diferencia clave: siempre ejecuta una vez</span><br>
+                            <span class="keyword">let</span> contador = <span class="number">10</span>;<br>
+                            <span class="keyword">do</span> {<br>
+                            &nbsp;&nbsp;console.log(contador); <span class="comment">// imprime 10, aunque ya no cumpla</span><br>
+                            &nbsp;&nbsp;contador++;<br>
+                            } <span class="keyword">while</span> (contador &lt; <span class="number">10</span>);
+                        </div>
+                    </div>
+                    <div class="glass-panel p-5 bg-sky-400/5 md:w-52 shrink-0">
+                        <div class="text-[0.6rem] uppercase tracking-widest text-slate-500 mb-2">Usa cuando</div>
+                        <ul class="text-slate-400 text-xs space-y-2">
+                            <li>✓ Al menos 1 ejecución</li>
+                            <li>✓ Validar input de usuario</li>
+                            <li>✓ Menús interactivos</li>
+                            <li>✓ Inicialización + loop</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- for...of, for...in, forEach -->
+            <div class="glass-panel p-8 mb-8">
+                <h3 class="text-xl font-bold text-slate-200 mb-4">Iteración Moderna: <code class="text-pink-400">for...of</code>, <code class="text-pink-400">for...in</code> y <code class="text-pink-400">forEach</code></h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div>
+                        <h5 class="text-sky-300 font-bold text-sm mb-3">for...of — valores del iterable</h5>
+                        <div class="code-block text-xs">
+                            <span class="keyword">for</span> (<span class="keyword">const</span> item <span class="keyword">of</span> carrito) {<br>
+                            &nbsp;&nbsp;console.log(item.nombre);<br>
+                            }<br><br>
+                            <span class="comment">// También funciona con strings</span><br>
+                            <span class="keyword">for</span> (<span class="keyword">const</span> char <span class="keyword">of</span> <span class="string">"hola"</span>) {<br>
+                            &nbsp;&nbsp;console.log(char);<br>
+                            }
+                        </div>
+                    </div>
+                    <div>
+                        <h5 class="text-sky-300 font-bold text-sm mb-3">for...in — claves del objeto</h5>
+                        <div class="code-block text-xs">
+                            <span class="keyword">const</span> config = {<br>
+                            &nbsp;&nbsp;host: <span class="string">"localhost"</span>,<br>
+                            &nbsp;&nbsp;port: <span class="number">3000</span><br>
+                            };<br><br>
+                            <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> config) {<br>
+                            &nbsp;&nbsp;<span class="keyword">if</span> (config.hasOwnProperty(key))<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;console.log(key, config[key]);<br>
+                            }
+                        </div>
+                    </div>
+                    <div>
+                        <h5 class="text-sky-300 font-bold text-sm mb-3">forEach — callback por elemento</h5>
+                        <div class="code-block text-xs">
+                            carrito.forEach((item, i) => {<br>
+                            &nbsp;&nbsp;console.log(i, item.nombre);<br>
+                            &nbsp;&nbsp;total += item.precio;<br>
+                            });<br><br>
+                            <span class="comment">// No admite break/return para salir</span><br>
+                            <span class="comment">// Siempre recorre todos los elementos</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla comparativa completa -->
+            <div class="overflow-x-auto rounded-2xl">
                 <table>
                     <thead>
-                        <tr><th>Bucle</th><th>Usa con</th><th>Devuelve</th><th>Cuándo usarlo</th></tr>
+                        <tr><th>Bucle</th><th>Evalúa condición</th><th>Usa con</th><th>Soporta break/continue</th><th>Cuándo elegirlo</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td><code class="text-pink-400">for...of</code></td><td>Arrays, strings, Maps, Sets</td><td>Los valores directamente</td><td>Recorrer colecciones iterables</td></tr>
-                        <tr><td><code class="text-pink-400">for...in</code></td><td>Objetos</td><td>Las claves (keys)</td><td>Inspeccionar propiedades de objetos</td></tr>
-                        <tr><td><code class="text-pink-400">.forEach()</code></td><td>Arrays</td><td>undefined (sin break)</td><td>Efectos secundarios sobre arrays</td></tr>
-                        <tr><td><code class="text-pink-400">for clásico</code></td><td>Cualquier cosa</td><td>Control total</td><td>Cuando necesitas el índice o break/continue</td></tr>
+                        <tr><td><code class="text-pink-400">for</code></td><td>Antes</td><td>Cualquier cosa</td><td>✓</td><td>Necesitas índice, recorrer al revés</td></tr>
+                        <tr><td><code class="text-pink-400">while</code></td><td>Antes</td><td>Condición dinámica</td><td>✓</td><td>Número de iteraciones desconocido</td></tr>
+                        <tr><td><code class="text-pink-400">do...while</code></td><td>Después</td><td>Condición dinámica</td><td>✓</td><td>Necesitas al menos una ejecución</td></tr>
+                        <tr><td><code class="text-pink-400">for...of</code></td><td>Por elemento</td><td>Arrays, strings, Maps, Sets</td><td>✓</td><td>Recorrer colecciones iterables</td></tr>
+                        <tr><td><code class="text-pink-400">for...in</code></td><td>Por propiedad</td><td>Objetos</td><td>✓</td><td>Inspeccionar propiedades de objetos</td></tr>
+                        <tr><td><code class="text-pink-400">forEach()</code></td><td>Por elemento</td><td>Arrays</td><td>✗</td><td>Efectos secundarios sin necesitar break</td></tr>
                     </tbody>
                 </table>
-            </div>
-            <div class="code-block text-sm">
-                <span class="comment">// for...of — itera valores</span><br>
-                <span class="keyword">for</span> (<span class="keyword">const</span> producto <span class="keyword">of</span> carrito) {<br>
-                &nbsp;&nbsp;console.log(producto.nombre, producto.precio);<br>
-                }<br><br>
-                <span class="comment">// for...in — itera claves</span><br>
-                <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> configObj) {<br>
-                &nbsp;&nbsp;<span class="keyword">if</span> (configObj.hasOwnProperty(key)) console.log(key, configObj[key]);<br>
-                }
             </div>
         </section>
     </div>
 
     <script>
         const steps = [
-            { title: "Operador Ternario", desc: "El if/else de una sola línea: condición ? valorSiTrue : valorSiFalse. Ideal para asignar valores condicionales compactos.", perf: "Media", syn: "? :" },
+            { title: "if — condición", desc: "Ejecuta el bloque solo si la condición es verdadera. Si stock > 0, se llama a vender(). Es la estructura condicional más fundamental.", perf: "Condicional", syn: "if (cond) {}" },
+            { title: "else if — segunda condición", desc: "Se evalúa solo si el if anterior fue falso. Permite encadenar múltiples ramas. JS las evalúa de arriba hacia abajo y detiene al encontrar la primera verdadera.", perf: "Condicional", syn: "else if (cond) {}" },
+            { title: "else — caso por defecto", desc: "Se ejecuta si ninguna condición anterior fue verdadera. No tiene condición propia — es el 'catch-all' de la cadena if/else.", perf: "Condicional", syn: "else {}" },
             { title: "-", desc: "-", perf: "-", syn: "-" },
-            { title: "Short-circuit OR ||", desc: "Devuelve el primer valor truthy. Si 'nombre' es undefined, asigna 'Anónimo'. Cuidado: 0 y '' también son falsy.", perf: "Alta", syn: "||" },
-            { title: "Short-circuit AND &&", desc: "Solo evalúa el lado derecho si el izquierdo es truthy. Forma compacta de ejecutar algo solo si una condición se cumple.", perf: "Alta", syn: "&&" },
-            { title: "Nullish Coalescing ??", desc: "Solo considera null y undefined como 'ausentes'. Respeta 0, false y cadenas vacías como valores válidos.", perf: "Alta", syn: "??" },
+            { title: "for — inicialización", desc: "El for clásico tiene 3 partes: let i=0 inicializa el contador, i < lista.length es la condición de continuación, i++ actualiza el contador en cada vuelta.", perf: "Bucle", syn: "for (init; cond; update)" },
+            { title: "for — cuerpo del bucle", desc: "El bloque que se repite. En cada iteración, lista[i] accede al elemento en la posición actual. El índice i permite acceso posicional.", perf: "Bucle", syn: "lista[i]" },
+            { title: "for — cierre", desc: "El bloque del for termina. Variables declaradas con let/const dentro son locales a cada iteración — no se filtran al scope externo.", perf: "Bucle", syn: "}" },
             { title: "-", desc: "-", perf: "-", syn: "-" },
-            { title: "Bucle for...of", desc: "La forma moderna de recorrer arrays e iterables. Accede al valor directamente sin manejar índices manualmente.", perf: "Optimizada", syn: "for...of" },
-            { title: "Cuerpo de Iteración", desc: "En cada vuelta, la variable (item) toma el valor del elemento actual del iterable.", perf: "Legibilidad", syn: "Elemento directo" },
-            { title: "Cierre de bloque", desc: "El bloque {} define el alcance del bucle. Variables declaradas con let/const aquí son locales a cada iteración.", perf: "-", syn: "}" }
+            { title: "while — condición", desc: "Repite el bloque mientras intentos < MAX sea verdadero. A diferencia del for, no tiene contador incorporado — lo gestionas tú manualmente.", perf: "Bucle", syn: "while (cond) {}" },
+            { title: "while — break condicional", desc: "Si conectar() retorna true, break interrumpe el bucle inmediatamente. Sin break, el while continuaría hasta que intentos >= MAX.", perf: "Bucle", syn: "if (ok) break" },
+            { title: "while — actualización manual", desc: "El contador se incrementa manualmente. Si olvidas esta línea, el bucle corre infinitamente — uno de los errores más comunes con while.", perf: "Bucle", syn: "intentos++" },
+            { title: "while — cierre", desc: "Fin del bloque while. Si la condición inicial era falsa, este bloque nunca se ejecutó. Usa do...while si necesitas al menos una ejecución.", perf: "Bucle", syn: "}" },
+            { title: "-", desc: "-", perf: "-", syn: "-" },
+            { title: "forEach — callback", desc: "Llama a la función flecha por cada elemento del array. Recibe el elemento (item) y opcionalmente el índice. No puede interrumpirse con break.", perf: "Iteración", syn: "arr.forEach(cb)" },
+            { title: "forEach — acumulación", desc: "El cuerpo del callback. Aquí se acumula el precio en total. forEach es ideal para efectos secundarios sobre todos los elementos sin excepción.", perf: "Iteración", syn: "total += item.precio" },
+            { title: "forEach — cierre", desc: "forEach siempre recorre todos los elementos. Si necesitas salir antes o usar break, usa for...of o un for clásico.", perf: "Iteración", syn: "})" }
         ];
 
         const lines = document.querySelectorAll('.line');
@@ -268,8 +520,8 @@
 
         lines.forEach(line => {
             line.addEventListener('click', () => {
-                const step = steps[line.getAttribute('data-step')];
-                if (step.title === "-") return;
+                const step = steps[parseInt(line.getAttribute('data-step'))];
+                if (!step || step.title === "-") return;
                 lines.forEach(l => l.classList.remove('active'));
                 line.classList.add('active');
                 titleEle.textContent = step.title;
