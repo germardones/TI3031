@@ -219,15 +219,322 @@
                     </div>
                 </div>
             </div>
-            <div class="glass-panel p-6 border-l-4 border-sky-400">
-                <h5 class="text-sky-300 font-bold mb-3">Arrow functions y el contexto <code>this</code></h5>
-                <p class="text-slate-400 text-sm leading-relaxed mb-3">Las arrow functions <strong>no tienen su propio <code>this</code></strong>. Capturan el <code>this</code> del scope donde fueron definidas (léxico). Las funciones tradicionales crean su propio <code>this</code> según cómo se llaman.</p>
-                <div class="code-block text-xs">
-                    <span class="keyword">const</span> obj = {<br>
-                    &nbsp;&nbsp;nombre: <span class="string">"App"</span>,<br>
-                    &nbsp;&nbsp;traditional: <span class="keyword">function</span>() { <span class="keyword">return</span> <span class="keyword">this</span>.nombre; }, <span class="comment">// "App"</span><br>
-                    &nbsp;&nbsp;arrow: () => <span class="keyword">this</span>.nombre <span class="comment">// undefined — this = window/undefined</span><br>
-                    };
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- ARROW FUNCTIONS Y THIS -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-sky-400 mb-4">Arrow Functions y el Contexto <code class="text-sky-300">this</code></h2>
+            <p class="text-slate-300 text-lg leading-relaxed mb-10">
+                Las <span class="tecnicismo" data-tooltip="Arrow function: sintaxis compacta para escribir funciones introducida en ES6. No crea su propio 'this', 'arguments', ni puede usarse como constructor.">arrow functions</span> no son solo sintaxis más corta — tienen una diferencia semántica fundamental con las funciones tradicionales: <strong>no tienen su propio <code>this</code></strong>. Entender esto evita los errores de contexto más frecuentes en JavaScript.
+            </p>
+
+            <!-- SINTAXIS -->
+            <h3 class="text-2xl font-bold text-slate-200 mb-6">Evolución de la Sintaxis</h3>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+                <div>
+                    <p class="text-slate-400 text-sm mb-4">Las arrow functions tienen varias formas según la cantidad de parámetros y si el cuerpo es una expresión o un bloque:</p>
+                    <div class="space-y-3">
+                        <div class="glass-panel p-4 border-l-4 border-slate-500">
+                            <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">Forma completa (con bloque)</div>
+                            <div class="code-block text-xs">
+                                <span class="keyword">const</span> sumar = (a, b) => {<br>
+                                &nbsp;&nbsp;<span class="keyword">return</span> a + b;<br>
+                                };
+                            </div>
+                        </div>
+                        <div class="glass-panel p-4 border-l-4 border-sky-400">
+                            <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">Retorno implícito (expresión directa)</div>
+                            <div class="code-block text-xs">
+                                <span class="keyword">const</span> sumar = (a, b) => a + b;
+                            </div>
+                        </div>
+                        <div class="glass-panel p-4 border-l-4 border-sky-400">
+                            <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">Un solo parámetro (sin paréntesis)</div>
+                            <div class="code-block text-xs">
+                                <span class="keyword">const</span> doble = n => n * <span class="number">2</span>;
+                            </div>
+                        </div>
+                        <div class="glass-panel p-4 border-l-4 border-sky-400">
+                            <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">Sin parámetros (paréntesis obligatorio)</div>
+                            <div class="code-block text-xs">
+                                <span class="keyword">const</span> saludar = () => <span class="string">"Hola!"</span>;
+                            </div>
+                        </div>
+                        <div class="glass-panel p-4 border-l-4 border-amber-500 bg-amber-500/5">
+                            <div class="text-xs text-amber-400 uppercase tracking-widest mb-2">⚠️ Retornar un objeto literal</div>
+                            <div class="code-block text-xs">
+                                <span class="comment">// ❌ Esto falla: las llaves se leen como bloque</span><br>
+                                <span class="keyword">const</span> obj = () => { nombre: <span class="string">"Ana"</span> };<br><br>
+                                <span class="comment">// ✅ Envolver el objeto en paréntesis</span><br>
+                                <span class="keyword">const</span> obj = () => ({ nombre: <span class="string">"Ana"</span> });
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-slate-400 text-sm mb-4">Comparación directa con función tradicional equivalente:</p>
+                    <div class="overflow-x-auto rounded-2xl">
+                        <table>
+                            <thead><tr><th>Característica</th><th>function</th><th>Arrow =></th></tr></thead>
+                            <tbody>
+                                <tr><td class="text-slate-300 font-semibold">Sintaxis</td><td>Más verbosa</td><td>Compacta</td></tr>
+                                <tr><td class="text-slate-300 font-semibold">Propio <code>this</code></td><td>Sí (dinámico)</td><td>No (léxico)</td></tr>
+                                <tr><td class="text-slate-300 font-semibold">Objeto <code>arguments</code></td><td>Disponible</td><td>No disponible</td></tr>
+                                <tr><td class="text-slate-300 font-semibold">Como constructor</td><td>✅ con <code>new</code></td><td>❌ Error</td></tr>
+                                <tr><td class="text-slate-300 font-semibold">Método de objeto</td><td>✅ Recomendado</td><td>⚠️ Cuidado</td></tr>
+                                <tr><td class="text-slate-300 font-semibold">Callbacks / HOF</td><td>Funciona</td><td>✅ Ideal</td></tr>
+                                <tr><td class="text-slate-300 font-semibold">Hoisting</td><td>Sí (function decl)</td><td>No</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="glass-panel p-5 mt-4 bg-sky-400/5 border-l-4 border-sky-400">
+                        <p class="text-slate-300 text-sm leading-relaxed">Las arrow functions son ideales para <strong class="text-sky-300">callbacks, métodos de array</strong> (<code>.map</code>, <code>.filter</code>, <code>.reduce</code>) y cualquier función corta que no necesite su propio contexto.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-divider" style="margin: 2rem 0;"></div>
+
+            <!-- EL PROBLEMA DE THIS -->
+            <h3 class="text-2xl font-bold text-slate-200 mb-4">¿Qué es <code class="text-sky-300">this</code> y por qué cambia?</h3>
+            <p class="text-slate-300 text-base leading-relaxed mb-6">
+                <code>this</code> es una variable especial que apunta al <span class="tecnicismo" data-tooltip="Contexto de ejecución: entorno en el que se ejecuta una función. Determina el valor de 'this', el scope, y las variables accesibles.">contexto de ejecución</span>. Su valor <strong>no depende de dónde está escrita la función, sino de cómo se llama</strong>.
+            </p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <div class="space-y-3">
+                    <div class="glass-panel p-4 border-l-4 border-slate-500">
+                        <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">Contexto global</div>
+                        <div class="code-block text-xs">
+                            console.log(<span class="keyword">this</span>); <span class="comment">// window (browser)</span><br>
+                            <span class="comment">// undefined en modo estricto</span>
+                        </div>
+                    </div>
+                    <div class="glass-panel p-4 border-l-4 border-emerald-500">
+                        <div class="text-xs text-slate-500 uppercase tracking-widest mb-2">Llamada como método de objeto</div>
+                        <div class="code-block text-xs">
+                            <span class="keyword">const</span> user = {<br>
+                            &nbsp;&nbsp;nombre: <span class="string">"Ana"</span>,<br>
+                            &nbsp;&nbsp;saludar() {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="keyword">this</span>.nombre); <span class="comment">// "Ana"</span><br>
+                            &nbsp;&nbsp;}<br>
+                            };<br>
+                            user.saludar(); <span class="comment">// this = user ✅</span>
+                        </div>
+                    </div>
+                    <div class="glass-panel p-4 border-l-4 border-red-500 bg-red-500/5">
+                        <div class="text-xs text-red-400 uppercase tracking-widest mb-2">⚠️ Función extraída pierde contexto</div>
+                        <div class="code-block text-xs">
+                            <span class="keyword">const</span> fn = user.saludar;<br>
+                            fn(); <span class="comment">// this = undefined ❌</span><br>
+                            <span class="comment">// La función ya no tiene objeto dueño</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <div class="glass-panel p-4 border-l-4 border-red-500 bg-red-500/5">
+                        <div class="text-xs text-red-400 uppercase tracking-widest mb-2">⚠️ El problema clásico: this en callbacks</div>
+                        <div class="code-block text-xs">
+                            <span class="keyword">function</span> Temporizador() {<br>
+                            &nbsp;&nbsp;<span class="keyword">this</span>.segundos = <span class="number">0</span>;<br>
+                            &nbsp;&nbsp;setInterval(<span class="keyword">function</span>() {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.segundos++; <span class="comment">// ❌ this = window</span><br>
+                            &nbsp;&nbsp;}, <span class="number">1000</span>);<br>
+                            }<br>
+                            <span class="keyword">const</span> t = <span class="keyword">new</span> Temporizador();<br>
+                            <span class="comment">// t.segundos siempre es 0</span>
+                        </div>
+                    </div>
+                    <div class="glass-panel p-4 border-l-4 border-emerald-500 bg-emerald-500/5">
+                        <div class="text-xs text-emerald-400 uppercase tracking-widest mb-2">✅ Solución: arrow function captura this léxico</div>
+                        <div class="code-block text-xs">
+                            <span class="keyword">function</span> Temporizador() {<br>
+                            &nbsp;&nbsp;<span class="keyword">this</span>.segundos = <span class="number">0</span>;<br>
+                            &nbsp;&nbsp;setInterval(<span class="comment">/* arrow */</span>() => {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.segundos++; <span class="comment">// ✅ this = instancia</span><br>
+                            &nbsp;&nbsp;}, <span class="number">1000</span>);<br>
+                            }<br>
+                            <span class="comment">// Funciona porque this es léxico</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- THIS LÉXICO ILUSTRADO -->
+            <div class="glass-panel p-6 mb-8 bg-sky-400/5 border border-sky-400/30">
+                <h4 class="text-sky-300 font-bold mb-4 text-lg">This léxico vs dinámico — el ejemplo definitivo</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <div class="text-xs text-red-400 uppercase tracking-widest mb-2">❌ Función tradicional como callback</div>
+                        <div class="code-block text-xs">
+                            <span class="keyword">class</span> Contador {<br>
+                            &nbsp;&nbsp;<span class="keyword">constructor</span>() {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.valor = <span class="number">0</span>;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.btn = document.querySelector(<span class="string">"#btn"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.btn.addEventListener(<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"click"</span>,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">function</span>() {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.valor++; <span class="comment">// ❌ this = botón</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;);<br>
+                            &nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-emerald-400 uppercase tracking-widest mb-2">✅ Arrow function — this heredado</div>
+                        <div class="code-block text-xs">
+                            <span class="keyword">class</span> Contador {<br>
+                            &nbsp;&nbsp;<span class="keyword">constructor</span>() {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.valor = <span class="number">0</span>;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.btn = document.querySelector(<span class="string">"#btn"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.btn.addEventListener(<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"click"</span>,<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;() => {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.valor++; <span class="comment">// ✅ this = instancia</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;);<br>
+                            &nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <p class="text-slate-400 text-sm mt-4 leading-relaxed">La arrow function no tiene su propio <code>this</code>, por lo que <em>hereda</em> el de su scope contenedor — en este caso, el <code>constructor</code>, donde <code>this</code> es la instancia correcta.</p>
+            </div>
+
+            <div class="section-divider" style="margin: 2rem 0;"></div>
+
+            <!-- CALL / APPLY / BIND -->
+            <h3 class="text-2xl font-bold text-slate-200 mb-4">Controlar <code class="text-sky-300">this</code> Manualmente: <code>call</code>, <code>apply</code>, <code>bind</code></h3>
+            <p class="text-slate-300 text-base leading-relaxed mb-6">Cuando necesitas usar una función tradicional pero decidir explícitamente cuál será su <code>this</code>, JavaScript ofrece tres métodos:</p>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <div class="glass-panel p-5 border-t-4 border-violet-500">
+                    <h5 class="text-violet-400 font-bold mb-3"><code>call(ctx, arg1, arg2)</code></h5>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-3">Llama la función <em>inmediatamente</em>, pasando <code>this</code> y argumentos uno a uno.</p>
+                    <div class="code-block text-xs">
+                        <span class="keyword">function</span> saludar(saludo) {<br>
+                        &nbsp;&nbsp;<span class="keyword">return</span> <span class="string">`${saludo}, ${</span><span class="keyword">this</span><span class="string">.nombre}`</span>;<br>
+                        }<br>
+                        <span class="keyword">const</span> user = { nombre: <span class="string">"Ana"</span> };<br><br>
+                        saludar.call(user, <span class="string">"Hola"</span>);<br>
+                        <span class="comment">// "Hola, Ana"</span>
+                    </div>
+                </div>
+                <div class="glass-panel p-5 border-t-4 border-pink-500">
+                    <h5 class="text-pink-400 font-bold mb-3"><code>apply(ctx, [args])</code></h5>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-3">Igual que <code>call</code>, pero los argumentos se pasan como <strong>array</strong>. Útil cuando los args ya están en un array.</p>
+                    <div class="code-block text-xs">
+                        <span class="keyword">const</span> nums = [<span class="number">3</span>, <span class="number">7</span>, <span class="number">2</span>, <span class="number">9</span>];<br><br>
+                        Math.max.apply(<span class="keyword">null</span>, nums);<br>
+                        <span class="comment">// 9</span><br><br>
+                        <span class="comment">// Equivalente moderno:</span><br>
+                        Math.max(...nums); <span class="comment">// 9</span>
+                    </div>
+                </div>
+                <div class="glass-panel p-5 border-t-4 border-sky-500">
+                    <h5 class="text-sky-400 font-bold mb-3"><code>bind(ctx)</code></h5>
+                    <p class="text-slate-400 text-xs leading-relaxed mb-3">No llama la función — devuelve una <strong>nueva función</strong> con <code>this</code> fijado permanentemente.</p>
+                    <div class="code-block text-xs">
+                        <span class="keyword">function</span> log() {<br>
+                        &nbsp;&nbsp;console.log(<span class="keyword">this</span>.nombre);<br>
+                        }<br>
+                        <span class="keyword">const</span> user = { nombre: <span class="string">"Ana"</span> };<br><br>
+                        <span class="keyword">const</span> logUser = log.bind(user);<br>
+                        logUser(); <span class="comment">// "Ana" — siempre</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-divider" style="margin: 2rem 0;"></div>
+
+            <!-- CUANDO NO USAR ARROW -->
+            <h3 class="text-2xl font-bold text-slate-200 mb-4">¿Cuándo <span class="text-red-400">NO</span> usar Arrow Functions?</h3>
+            <p class="text-slate-300 text-base leading-relaxed mb-6">Aunque son convenientes, las arrow functions tienen casos donde son incorrectas o problemáticas:</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="glass-panel p-5 border-l-4 border-red-500 bg-red-500/5">
+                    <h5 class="text-red-400 font-bold mb-3">❌ Métodos de objeto que usan <code>this</code></h5>
+                    <div class="code-block text-xs">
+                        <span class="keyword">const</span> reloj = {<br>
+                        &nbsp;&nbsp;hora: <span class="number">0</span>,<br>
+                        &nbsp;&nbsp;tick: () => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.hora++; <span class="comment">// ❌ this = window</span><br>
+                        &nbsp;&nbsp;}<br>
+                        };<br><br>
+                        <span class="comment">// Usar function o método shorthand:</span><br>
+                        <span class="keyword">const</span> reloj2 = {<br>
+                        &nbsp;&nbsp;hora: <span class="number">0</span>,<br>
+                        &nbsp;&nbsp;tick() { <span class="keyword">this</span>.hora++; } <span class="comment">// ✅</span><br>
+                        };
+                    </div>
+                </div>
+                <div class="glass-panel p-5 border-l-4 border-red-500 bg-red-500/5">
+                    <h5 class="text-red-400 font-bold mb-3">❌ Como función constructora</h5>
+                    <div class="code-block text-xs">
+                        <span class="keyword">const</span> Persona = (nombre) => {<br>
+                        &nbsp;&nbsp;<span class="keyword">this</span>.nombre = nombre;<br>
+                        };<br>
+                        <span class="keyword">new</span> Persona(<span class="string">"Ana"</span>); <span class="comment">// ❌ TypeError</span><br>
+                        <span class="comment">// Las arrow functions no tienen [[Construct]]</span><br><br>
+                        <span class="comment">// Usar function o class:</span><br>
+                        <span class="keyword">class</span> Persona {<br>
+                        &nbsp;&nbsp;<span class="keyword">constructor</span>(nombre) { <span class="keyword">this</span>.nombre = nombre; }<br>
+                        }
+                    </div>
+                </div>
+                <div class="glass-panel p-5 border-l-4 border-amber-500 bg-amber-500/5">
+                    <h5 class="text-amber-400 font-bold mb-3">⚠️ Event listeners que necesitan <code>this</code> dinámico</h5>
+                    <div class="code-block text-xs">
+                        <span class="comment">// Si necesitas this = elemento que disparó el evento:</span><br>
+                        btn.addEventListener(<span class="string">"click"</span>, <span class="keyword">function</span>() {<br>
+                        &nbsp;&nbsp;console.log(<span class="keyword">this</span>); <span class="comment">// ✅ = btn</span><br>
+                        });<br><br>
+                        <span class="comment">// Arrow: this = scope externo (no el botón)</span><br>
+                        btn.addEventListener(<span class="string">"click"</span>, () => {<br>
+                        &nbsp;&nbsp;console.log(<span class="keyword">this</span>); <span class="comment">// ⚠️ = window/clase</span><br>
+                        });
+                    </div>
+                </div>
+                <div class="glass-panel p-5 border-l-4 border-amber-500 bg-amber-500/5">
+                    <h5 class="text-amber-400 font-bold mb-3">⚠️ Prototypes y herencia</h5>
+                    <div class="code-block text-xs">
+                        <span class="keyword">function</span> Animal(nombre) {<br>
+                        &nbsp;&nbsp;<span class="keyword">this</span>.nombre = nombre;<br>
+                        }<br>
+                        <span class="comment">// ❌ Arrow en prototype pierde this</span><br>
+                        Animal.prototype.hablar = () => {<br>
+                        &nbsp;&nbsp;console.log(<span class="keyword">this</span>.nombre); <span class="comment">// undefined</span><br>
+                        };<br>
+                        <span class="comment">// ✅ function expression correcta</span><br>
+                        Animal.prototype.hablar = <span class="keyword">function</span>() {<br>
+                        &nbsp;&nbsp;console.log(<span class="keyword">this</span>.nombre);<br>
+                        };
+                    </div>
+                </div>
+            </div>
+
+            <!-- REGLA MENTAL -->
+            <div class="glass-panel p-6 border border-sky-400/40 bg-sky-400/5">
+                <h4 class="text-sky-300 font-bold mb-4 text-lg">Regla mental para elegir</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <div class="text-emerald-400 font-bold mb-2 text-sm">✅ Usa arrow function cuando...</div>
+                        <ul class="text-slate-400 text-sm space-y-1 leading-relaxed">
+                            <li>• Escribes un callback (<code>.map</code>, <code>.filter</code>, <code>setTimeout</code>)</li>
+                            <li>• Necesitas que <code>this</code> del scope padre esté disponible</li>
+                            <li>• La función es corta y de un solo propósito</li>
+                            <li>• Usas programación funcional (composición, currying)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="text-red-400 font-bold mb-2 text-sm">❌ Usa function tradicional cuando...</div>
+                        <ul class="text-slate-400 text-sm space-y-1 leading-relaxed">
+                            <li>• Defines un método de objeto que usa <code>this</code></li>
+                            <li>• Necesitas <code>new</code> (constructor)</li>
+                            <li>• El event listener necesita <code>this</code> como el elemento</li>
+                            <li>• Usas herencia con <code>prototype</code></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </section>
