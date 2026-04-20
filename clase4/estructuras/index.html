@@ -3,26 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JS Estructuras Avanzado | Módulo 4</title>
+    <title>Control de Flujo Pro | Módulo 4</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --bg-color: #0f172a; --card-bg: rgba(30, 41, 59, 0.7); --accent: #f59e0b; --text-main: #f8fafc; --transition: all 0.3s ease; }
-        [data-theme="light"] { --bg-color: #f8fafc; --card-bg: rgba(255, 255, 255, 0.85); --text-main: #0f172a; --accent: #d97706; }
+        :root { --bg-color: #0f172a; --card-bg: rgba(30, 41, 59, 0.7); --accent: #f59e0b; --accent-glow: rgba(245,158,11,0.2); --text-main: #f8fafc; --transition: all 0.3s ease; }
+        [data-theme="light"] { --bg-color: #f8fafc; --card-bg: rgba(255, 255, 255, 0.85); --text-main: #0f172a; --accent: #d97706; --accent-glow: rgba(217,119,6,0.2); }
+        [data-theme="light"] h1 { background-image: linear-gradient(to right, #1e293b, var(--accent)) !important; }
+        [data-theme="light"] .text-slate-400, [data-theme="light"] .text-slate-300 { color: #475569 !important; }
+        [data-theme="light"] .glass-panel { border-color: rgba(0,0,0,0.1) !important; }
         body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); min-height: 100vh; }
-        .glass-panel { background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1.5rem; }
-        .code-explorer { background: #0f172a; border-radius: 1rem; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .glass-panel { background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; }
+        .code-explorer { background: #0f172a; border-radius: 1rem; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
         .line { display: flex; padding: 4px 20px; font-family: 'JetBrains Mono', monospace; cursor: pointer; transition: all 0.2s; border-left: 4px solid transparent; }
-        .line:hover { background: rgba(245, 158, 11, 0.1); border-left-color: var(--accent); }
-        .line.active { background: rgba(245, 158, 11, 0.2); border-left-color: var(--accent); }
+        .line:hover { background: rgba(245,158,11,0.1); border-left-color: var(--accent); }
+        .line.active { background: rgba(245,158,11,0.2); border-left-color: var(--accent); }
         .ln { width: 30px; color: #475569; user-select: none; font-size: 0.8rem; }
         .keyword { color: #f472b6; }
         .string { color: #fbbf24; }
+        .number { color: #818cf8; }
         .comment { color: #475569; font-style: italic; }
-        #themeToggle { position: fixed; top: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-main); padding: 0.75rem 1.5rem; border-radius: 100px; font-weight: 600; }
+        #themeToggle { position: fixed; top: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); padding: 0.75rem 1.5rem; border-radius: 100px; font-weight: 600; cursor: pointer; }
+        .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(245,158,11,0.3), transparent); margin: 4rem 0; }
+        .tecnicismo { border-bottom: 2px dashed var(--accent); cursor: help; position: relative; font-weight: 600; color: var(--accent); }
+        .tecnicismo::after { content: attr(data-tooltip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #0f172a; color: #f8fafc; padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.8rem; font-weight: 400; width: 260px; white-space: normal; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; border: 1px solid rgba(245,158,11,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.4); pointer-events: none; font-family: 'Outfit', sans-serif; }
+        .tecnicismo::before { content: ''; position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: #0f172a; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; pointer-events: none; }
+        .tecnicismo:hover::after, .tecnicismo:hover::before { opacity: 1; visibility: visible; }
+        .code-block { background: #010409; border-radius: 1rem; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.08); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.7; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: rgba(245,158,11,0.1); color: #f59e0b; padding: 0.6rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        td { padding: 0.6rem 1rem; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; color: #94a3b8; }
     </style>
 </head>
-<body class="p-6 md:p-12">
+<body class="p-6 md:p-12 pb-32">
     <button id="themeToggle">☀️ Modo Claro</button>
 
     <div class="max-w-6xl mx-auto">
@@ -35,10 +48,11 @@
             <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-amber-500 bg-clip-text text-transparent">
                 Control de Flujo Pro
             </h1>
-            <p class="text-slate-400 text-lg mt-2 font-medium italic">"Ternarios, evaluación de cortocircuito y bucles modernos para un código eficiente."</p>
+            <p class="text-slate-400 text-lg mt-2 font-medium italic">"Ternarios, cortocircuito, manejo de errores y bucles modernos para código profesional."</p>
         </header>
 
-        <main class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+        <!-- CODE EXPLORER -->
+        <main class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start mb-16">
             <div class="code-explorer shadow-2xl">
                 <div class="bg-slate-800 px-4 py-2 border-b border-white/5 flex gap-2">
                     <div class="w-3 h-3 rounded-full bg-red-500"></div>
@@ -47,53 +61,27 @@
                     <span class="ml-4 text-xs text-slate-400 font-mono">modern_control.js</span>
                 </div>
                 <div class="py-4 space-y-0 text-sm md:text-base">
-                    <div class="line" data-step="0">
-                        <span class="ln">1</span>
-                        <span><span class="keyword">const</span> mensaje = (edad >= <span class="string">18</span>) ? <span class="string">"Pasa"</span> : <span class="string">"Espera"</span>;</span>
-                    </div>
-                    <div class="line" data-step="1">
-                        <span class="ln">2</span>
-                        <span>&nbsp;</span>
-                    </div>
-                    <div class="line" data-step="2">
-                        <span class="ln">3</span>
-                        <span><span class="keyword">const</span> usuario = nombre || <span class="string">"Anónimo"</span>;</span>
-                    </div>
-                    <div class="line" data-step="3">
-                        <span class="ln">4</span>
-                        <span>esVIP && imprimirInvitacion();</span>
-                    </div>
-                    <div class="line" data-step="4">
-                        <span class="ln">5</span>
-                        <span>&nbsp;</span>
-                    </div>
-                    <div class="line" data-step="5">
-                        <span class="ln">6</span>
-                        <span><span class="keyword">for</span> (<span class="keyword">const</span> item <span class="keyword">of</span> carrito) {</span>
-                    </div>
-                    <div class="line" data-step="6">
-                        <span class="ln">7</span>
-                        <span>&nbsp;&nbsp;console.log(item.nombre);</span>
-                    </div>
-                    <div class="line" data-step="7">
-                        <span class="ln">8</span>
-                        <span>}</span>
-                    </div>
+                    <div class="line" data-step="0"><span class="ln">1</span><span><span class="keyword">const</span> msg = (edad >= <span class="number">18</span>) ? <span class="string">"Pasa"</span> : <span class="string">"Espera"</span>;</span></div>
+                    <div class="line" data-step="1"><span class="ln">2</span><span>&nbsp;</span></div>
+                    <div class="line" data-step="2"><span class="ln">3</span><span><span class="keyword">const</span> user = nombre || <span class="string">"Anónimo"</span>;</span></div>
+                    <div class="line" data-step="3"><span class="ln">4</span><span>esVIP && imprimirInvitacion();</span></div>
+                    <div class="line" data-step="4"><span class="ln">5</span><span><span class="keyword">const</span> val = data ?? <span class="string">"default"</span>;</span></div>
+                    <div class="line" data-step="5"><span class="ln">6</span><span>&nbsp;</span></div>
+                    <div class="line" data-step="6"><span class="ln">7</span><span><span class="keyword">for</span> (<span class="keyword">const</span> item <span class="keyword">of</span> carrito) {</span></div>
+                    <div class="line" data-step="7"><span class="ln">8</span><span>&nbsp;&nbsp;console.log(item.nombre);</span></div>
+                    <div class="line" data-step="8"><span class="ln">9</span><span>}</span></div>
                 </div>
             </div>
 
             <div class="space-y-6">
                 <div class="glass-panel p-8 border-l-4 border-amber-500 min-h-[250px] flex flex-col justify-center">
                     <h3 id="stepTitle" class="text-2xl font-bold mb-4 text-amber-500">Haz clic en una técnica</h3>
-                    <p id="stepDesc" class="text-slate-400 leading-relaxed">
-                        Optimiza tu lógica. JavaScript ofrece herramientas sintácticas para reducir el 'boilplate' (código repetitivo) y hacer las decisiones más compactas y legibles.
-                    </p>
+                    <p id="stepDesc" class="text-slate-400 leading-relaxed">JavaScript ofrece herramientas sintácticas para reducir código repetitivo y hacer las decisiones más compactas y legibles.</p>
                 </div>
-
                 <div class="grid grid-cols-2 gap-4">
                     <div class="glass-panel p-4 bg-amber-500/5">
                         <div class="text-[0.6rem] uppercase tracking-widest text-slate-500 mb-1">Rendimiento</div>
-                        <p id="stepPerf" class="text-xs italic text-slate-400">Cortocircuito.</p>
+                        <p id="stepPerf" class="text-xs italic text-slate-400">Cortocircuito</p>
                     </div>
                     <div class="glass-panel p-4 bg-amber-500/5">
                         <div class="text-[0.6rem] uppercase tracking-widest text-slate-500 mb-1">Sintaxis</div>
@@ -103,59 +91,173 @@
             </div>
         </main>
 
-        <!-- SECCIÓN DE PROFUNDIZACIÓN -->
-        <section class="mt-16 glass-panel p-8 border-t-4 border-amber-500 bg-amber-900/5">
-            <h2 class="text-3xl font-bold mb-8 flex items-center gap-4 text-amber-500">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20m10-10H2"/></svg>
-                Evaluación Logicom
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                    <h4 class="font-bold text-white mb-3 text-lg underline decoration-amber-500">Operador OR ( || )</h4>
-                    <p class="text-sm text-slate-400">Excelente para valores por defecto. Si el primer valor es <i>falsy</i> (null, undefined, false, 0, ""), JS toma el segundo.</p>
+        <div class="section-divider"></div>
+
+        <!-- SECCIÓN: OPERADORES DE DECISIÓN -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-amber-500 mb-8">Operadores de Decisión en Profundidad</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="glass-panel p-6">
+                    <h4 class="text-amber-400 font-bold mb-3">Operador OR <code>||</code></h4>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Retorna el primer valor <span class="tecnicismo" data-tooltip="Truthy: cualquier valor que JavaScript evalúa como verdadero en un contexto booleano. Todo excepto: false, 0, '', null, undefined, NaN.">truthy</span>. Úsalo para valores por defecto, pero cuidado con 0 o cadenas vacías válidas — los trata como falsos.</p>
+                    <div class="code-block text-xs">
+                        <span class="keyword">const</span> n = config.port || <span class="number">3000</span>;<br>
+                        <span class="comment">// Si config.port = 0, usa 3000 (bug!)</span>
+                    </div>
                 </div>
-                <div>
-                    <h4 class="font-bold text-white mb-3 text-lg underline decoration-amber-500">Operador AND ( && )</h4>
-                    <p class="text-sm text-slate-400">Útil para ejecuciones condicionales. El código a la derecha solo corre si el de la izquierda es <i>truthy</i>.</p>
+                <div class="glass-panel p-6">
+                    <h4 class="text-amber-400 font-bold mb-3">Nullish <code>??</code></h4>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Solo considera <code>null</code> y <code>undefined</code> como ausentes. Respeta <code>0</code>, <code>false</code> y <code>""</code> como valores válidos. La opción segura para defaults.</p>
+                    <div class="code-block text-xs">
+                        <span class="keyword">const</span> n = config.port ?? <span class="number">3000</span>;<br>
+                        <span class="comment">// Si port = 0, usa 0 (correcto!)</span>
+                    </div>
+                </div>
+                <div class="glass-panel p-6">
+                    <h4 class="text-amber-400 font-bold mb-3">Optional Chaining <code>?.</code></h4>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Accede a propiedades profundas sin crashear si algún nivel es <code>null</code> o <code>undefined</code>. Esencial para datos de APIs que pueden ser incompletos.</p>
+                    <div class="code-block text-xs">
+                        <span class="keyword">const</span> city = user?.address?.city;<br>
+                        <span class="comment">// No lanza error si address es null</span>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-panel p-6 border-l-4 border-amber-500">
+                <h4 class="text-amber-400 font-bold mb-4">Asignación Lógica (ES2021)</h4>
+                <p class="text-slate-400 text-sm leading-relaxed mb-4">Combina un operador lógico con asignación. Asigna <strong>solo si</strong> se cumple la condición — evita sobreescribir valores existentes.</p>
+                <div class="code-block text-sm">
+                    config.timeout <span class="keyword">||=</span> <span class="number">5000</span>;&nbsp;&nbsp;<span class="comment">// Asigna si es falsy</span><br>
+                    config.debug <span class="keyword">&&=</span> process.env.DEV;&nbsp;&nbsp;<span class="comment">// Asigna si es truthy</span><br>
+                    config.cache <span class="keyword">??=</span> <span class="keyword">new</span> Map();&nbsp;&nbsp;<span class="comment">// Asigna si es null/undefined</span>
                 </div>
             </div>
         </section>
 
-        <section class="mt-16 glass-panel p-8">
-            <h2 class="text-3xl font-bold bg-gradient-to-r from-white to-amber-500 bg-clip-text text-transparent mb-6">🚀 Reto Técnico: Filtro de Seguridad</h2>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div>
-                    <h4 class="text-amber-500 font-bold mb-4">Misión: Procesador de Invitados</h4>
-                    <p class="text-slate-400 text-sm mb-6">Usa un bucle <code>for...of</code> para recorrer una lista y un operador ternario para decidir si cada uno tiene acceso.</p>
-                    <textarea id="codeEditor" spellcheck="false" class="w-full h-64 bg-slate-900 text-amber-400 font-mono p-6 rounded-xl border border-white/10 resize-none focus:border-amber-500 outline-none transition-all">// RETO:
-// 1. Tienes este arreglo: const invitados = ["Ana", "Pedro", "VIP_Luis", "Marta"];
-// 2. Recórrelo con for...of.
-// 3. Si el nombre comienza con "VIP_", imprime: "[ACCESO TOTAL] Nombre"
-// 4. Si no, imprime: "[ACCESO ESTÁNDAR] Nombre"
-// PISTA: Usa nombre.startsWith("VIP_") y un OPERADOR TERNARIO.
+        <div class="section-divider"></div>
 
-</textarea>
-                    <button onclick="runCode()" class="mt-4 bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-lg active:scale-95">▶️ Validar Lógica</button>
+        <!-- SECCIÓN: SWITCH Y OBJECT LOOKUP -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-amber-500 mb-8">Switch y Decisiones Múltiples</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <div>
+                    <h4 class="text-slate-200 font-bold mb-4">Switch tradicional</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Útil para múltiples valores de una misma variable. Importante: sin <code>break</code> ocurre <span class="tecnicismo" data-tooltip="Fall-through: en switch, si una case no tiene 'break', la ejecución continúa al siguiente case automáticamente. Puede ser un bug o usarse intencionalmente para agrupar casos.">fall-through</span> — el código sigue al siguiente case.</p>
+                    <div class="code-block text-sm">
+                        <span class="keyword">switch</span> (estado) {<br>
+                        &nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"activo"</span>: color = <span class="string">"green"</span>; <span class="keyword">break</span>;<br>
+                        &nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"pausado"</span>: color = <span class="string">"yellow"</span>; <span class="keyword">break</span>;<br>
+                        &nbsp;&nbsp;<span class="keyword">case</span> <span class="string">"error"</span>: color = <span class="string">"red"</span>; <span class="keyword">break</span>;<br>
+                        &nbsp;&nbsp;<span class="keyword">default</span>: color = <span class="string">"gray"</span>;<br>
+                        }
+                    </div>
                 </div>
-                <div class="flex flex-col">
-                    <p class="text-slate-400 mb-4 font-mono text-xs uppercase">Terminal de Depuración:</p>
-                    <div id="consoleOutput" class="flex-1 bg-black text-emerald-400 font-mono p-6 rounded-xl border border-white/10 min-h-[250px] overflow-y-auto"></div>
-                    <button onclick="clearConsole()" class="mt-2 text-xs text-slate-500 hover:text-white transition-colors self-end">RESET CONSOLE</button>
+                <div>
+                    <h4 class="text-amber-400 font-bold mb-4">Object Lookup (patrón moderno)</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-4">Reemplaza switch con un objeto donde cada clave es un caso. Más declarativo, <span class="tecnicismo" data-tooltip="Inmutable en este contexto: el mapa de opciones se declara const y no se modifica. Facilita el testing y evita efectos secundarios.">inmutable</span>, y fácil de extender sin tocar la lógica principal.</p>
+                    <div class="code-block text-sm">
+                        <span class="keyword">const</span> colors = {<br>
+                        &nbsp;&nbsp;activo: <span class="string">"green"</span>,<br>
+                        &nbsp;&nbsp;pausado: <span class="string">"yellow"</span>,<br>
+                        &nbsp;&nbsp;error: <span class="string">"red"</span><br>
+                        };<br>
+                        <span class="keyword">const</span> color = colors[estado] ?? <span class="string">"gray"</span>;
+                    </div>
                 </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECCIÓN: TRY/CATCH -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-amber-500 mb-8">Manejo de Errores: try / catch / finally</h2>
+            <p class="text-slate-300 text-lg leading-relaxed mb-8">
+                En producción, el código falla. Parsear JSON inválido, acceder a una API caída, dividir por cero — todo puede lanzar una <span class="tecnicismo" data-tooltip="Excepción: error que interrumpe el flujo normal del programa. Sin try/catch, una excepción no capturada detiene toda la ejecución del script.">excepción</span>. El bloque try/catch permite reaccionar de forma controlada.
+            </p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <div class="code-block text-sm">
+                    <span class="keyword">try</span> {<br>
+                    &nbsp;&nbsp;<span class="keyword">const</span> data = <span class="keyword">JSON</span>.parse(rawText);<br>
+                    &nbsp;&nbsp;processUser(data);<br>
+                    } <span class="keyword">catch</span> (err) {<br>
+                    &nbsp;&nbsp;<span class="comment">// err.name, err.message, err.stack</span><br>
+                    &nbsp;&nbsp;console.error(<span class="string">"Parsing failed:"</span>, err.message);<br>
+                    } <span class="keyword">finally</span> {<br>
+                    &nbsp;&nbsp;<span class="comment">// Siempre se ejecuta: limpiar recursos</span><br>
+                    &nbsp;&nbsp;loader.hide();<br>
+                    }
+                </div>
+                <div class="space-y-4">
+                    <div class="glass-panel p-5">
+                        <h5 class="text-amber-400 font-bold text-sm mb-2">Tipos comunes de Error</h5>
+                        <ul class="text-slate-400 text-sm space-y-1">
+                            <li><code class="text-pink-400">SyntaxError</code> — JSON mal formado, código inválido</li>
+                            <li><code class="text-pink-400">TypeError</code> — operación en tipo incorrecto</li>
+                            <li><code class="text-pink-400">ReferenceError</code> — variable no declarada</li>
+                            <li><code class="text-pink-400">RangeError</code> — valor fuera de rango válido</li>
+                        </ul>
+                    </div>
+                    <div class="glass-panel p-5">
+                        <h5 class="text-amber-400 font-bold text-sm mb-2">Errores personalizados</h5>
+                        <div class="code-block text-xs">
+                            <span class="keyword">class</span> ValidationError <span class="keyword">extends</span> Error {<br>
+                            &nbsp;&nbsp;constructor(msg) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">super</span>(msg);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.name = <span class="string">"ValidationError"</span>;<br>
+                            &nbsp;&nbsp;}<br>
+                            }<br>
+                            <span class="keyword">throw new</span> ValidationError(<span class="string">"Email inválido"</span>);
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECCIÓN: BUCLES MODERNOS -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-amber-500 mb-8">Iteración Moderna: for...of vs for...in</h2>
+            <p class="text-slate-300 text-lg leading-relaxed mb-8">
+                El <code>for</code> clásico con índices numéricos es <span class="tecnicismo" data-tooltip="Imperativo: estilo donde describes paso a paso CÓMO hacer algo. Contrario al estilo declarativo donde describes QUÉ quieres. Los bucles for clásicos son imperativos; map/filter son declarativos.">imperativo</span> y verboso. ES6 introdujo alternativas más legibles y seguras.
+            </p>
+            <div class="overflow-x-auto rounded-2xl mb-8">
+                <table>
+                    <thead>
+                        <tr><th>Bucle</th><th>Usa con</th><th>Devuelve</th><th>Cuándo usarlo</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code class="text-pink-400">for...of</code></td><td>Arrays, strings, Maps, Sets</td><td>Los valores directamente</td><td>Recorrer colecciones iterables</td></tr>
+                        <tr><td><code class="text-pink-400">for...in</code></td><td>Objetos</td><td>Las claves (keys)</td><td>Inspeccionar propiedades de objetos</td></tr>
+                        <tr><td><code class="text-pink-400">.forEach()</code></td><td>Arrays</td><td>undefined (sin break)</td><td>Efectos secundarios sobre arrays</td></tr>
+                        <tr><td><code class="text-pink-400">for clásico</code></td><td>Cualquier cosa</td><td>Control total</td><td>Cuando necesitas el índice o break/continue</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="code-block text-sm">
+                <span class="comment">// for...of — itera valores</span><br>
+                <span class="keyword">for</span> (<span class="keyword">const</span> producto <span class="keyword">of</span> carrito) {<br>
+                &nbsp;&nbsp;console.log(producto.nombre, producto.precio);<br>
+                }<br><br>
+                <span class="comment">// for...in — itera claves</span><br>
+                <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> configObj) {<br>
+                &nbsp;&nbsp;<span class="keyword">if</span> (configObj.hasOwnProperty(key)) console.log(key, configObj[key]);<br>
+                }
             </div>
         </section>
     </div>
 
     <script>
         const steps = [
-            { title: "Operador Ternario", desc: "El 'if/else' de una sola línea. Ideal para asignar valores condicionales de forma rápida.", perf: "Media", syn: "? :" },
+            { title: "Operador Ternario", desc: "El if/else de una sola línea: condición ? valorSiTrue : valorSiFalse. Ideal para asignar valores condicionales compactos.", perf: "Media", syn: "? :" },
             { title: "-", desc: "-", perf: "-", syn: "-" },
-            { title: "Short-circuit OR", desc: "Si 'nombre' no tiene valor, se asigna 'Anónimo'. Evita que tu app explote por valores nulos.", perf: "Alta", syn: "||" },
-            { title: "Short-circuit AND", desc: "Forma compacta de decir: 'Si es VIP, entonces imprime'. Ahorra líneas de código.", perf: "Alta", syn: "&&" },
+            { title: "Short-circuit OR ||", desc: "Devuelve el primer valor truthy. Si 'nombre' es undefined, asigna 'Anónimo'. Cuidado: 0 y '' también son falsy.", perf: "Alta", syn: "||" },
+            { title: "Short-circuit AND &&", desc: "Solo evalúa el lado derecho si el izquierdo es truthy. Forma compacta de ejecutar algo solo si una condición se cumple.", perf: "Alta", syn: "&&" },
+            { title: "Nullish Coalescing ??", desc: "Solo considera null y undefined como 'ausentes'. Respeta 0, false y cadenas vacías como valores válidos.", perf: "Alta", syn: "??" },
             { title: "-", desc: "-", perf: "-", syn: "-" },
-            { title: "Bucle for...of", desc: "La forma más moderna y legible de recorrer arreglos. No necesitas manejar índices manuales.", perf: "Optimizada", syn: "for...of" },
-            { title: "Cuerpo de Iteración", desc: "En cada vuelta, 'item' representa el elemento actual del arreglo directamente.", perf: "Legibilidad", syn: "Element Iteration" },
-            { title: "Cierre", desc: "Fin de la estructura de repetición moderna.", perf: "-", syn: "-" }
+            { title: "Bucle for...of", desc: "La forma moderna de recorrer arrays e iterables. Accede al valor directamente sin manejar índices manualmente.", perf: "Optimizada", syn: "for...of" },
+            { title: "Cuerpo de Iteración", desc: "En cada vuelta, la variable (item) toma el valor del elemento actual del iterable.", perf: "Legibilidad", syn: "Elemento directo" },
+            { title: "Cierre de bloque", desc: "El bloque {} define el alcance del bucle. Variables declaradas con let/const aquí son locales a cada iteración.", perf: "-", syn: "}" }
         ];
 
         const lines = document.querySelectorAll('.line');
@@ -166,9 +268,8 @@
 
         lines.forEach(line => {
             line.addEventListener('click', () => {
-                const stepIdx = line.getAttribute('data-step');
-                const step = steps[stepIdx];
-                if(step.title === "-") return;
+                const step = steps[line.getAttribute('data-step')];
+                if (step.title === "-") return;
                 lines.forEach(l => l.classList.remove('active'));
                 line.classList.add('active');
                 titleEle.textContent = step.title;
@@ -178,27 +279,6 @@
             });
         });
 
-        function runCode() {
-            const code = document.getElementById('codeEditor').value;
-            const output = document.getElementById('consoleOutput');
-            output.innerHTML = "";
-            const oldLog = console.log;
-            console.log = function(...args) {
-                args.forEach(arg => {
-                    const line = document.createElement('div');
-                    line.textContent = `> ${typeof arg === 'object' ? JSON.stringify(arg) : arg}`;
-                    output.appendChild(line);
-                });
-                oldLog.apply(console, args);
-            };
-            try { new Function(code)(); } catch (err) {
-                const errorLine = document.createElement('div');
-                errorLine.style.color = "#ef4444";
-                errorLine.textContent = `Error: ${err.message}`;
-                output.appendChild(errorLine);
-            } finally { console.log = oldLog; }
-        }
-        function clearConsole() { document.getElementById('consoleOutput').innerHTML = ""; }
         const themeBtn = document.getElementById('themeToggle');
         const html = document.documentElement;
         if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
