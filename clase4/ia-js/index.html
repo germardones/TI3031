@@ -7,8 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --bg-color: #0f172a; --card-bg: rgba(30, 41, 59, 0.7); --accent: #f59e0b; --accent-glow: rgba(245,158,11,0.2); --text-main: #f8fafc; --transition: all 0.3s ease; }
-        [data-theme="light"] { --bg-color: #f8fafc; --card-bg: rgba(255, 255, 255, 0.85); --text-main: #0f172a; --accent: #d97706; --accent-glow: rgba(217,119,6,0.2); }
+        :root { --bg-color: #0f172a; --card-bg: rgba(30, 41, 59, 0.7); --accent: #38bdf8; --accent-glow: rgba(56,189,248,0.2); --text-main: #f8fafc; --transition: all 0.3s ease; }
+        [data-theme="light"] { --bg-color: #f8fafc; --card-bg: rgba(255, 255, 255, 0.85); --text-main: #0f172a; --accent: #0284c7; --accent-glow: rgba(2,132,199,0.2); }
         [data-theme="light"] h1 { background-image: linear-gradient(to right, #1e293b, var(--accent)) !important; }
         [data-theme="light"] .text-slate-400, [data-theme="light"] .text-slate-300 { color: #475569 !important; }
         [data-theme="light"] .glass-panel { border-color: rgba(0,0,0,0.1) !important; }
@@ -16,17 +16,17 @@
         .glass-panel { background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); border-radius: 1.5rem; }
         .code-explorer { background: #0f172a; border-radius: 1rem; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
         .line { display: flex; padding: 4px 20px; font-family: 'JetBrains Mono', monospace; cursor: pointer; transition: all 0.2s; border-left: 4px solid transparent; }
-        .line:hover { background: rgba(245,158,11,0.1); border-left-color: var(--accent); }
-        .line.active { background: rgba(245,158,11,0.2); border-left-color: var(--accent); }
+        .line:hover { background: rgba(56,189,248,0.1); border-left-color: var(--accent); }
+        .line.active { background: rgba(56,189,248,0.2); border-left-color: var(--accent); }
         .ln { width: 30px; color: #475569; user-select: none; font-size: 0.8rem; }
         .keyword { color: #f472b6; }
         .string { color: #fbbf24; }
         .number { color: #818cf8; }
         .comment { color: #475569; font-style: italic; }
         #themeToggle { position: fixed; top: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); padding: 0.75rem 1.5rem; border-radius: 100px; font-weight: 600; cursor: pointer; }
-        .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(245,158,11,0.3), transparent); margin: 4rem 0; }
+        .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(56,189,248,0.3), transparent); margin: 4rem 0; }
         .tecnicismo { border-bottom: 2px dashed var(--accent); cursor: help; position: relative; font-weight: 600; color: var(--accent); }
-        .tecnicismo::after { content: attr(data-tooltip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #0f172a; color: #f8fafc; padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.8rem; font-weight: 400; width: 260px; white-space: normal; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; border: 1px solid rgba(245,158,11,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.4); pointer-events: none; font-family: 'Outfit', sans-serif; }
+        .tecnicismo::after { content: attr(data-tooltip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #0f172a; color: #f8fafc; padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.8rem; font-weight: 400; width: 260px; white-space: normal; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; border: 1px solid rgba(56,189,248,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.4); pointer-events: none; font-family: 'Outfit', sans-serif; }
         .tecnicismo::before { content: ''; position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: #0f172a; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; pointer-events: none; }
         .tecnicismo:hover::after, .tecnicismo:hover::before { opacity: 1; visibility: visible; }
         .code-block { background: #010409; border-radius: 1rem; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.08); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; line-height: 1.7; }
@@ -38,11 +38,11 @@
     <div class="max-w-6xl mx-auto">
         <header class="mb-12">
             <nav class="mb-4">
-                <a href="../index.html" class="text-amber-500 hover:text-amber-400 font-semibold flex items-center gap-2 transition-colors">
+                <a href="../index.html" class="text-sky-400 hover:text-sky-300 font-semibold flex items-center gap-2 transition-colors">
                     &larr; Volver al Hub del Módulo 04
                 </a>
             </nav>
-            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-amber-500 bg-clip-text text-transparent">
+            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-sky-400 bg-clip-text text-transparent">
                 Ingeniería Pro con IA
             </h1>
             <p class="text-slate-400 text-lg mt-2 font-medium italic">"Prompt engineering, limitaciones reales y flujo de trabajo profesional con IA."</p>
@@ -71,18 +71,18 @@
             </div>
 
             <div class="space-y-6">
-                <div class="glass-panel p-8 border-l-4 border-amber-500 min-h-[250px] flex flex-col justify-center">
-                    <h3 id="stepTitle" class="text-2xl font-bold mb-4 text-amber-500">Haz clic en una técnica</h3>
+                <div class="glass-panel p-8 border-l-4 border-sky-400 min-h-[250px] flex flex-col justify-center">
+                    <h3 id="stepTitle" class="text-2xl font-bold mb-4 text-sky-400">Haz clic en una técnica</h3>
                     <p id="stepDesc" class="text-slate-400 leading-relaxed">Un ingeniero no deja que la IA escriba todo. La usa como analista de calidad: encontrar vulnerabilidades, sugerir patrones, crear tests y analizar complejidad.</p>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
-                    <div class="glass-panel p-4 bg-amber-500/5">
+                    <div class="glass-panel p-4 bg-sky-400/5">
                         <div class="text-[0.6rem] uppercase tracking-widest text-slate-500 mb-1">Rol IA</div>
                         <p id="stepRole" class="text-xs italic text-slate-400">Code reviewer</p>
                     </div>
-                    <div class="glass-panel p-4 bg-amber-500/5">
+                    <div class="glass-panel p-4 bg-sky-400/5">
                         <div class="text-[0.6rem] uppercase tracking-widest text-slate-500 mb-1">Métrica</div>
-                        <p id="stepMetric" class="text-xs font-bold text-amber-500">Mantenibilidad</p>
+                        <p id="stepMetric" class="text-xs font-bold text-sky-400">Mantenibilidad</p>
                     </div>
                 </div>
             </div>
@@ -92,7 +92,7 @@
 
         <!-- PROMPT ENGINEERING -->
         <section class="mb-16">
-            <h2 class="text-3xl font-bold text-amber-500 mb-8">Prompt Engineering</h2>
+            <h2 class="text-3xl font-bold text-sky-400 mb-8">Prompt Engineering</h2>
             <p class="text-slate-300 text-lg leading-relaxed mb-8">
                 <span class="tecnicismo" data-tooltip="Prompt engineering: el arte de diseñar instrucciones para modelos de IA para obtener respuestas de mayor calidad, precisión y formato correcto.">Prompt engineering</span> es la diferencia entre una IA que da respuestas genéricas y una que actúa como un especialista. Un prompt bien construido tiene 4 elementos.
             </p>
@@ -123,37 +123,37 @@ Sin dependencias extra."</span>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                 <div class="glass-panel p-5">
                     <div class="text-2xl mb-2">🎯</div>
-                    <h5 class="text-amber-400 font-bold text-sm mb-2">1. Contexto</h5>
+                    <h5 class="text-sky-300 font-bold text-sm mb-2">1. Contexto</h5>
                     <p class="text-slate-400 text-xs leading-relaxed">Quién eres tú o qué rol debe adoptar la IA. "Eres un senior dev de React con 10 años de experiencia."</p>
                 </div>
                 <div class="glass-panel p-5">
                     <div class="text-2xl mb-2">📋</div>
-                    <h5 class="text-amber-400 font-bold text-sm mb-2">2. Tarea</h5>
+                    <h5 class="text-sky-300 font-bold text-sm mb-2">2. Tarea</h5>
                     <p class="text-slate-400 text-xs leading-relaxed">Qué necesitas exactamente. Verbos claros: "Crea", "Refactoriza", "Explica", "Encuentra bugs en".</p>
                 </div>
                 <div class="glass-panel p-5">
                     <div class="text-2xl mb-2">⚙️</div>
-                    <h5 class="text-amber-400 font-bold text-sm mb-2">3. Restricciones</h5>
+                    <h5 class="text-sky-300 font-bold text-sm mb-2">3. Restricciones</h5>
                     <p class="text-slate-400 text-xs leading-relaxed">Límites y condiciones. "Sin librerías externas", "compatible con ES5", "menos de 20 líneas".</p>
                 </div>
                 <div class="glass-panel p-5">
                     <div class="text-2xl mb-2">📄</div>
-                    <h5 class="text-amber-400 font-bold text-sm mb-2">4. Formato</h5>
+                    <h5 class="text-sky-300 font-bold text-sm mb-2">4. Formato</h5>
                     <p class="text-slate-400 text-xs leading-relaxed">Cómo quieres la respuesta. "En una tabla", "con comentarios JSDoc", "primero el código, luego la explicación".</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="glass-panel p-5">
-                    <h5 class="text-amber-400 font-bold text-sm mb-2"><span class="tecnicismo" data-tooltip="Chain of Thought: técnica que pide a la IA que razone paso a paso antes de dar la respuesta final. Mejora drásticamente la precisión en problemas complejos.">Chain of Thought</span></h5>
+                    <h5 class="text-sky-300 font-bold text-sm mb-2"><span class="tecnicismo" data-tooltip="Chain of Thought: técnica que pide a la IA que razone paso a paso antes de dar la respuesta final. Mejora drásticamente la precisión en problemas complejos.">Chain of Thought</span></h5>
                     <p class="text-slate-400 text-xs leading-relaxed">Añade "Piensa paso a paso antes de responder." La IA razona el problema antes de dar código, reduciendo errores lógicos.</p>
                 </div>
                 <div class="glass-panel p-5">
-                    <h5 class="text-amber-400 font-bold text-sm mb-2"><span class="tecnicismo" data-tooltip="Role prompting: asignar un rol o persona a la IA para que adopte su conocimiento y tono. 'Eres un experto en seguridad...' hace que la IA piense desde esa perspectiva.">Role Prompting</span></h5>
+                    <h5 class="text-sky-300 font-bold text-sm mb-2"><span class="tecnicismo" data-tooltip="Role prompting: asignar un rol o persona a la IA para que adopte su conocimiento y tono. 'Eres un experto en seguridad...' hace que la IA piense desde esa perspectiva.">Role Prompting</span></h5>
                     <p class="text-slate-400 text-xs leading-relaxed">"Actúa como un revisor de código de Google." Ajusta el nivel de detalle, las mejores prácticas y el vocabulario técnico.</p>
                 </div>
                 <div class="glass-panel p-5">
-                    <h5 class="text-amber-400 font-bold text-sm mb-2"><span class="tecnicismo" data-tooltip="Few-shot prompting: dar ejemplos de input/output al inicio del prompt para que la IA entienda exactamente el patrón que debe seguir.">Few-Shot</span></h5>
+                    <h5 class="text-sky-300 font-bold text-sm mb-2"><span class="tecnicismo" data-tooltip="Few-shot prompting: dar ejemplos de input/output al inicio del prompt para que la IA entienda exactamente el patrón que debe seguir.">Few-Shot</span></h5>
                     <p class="text-slate-400 text-xs leading-relaxed">"Dado este input → output de ejemplo, haz lo mismo con este nuevo input." Los ejemplos guían el formato y la lógica esperada.</p>
                 </div>
             </div>
@@ -163,7 +163,7 @@ Sin dependencias extra."</span>
 
         <!-- LIMITACIONES -->
         <section class="mb-16">
-            <h2 class="text-3xl font-bold text-amber-500 mb-8">Limitaciones Reales de la IA</h2>
+            <h2 class="text-3xl font-bold text-sky-400 mb-8">Limitaciones Reales de la IA</h2>
             <p class="text-slate-300 text-lg leading-relaxed mb-8">
                 La IA es una herramienta poderosa, pero no infalible. Conocer sus límites es lo que distingue a un profesional de alguien que solo copia y pega.
             </p>
@@ -197,29 +197,29 @@ Sin dependencias extra."</span>
 
         <!-- FLUJO PROFESIONAL -->
         <section class="mb-16">
-            <h2 class="text-3xl font-bold text-amber-500 mb-8">Flujo de Trabajo Profesional</h2>
+            <h2 class="text-3xl font-bold text-sky-400 mb-8">Flujo de Trabajo Profesional</h2>
             <p class="text-slate-300 text-lg leading-relaxed mb-8">
                 El desarrollador profesional usa la IA como un <span class="tecnicismo" data-tooltip="Pair programmer: metodología de desarrollo donde dos personas trabajan juntas en el mismo código. Una escribe, la otra revisa. La IA actúa como el segundo programador.">pair programmer</span> — no como un reemplazo. El criterio y la responsabilidad siempre son tuyos.
             </p>
             <div class="space-y-4">
                 <div class="flex gap-5 items-start glass-panel p-5">
-                    <div class="w-10 h-10 bg-amber-500/20 text-amber-400 rounded-full flex items-center justify-center font-bold text-lg shrink-0">1</div>
+                    <div class="w-10 h-10 bg-sky-400/20 text-sky-300 rounded-full flex items-center justify-center font-bold text-lg shrink-0">1</div>
                     <div><h5 class="font-bold text-slate-200 mb-1">Definir el problema claramente</h5><p class="text-slate-400 text-sm leading-relaxed">Antes de preguntar a la IA, escribe en palabras propias qué necesitas resolver. Si no puedes explicarlo, no estás listo para pedir ayuda.</p></div>
                 </div>
                 <div class="flex gap-5 items-start glass-panel p-5">
-                    <div class="w-10 h-10 bg-amber-500/20 text-amber-400 rounded-full flex items-center justify-center font-bold text-lg shrink-0">2</div>
+                    <div class="w-10 h-10 bg-sky-400/20 text-sky-300 rounded-full flex items-center justify-center font-bold text-lg shrink-0">2</div>
                     <div><h5 class="font-bold text-slate-200 mb-1">Construir un prompt con contexto</h5><p class="text-slate-400 text-sm leading-relaxed">Incluye: tecnologías, restricciones, ejemplos de lo que esperas. Más contexto = mejor respuesta.</p></div>
                 </div>
                 <div class="flex gap-5 items-start glass-panel p-5">
-                    <div class="w-10 h-10 bg-amber-500/20 text-amber-400 rounded-full flex items-center justify-center font-bold text-lg shrink-0">3</div>
+                    <div class="w-10 h-10 bg-sky-400/20 text-sky-300 rounded-full flex items-center justify-center font-bold text-lg shrink-0">3</div>
                     <div><h5 class="font-bold text-slate-200 mb-1">Leer y entender el código generado</h5><p class="text-slate-400 text-sm leading-relaxed">Nunca copies código sin entenderlo. Pregunta a la IA que te explique cada parte que no entiendas. Eres responsable de lo que sube a producción.</p></div>
                 </div>
                 <div class="flex gap-5 items-start glass-panel p-5">
-                    <div class="w-10 h-10 bg-amber-500/20 text-amber-400 rounded-full flex items-center justify-center font-bold text-lg shrink-0">4</div>
+                    <div class="w-10 h-10 bg-sky-400/20 text-sky-300 rounded-full flex items-center justify-center font-bold text-lg shrink-0">4</div>
                     <div><h5 class="font-bold text-slate-200 mb-1">Verificar y testear</h5><p class="text-slate-400 text-sm leading-relaxed">Prueba con <span class="tecnicismo" data-tooltip="Edge cases: casos extremos o inusuales que pueden romper la lógica. Ej: array vacío, null, número negativo, string muy largo.">edge cases</span>. Comprueba contra la documentación oficial. El código de la IA puede funcionar en el caso feliz y fallar en los bordes.</p></div>
                 </div>
                 <div class="flex gap-5 items-start glass-panel p-5">
-                    <div class="w-10 h-10 bg-amber-500/20 text-amber-400 rounded-full flex items-center justify-center font-bold text-lg shrink-0">5</div>
+                    <div class="w-10 h-10 bg-sky-400/20 text-sky-300 rounded-full flex items-center justify-center font-bold text-lg shrink-0">5</div>
                     <div><h5 class="font-bold text-slate-200 mb-1">Iterar y refinar</h5><p class="text-slate-400 text-sm leading-relaxed">La primera respuesta raramente es la final. Pide mejoras específicas: "Hazlo más eficiente", "Añade manejo de errores", "Simplifica la lógica del if".</p></div>
                 </div>
             </div>
