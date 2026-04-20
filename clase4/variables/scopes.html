@@ -9,6 +9,13 @@
     <style>
         :root { --bg-color: #0b1120; --card-bg: rgba(15, 23, 42, 0.7); --accent: #f59e0b; --text-main: #f8fafc; --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         [data-theme="light"] { --bg-color: #f1f5f9; --card-bg: rgba(255, 255, 255, 0.85); --text-main: #0f172a; --accent: #d97706; }
+        [data-theme="light"] h1 { background-image: linear-gradient(to right, #1e293b, var(--accent)) !important; }
+        [data-theme="light"] .text-slate-400, [data-theme="light"] .text-slate-300 { color: #475569 !important; }
+        [data-theme="light"] .glass-panel { border-color: rgba(0,0,0,0.1) !important; }
+        .tecnicismo { border-bottom: 2px dashed var(--accent); cursor: help; position: relative; font-weight: 600; color: var(--accent); }
+        .tecnicismo::after { content: attr(data-tooltip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #0f172a; color: #f8fafc; padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.8rem; font-weight: 400; width: 260px; white-space: normal; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; border: 1px solid rgba(245,158,11,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.4); pointer-events: none; font-family: 'Outfit', sans-serif; }
+        .tecnicismo::before { content: ''; position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: #0f172a; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; pointer-events: none; }
+        .tecnicismo:hover::after, .tecnicismo:hover::before { opacity: 1; visibility: visible; }
         body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); min-height: 100vh; font-size: 1.25rem; }
         .glass-panel { background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 2.5rem; }
         .code-snippet { background: #010409; border-radius: 1.5rem; padding: 2rem; border: 1px solid rgba(255, 255, 255, 0.1); font-family: 'JetBrains Mono', monospace; font-size: 1rem; }
@@ -28,6 +35,8 @@
         <!-- HEADER -->
         <header class="mb-24 text-center">
             <nav class="mb-12 flex justify-center gap-6 text-sm font-semibold uppercase tracking-widest">
+                <a href="../index.html" class="text-amber-500 hover:text-amber-400 transition-colors font-bold">← Módulo 04</a>
+                <span class="text-slate-700">|</span>
                 <a href="index.html" class="text-amber-500 hover:text-amber-400 transition-colors font-bold">Variables Hub</a>
                 <span class="text-slate-700">|</span>
                 <span class="text-slate-500">Contextos y Entornos</span>
@@ -124,55 +133,9 @@
             </div>
         </section>
 
-        <!-- CHALLENGE -->
-        <section class="glass-panel p-12 border-t-8 border-amber-500">
-            <h2 class="text-3xl font-bold mb-8 text-amber-500 font-mono tracking-tighter uppercase italic">Debug Challenge: Scope Leakage</h2>
-            <p class="text-slate-400 text-lg mb-8 leading-relaxed">
-                El siguiente código lanza un error inesperado debido a la visibilidad de bloque. Tu misión es refactorizar para que la variable se mantenga encapsulada pero el log final funcione correctamente utilizando el flujo de ejecución esperado.
-            </p>
-            <div class="grid grid-cols-1 gap-12">
-                <div>
-                    <textarea id="codeEditor" spellcheck="false" class="w-full h-64 bg-slate-900/50 text-amber-400 font-mono p-10 rounded-2xl border border-white/10 resize-none focus:border-amber-500 outline-none transition-all leading-relaxed text-lg mb-8">// ENTORNO EXPERIMENTAL
-{
-    let system_id = "V8-CORE";
-}
-// Tarea: Evitar el ReferenceError sin convertir 'system_id' en global absoluta.
-console.log(system_id);
-</textarea>
-                    <div class="flex flex-col md:flex-row gap-6">
-                        <button onclick="runCode()" class="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-bold py-5 px-12 rounded-2xl transition-all shadow-xl active:scale-95 text-xl tracking-wide uppercase">
-                            Analizar Contexto
-                        </button>
-                        <div id="consoleOutput" class="flex-[1.5] bg-black/70 text-amber-400 font-mono p-10 rounded-2xl border border-white/10 min-h-[150px] overflow-y-auto text-base"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
     </div>
 
     <script>
-        function runCode() {
-            const code = document.getElementById('codeEditor').value;
-            const output = document.getElementById('consoleOutput');
-            output.innerHTML = "";
-            const oldLog = console.log;
-            console.log = function(...args) {
-                args.forEach(arg => {
-                    const line = document.createElement('div');
-                    line.className = "mb-2 border-l-2 border-amber-500/30 pl-4 py-1";
-                    line.innerHTML = `<span class="text-amber-500/50 mr-3">V8_RUNTIME:</span> ${JSON.stringify(arg)}`;
-                    output.appendChild(line);
-                });
-                oldLog.apply(console, args);
-            };
-            try { new Function(code)(); } catch (err) {
-                const errorLine = document.createElement('div');
-                errorLine.className = "text-red-400 py-2 font-bold";
-                errorLine.textContent = `REFERENCE_ERROR: ${err.message}`;
-                output.appendChild(errorLine);
-            } finally { console.log = oldLog; }
-        }
-
         const themeBtn = document.getElementById('themeToggle');
         const html = document.documentElement;
         if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme', 'light'); themeBtn.innerHTML = 'Modo Oscuro'; }
