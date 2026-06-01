@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 5 | Framework JavaScript: React</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg-color: #0b1120;
+            --card-bg: #111c2e;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --accent: #61dafb; /* React cyan */
+            --accent-glow: rgba(97, 218, 251, 0.2);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-dim: #475569;
+            --accent: #0891b2;
+            --accent-glow: rgba(8, 145, 178, 0.12);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            transition: var(--transition);
+        }
+
+        h1, h2, h3 { font-family: 'Outfit', sans-serif; }
+
+        #themeToggle {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            padding: 0.75rem 1.25rem;
+            border-radius: 100px;
+            cursor: pointer;
+            font-weight: 600;
+            z-index: 100;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container-custom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .content-card {
+            background-color: var(--card-bg);
+            border: 1px solid rgba(97, 218, 251, 0.12);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            transition: var(--transition);
+        }
+
+        .content-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px -15px var(--accent-glow);
+        }
+
+        [data-theme="light"] h1 {
+            background-image: linear-gradient(to right, #0f172a, #0891b2) !important;
+        }
+    </style>
+</head>
+<body>
+
+    <button id="themeToggle">☀️ Modo Claro</button>
+
+    <div class="container-custom">
+        <header class="mb-16">
+            <a href="../index.html" class="inline-flex items-center gap-2 font-semibold mb-6 hover:-translate-x-1 transition-transform" style="color: var(--accent);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+                Regresar al Hub Principal
+            </a>
+            <div class="flex items-center gap-4 mb-4">
+                <svg width="56" height="56" viewBox="-11.5 -10.23 23 20.46" fill="none">
+                    <circle cx="0" cy="0" r="2.05" fill="#61dafb"/>
+                    <g stroke="#61dafb" stroke-width="1" fill="none">
+                        <ellipse rx="11" ry="4.2"/>
+                        <ellipse rx="11" ry="4.2" transform="rotate(60)"/>
+                        <ellipse rx="11" ry="4.2" transform="rotate(120)"/>
+                    </g>
+                </svg>
+                <h1 class="text-5xl md:text-6xl font-bold bg-gradient-to-r from-white to-cyan-300 bg-clip-text text-transparent">
+                    Módulo 5: React
+                </h1>
+            </div>
+            <p class="text-xl text-slate-400 max-w-3xl">
+                Da el salto del JavaScript puro al desarrollo profesional con componentes. Aprende React, persistencia con Local Storage, consumo de APIs, apoyo de IA y seguridad en aplicaciones SPA.
+            </p>
+        </header>
+
+        <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- 1. Introducción a React -->
+            <a href="introduccion.html" class="content-card flex flex-col justify-between">
+                <div>
+                    <span class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-6" style="background: var(--accent-glow); color: var(--accent);">Paso 01</span>
+                    <h2 class="text-2xl font-bold mb-4" style="color: var(--accent);">Introducción a React</h2>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-8">Qué es un framework, por qué React, el Virtual DOM y cómo crear tu primer proyecto con Vite.</p>
+                </div>
+                <div class="flex items-center gap-2 font-bold text-sm" style="color: var(--accent);">
+                    Iniciar Lección <span>&rarr;</span>
+                </div>
+            </a>
+
+            <!-- 2. Componentes -->
+            <a href="componentes.html" class="content-card flex flex-col justify-between">
+                <div>
+                    <span class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-6" style="background: var(--accent-glow); color: var(--accent);">Paso 02</span>
+                    <h2 class="text-2xl font-bold mb-4" style="color: var(--accent);">Codificación por Componentes</h2>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-8">Anatomía de un componente, JSX, props, estado con useState y eventos. Con diagrama anotado línea por línea.</p>
+                </div>
+                <div class="flex items-center gap-2 font-bold text-sm" style="color: var(--accent);">
+                    Iniciar Lección <span>&rarr;</span>
+                </div>
+            </a>
+
+            <!-- 3. Local Storage -->
+            <a href="local-storage.html" class="content-card flex flex-col justify-between">
+                <div>
+                    <span class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-6" style="background: var(--accent-glow); color: var(--accent);">Paso 03</span>
+                    <h2 class="text-2xl font-bold mb-4" style="color: var(--accent);">Local Storage</h2>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-8">Persiste datos en el navegador, serializa con JSON y sincroniza el estado con useEffect.</p>
+                </div>
+                <div class="flex items-center gap-2 font-bold text-sm" style="color: var(--accent);">
+                    Iniciar Lección <span>&rarr;</span>
+                </div>
+            </a>
+
+            <!-- 4. API / Fetch -->
+            <a href="api-fetch.html" class="content-card flex flex-col justify-between">
+                <div>
+                    <span class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-6" style="background: var(--accent-glow); color: var(--accent);">Paso 04</span>
+                    <h2 class="text-2xl font-bold mb-4" style="color: var(--accent);">APIs, JSON y Async</h2>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-8">Consume datos externos: JSON, promesas, async/await, fetch y axios dentro de componentes React.</p>
+                </div>
+                <div class="flex items-center gap-2 font-bold text-sm" style="color: var(--accent);">
+                    Iniciar Lección <span>&rarr;</span>
+                </div>
+            </a>
+
+            <!-- 5. IA en React -->
+            <a href="ia-react.html" class="content-card flex flex-col justify-between">
+                <div>
+                    <span class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-6" style="background: var(--accent-glow); color: var(--accent);">Paso 05</span>
+                    <h2 class="text-2xl font-bold mb-4" style="color: var(--accent);">IA en el Desarrollo</h2>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-8">Acelera con GitHub Copilot y vigila la calidad del código con SonarQube en proyectos React.</p>
+                </div>
+                <div class="flex items-center gap-2 font-bold text-sm" style="color: var(--accent);">
+                    Iniciar Lección <span>&rarr;</span>
+                </div>
+            </a>
+
+            <!-- 6. Seguridad SPA -->
+            <a href="seguridad-spa.html" class="content-card flex flex-col justify-between">
+                <div>
+                    <span class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-6" style="background: var(--accent-glow); color: var(--accent);">Paso 06</span>
+                    <h2 class="text-2xl font-bold mb-4" style="color: var(--accent);">Desarrollo Seguro en SPA</h2>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-8">Protege tu aplicación: XSS, manejo de tokens, variables de entorno y validación de datos.</p>
+                </div>
+                <div class="flex items-center gap-2 font-bold text-sm" style="color: var(--accent);">
+                    Iniciar Lección <span>&rarr;</span>
+                </div>
+            </a>
+        </main>
+    </div>
+
+    <script>
+        const toggleBtn = document.getElementById('themeToggle');
+        const root = document.documentElement;
+
+        if (localStorage.getItem('theme') === 'light') {
+            root.setAttribute('data-theme', 'light');
+            toggleBtn.innerHTML = '🌙 Modo Oscuro';
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            if (root.getAttribute('data-theme') === 'light') {
+                root.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'dark');
+                toggleBtn.innerHTML = '☀️ Modo Claro';
+            } else {
+                root.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                toggleBtn.innerHTML = '🌙 Modo Oscuro';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA en el Desarrollo React | Módulo 5</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #0b1120; --card-bg: rgba(15, 23, 42, 0.7); --accent: #61dafb; --accent-glow: rgba(97, 218, 251, 0.25); --text-main: #f8fafc; --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        [data-theme="light"] { --bg-color: #f1f5f9; --card-bg: rgba(255, 255, 255, 0.85); --text-main: #0f172a; --accent: #0891b2; --accent-glow: rgba(8, 145, 178, 0.2); }
+        [data-theme="light"] h1 { background-image: linear-gradient(to right, #1e293b, var(--accent)) !important; }
+        [data-theme="light"] .text-slate-400, [data-theme="light"] .text-slate-300 { color: #475569 !important; }
+        [data-theme="light"] .glass-panel { border-color: rgba(0,0,0,0.1) !important; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); min-height: 100vh; font-size: 1.25rem; }
+        .glass-panel { background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 2.5rem; transition: var(--transition); }
+        .glass-panel:hover { border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow); }
+        .code-snippet { background: #010409; border-radius: 1.5rem; padding: 2rem; border: 1px solid rgba(255, 255, 255, 0.1); font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; line-height: 1.8; overflow-x: auto; }
+        #themeToggle { position: fixed; bottom: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-main); padding: 1rem 2rem; border-radius: 100px; cursor: pointer; font-weight: 600; }
+        .keyword { color: #f472b6; }
+        .string { color: #fbbf24; }
+        .number { color: #818cf8; }
+        .comment { color: #64748b; font-style: italic; }
+        .tag { color: #61dafb; }
+        .attr { color: #a5d6ff; }
+        .func { color: #d2a8ff; }
+        .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(97, 218, 251, 0.3), transparent); margin: 6rem 0; }
+        .tech-tag { background: rgba(97, 218, 251, 0.1); color: var(--accent); padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; display: inline-block; margin-bottom: 0.75rem; }
+        .tecnicismo { border-bottom: 2px dashed var(--accent); cursor: help; position: relative; font-weight: 600; color: var(--accent); }
+        .tecnicismo::after { content: attr(data-tooltip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #0f172a; color: #f8fafc; padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.8rem; font-weight: 400; width: 280px; white-space: normal; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; border: 1px solid rgba(97,218,251,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.4); pointer-events: none; font-family: 'Outfit', sans-serif; }
+        .tecnicismo:hover::after { opacity: 1; visibility: visible; }
+        .cmd { background: #010409; border-radius: 1rem; padding: 1rem 1.5rem; border: 1px solid rgba(97,218,251,0.2); font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; color: #e2e8f0; display: flex; align-items: center; gap: 0.75rem; }
+        .cmd::before { content: '$'; color: var(--accent); font-weight: bold; }
+    </style>
+</head>
+<body class="p-6 md:p-12 pb-32">
+    <button id="themeToggle">☀️ Modo Claro</button>
+
+    <div class="max-w-6xl mx-auto">
+        <header class="mb-24 text-center">
+            <nav class="mb-12 flex justify-center gap-6 text-sm font-semibold uppercase tracking-widest flex-wrap">
+                <a href="../index.html" class="hover:opacity-80 transition-opacity font-bold" style="color: var(--accent);">← Hub Principal</a>
+                <span class="text-slate-700">|</span>
+                <a href="index.html" class="hover:opacity-80 transition-opacity" style="color: var(--accent);">Módulo 05</a>
+                <span class="text-slate-700">|</span>
+                <span class="text-slate-500">IA en Desarrollo</span>
+            </nav>
+            <h1 class="text-5xl md:text-7xl font-black bg-gradient-to-r from-white to-cyan-300 bg-clip-text text-transparent mb-8 leading-tight">
+                IA en el Desarrollo
+            </h1>
+            <p class="text-slate-400 text-2xl font-light max-w-3xl mx-auto leading-relaxed">
+                Dos aliados del desarrollador moderno: GitHub Copilot escribe código contigo; SonarQube vigila que ese código sea sano.
+            </p>
+        </header>
+
+        <!-- SECTION 1: COPILOT -->
+        <section class="mb-32">
+            <h2 class="text-3xl font-bold mb-8 border-b pb-4 inline-block" style="color: var(--accent); border-color: var(--accent-glow);">1. GitHub Copilot</h2>
+            <p class="text-slate-300 text-xl leading-relaxed mt-8 mb-10">
+                <span class="tecnicismo" data-tooltip="GitHub Copilot: asistente de IA integrado en el editor. Sugiere código mientras escribes, basándose en el contexto del archivo y tus comentarios.">Copilot</span> es un "autocompletado inteligente": sugiere líneas o funciones completas mientras programas. En React acelera tareas repetitivas como crear componentes o llamadas a API.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <div class="glass-panel p-6 text-center">
+                    <div class="text-3xl mb-2">⌨️</div>
+                    <p class="font-bold mb-1" style="color: var(--accent);">Autocompleta</p>
+                    <p class="text-slate-400 text-sm">Sugiere el resto de la línea o bloque. Aceptas con <code class="font-mono">Tab</code>.</p>
+                </div>
+                <div class="glass-panel p-6 text-center">
+                    <div class="text-3xl mb-2">💬</div>
+                    <p class="font-bold mb-1" style="color: var(--accent);">Chat</p>
+                    <p class="text-slate-400 text-sm">Le preguntas en lenguaje natural: "crea un hook para fetch".</p>
+                </div>
+                <div class="glass-panel p-6 text-center">
+                    <div class="text-3xl mb-2">🔧</div>
+                    <p class="font-bold mb-1" style="color: var(--accent);">Refactoriza</p>
+                    <p class="text-slate-400 text-sm">Explica, traduce y mejora código que seleccionas.</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold mb-6" style="color: var(--accent);">Instalación en VS Code</h3>
+            <div class="space-y-4 mb-10">
+                <div class="glass-panel p-6">
+                    <p class="text-slate-300 mb-2"><strong>1.</strong> Abre la pestaña <strong>Extensiones</strong> (<code class="font-mono text-cyan-300">Ctrl+Shift+X</code>) y busca "GitHub Copilot". Instálala.</p>
+                </div>
+                <div class="glass-panel p-6">
+                    <p class="text-slate-300 mb-2"><strong>2.</strong> Inicia sesión con tu cuenta de GitHub (gratis para estudiantes con <span class="tecnicismo" data-tooltip="GitHub Student Pack: beneficios gratuitos para estudiantes verificados, incluye Copilot sin costo.">GitHub Student Pack</span>).</p>
+                </div>
+                <div class="glass-panel p-6">
+                    <p class="text-slate-300 mb-2"><strong>3.</strong> Empieza a escribir. Las sugerencias aparecen en gris: <code class="font-mono text-cyan-300">Tab</code> acepta, <code class="font-mono text-cyan-300">Esc</code> rechaza.</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold mb-6" style="color: var(--accent);">Cómo guiarlo: comentarios = instrucciones</h3>
+            <p class="text-slate-300 text-lg leading-relaxed mb-6">Copilot lee tus comentarios. Un comentario claro produce mejor sugerencia:</p>
+            <div class="code-snippet mb-8">
+                <span class="comment">// Componente que muestra una tarjeta de producto</span><br>
+                <span class="comment">// recibe props: nombre, precio, imagen</span><br>
+                <span class="comment">// con un botón "Agregar al carrito"</span><br>
+                <span class="keyword">function</span> <span class="func">ProductoCard</span>(<span style="color:#94a3b8">/* Copilot completa desde aquí ↓ */</span>) {
+            </div>
+            <div class="glass-panel p-8 border-l-4" style="border-color: #f59e0b;">
+                <p class="text-amber-400 font-bold mb-2">⚠ Tú eres el responsable, no la IA</p>
+                <p class="text-slate-400 text-base leading-relaxed">Copilot se equivoca: inventa funciones, sugiere código inseguro o con bugs. <strong>Siempre lee y entiende lo que aceptas.</strong> Nunca pegues código que no comprendes. La IA acelera, pero no reemplaza tu criterio.</p>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECTION 2: SONARQUBE -->
+        <section class="mb-32">
+            <h2 class="text-3xl font-bold mb-8 border-b pb-4 inline-block" style="color: var(--accent); border-color: var(--accent-glow);">2. SonarQube</h2>
+            <p class="text-slate-300 text-xl leading-relaxed mb-10">
+                <span class="tecnicismo" data-tooltip="SonarQube: plataforma de análisis estático que revisa tu código sin ejecutarlo, buscando bugs, vulnerabilidades y malas prácticas.">SonarQube</span> es un "inspector de calidad" automático. Hace <span class="tecnicismo" data-tooltip="Análisis estático: revisar el código leyéndolo, sin ejecutarlo, para detectar problemas antes de que lleguen a producción.">análisis estático</span>: lee tu código y reporta problemas antes de que lleguen a los usuarios.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                <div class="glass-panel p-6">
+                    <div class="tech-tag" style="background:rgba(239,68,68,0.1);color:#f87171;">🐞 Bugs</div>
+                    <p class="text-slate-400 text-sm">Errores lógicos: variables sin usar, comparaciones que siempre dan falso.</p>
+                </div>
+                <div class="glass-panel p-6">
+                    <div class="tech-tag" style="background:rgba(239,68,68,0.1);color:#f87171;">🔓 Vulnerabilidades</div>
+                    <p class="text-slate-400 text-sm">Riesgos de seguridad: XSS, claves expuestas, inyección de código.</p>
+                </div>
+                <div class="glass-panel p-6">
+                    <div class="tech-tag">🧹 Code Smells</div>
+                    <p class="text-slate-400 text-sm">Malas prácticas que no rompen, pero hacen el código difícil de mantener.</p>
+                </div>
+                <div class="glass-panel p-6">
+                    <div class="tech-tag">📊 Cobertura</div>
+                    <p class="text-slate-400 text-sm">Mide cuánto de tu código está cubierto por pruebas (tests).</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold mb-6" style="color: var(--accent);">La forma fácil: SonarLint en VS Code</h3>
+            <p class="text-slate-300 text-lg leading-relaxed mb-6">Para empezar, no necesitas instalar el servidor completo. <span class="tecnicismo" data-tooltip="SonarLint: extensión de editor que aplica las reglas de SonarQube en tiempo real, mientras escribes.">SonarLint</span> es la extensión que analiza mientras escribes:</p>
+            <div class="space-y-4 mb-10">
+                <div class="glass-panel p-6">
+                    <p class="text-slate-300"><strong>1.</strong> En VS Code, Extensiones (<code class="font-mono text-cyan-300">Ctrl+Shift+X</code>), busca "SonarLint" e instala.</p>
+                </div>
+                <div class="glass-panel p-6">
+                    <p class="text-slate-300"><strong>2.</strong> Subraya los problemas directamente en el editor, como un corrector ortográfico para tu código.</p>
+                </div>
+                <div class="glass-panel p-6">
+                    <p class="text-slate-300"><strong>3.</strong> Pasa el cursor sobre el subrayado para ver qué está mal y cómo arreglarlo.</p>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold mb-6" style="color: var(--accent);">Análisis del proyecto completo (avanzado)</h3>
+            <p class="text-slate-300 text-lg leading-relaxed mb-6">Para escanear todo un proyecto contra un servidor SonarQube se usa el <span class="tecnicismo" data-tooltip="sonar-scanner: herramienta de línea de comandos que envía tu código al servidor SonarQube para analizarlo completo.">sonar-scanner</span>:</p>
+            <div class="cmd mb-3">sonar-scanner -Dsonar.projectKey=mi-app</div>
+            <p class="text-slate-500 text-sm mb-8"><strong>sonar-scanner</strong>: ejecuta el análisis. <strong>-Dsonar.projectKey</strong>: identifica tu proyecto en el servidor. El resultado aparece en un panel web con el reporte de calidad.</p>
+
+            <div class="glass-panel p-8 border-l-4" style="border-color: var(--accent);">
+                <p class="font-bold mb-2" style="color: var(--accent);">Copilot + SonarQube: el flujo ideal</p>
+                <p class="text-slate-400 text-base leading-relaxed">Copilot te ayuda a <strong>escribir rápido</strong>; SonarQube verifica que lo escrito sea <strong>seguro y limpio</strong>. Uno acelera, el otro protege. Juntos = código profesional.</p>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECTION 3: BUENAS PRÁCTICAS -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 border-b pb-4 inline-block" style="color: var(--accent); border-color: var(--accent-glow);">3. Usar IA con Criterio</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass-panel p-8 border-l-4" style="border-color:#34d399;">
+                    <p class="font-bold mb-4" style="color:#34d399;">✓ Buenas prácticas</p>
+                    <ul class="text-slate-300 text-base space-y-2 leading-relaxed">
+                        <li>• Lee y entiende cada sugerencia antes de aceptar.</li>
+                        <li>• Pídele que <strong>explique</strong> el código que genera.</li>
+                        <li>• Úsalo para tareas repetitivas y boilerplate.</li>
+                        <li>• Verifica con SonarLint lo que la IA escribió.</li>
+                        <li>• Escribe comentarios claros para guiarlo mejor.</li>
+                    </ul>
+                </div>
+                <div class="glass-panel p-8 border-l-4" style="border-color:#f87171;">
+                    <p class="font-bold mb-4" style="color:#f87171;">✗ Errores comunes</p>
+                    <ul class="text-slate-300 text-base space-y-2 leading-relaxed">
+                        <li>• Pegar código sin entenderlo.</li>
+                        <li>• Confiar ciegamente: la IA inventa funciones.</li>
+                        <li>• Aceptar credenciales o claves que sugiera.</li>
+                        <li>• Dejar de aprender los fundamentos.</li>
+                        <li>• Ignorar las alertas de seguridad.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="glass-panel p-8 border-l-4 mt-8" style="border-color: var(--accent);">
+                <p class="font-bold mb-2" style="color: var(--accent);">Siguiente paso</p>
+                <p class="text-slate-400 text-base leading-relaxed">La IA puede sugerir código inseguro. Por eso cerramos el módulo con <a href="seguridad-spa.html" class="underline" style="color: var(--accent);">Desarrollo Seguro en SPA</a>: las amenazas reales y cómo protegerte.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const themeBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        themeBtn.addEventListener('click', () => {
+            const isLight = html.getAttribute('data-theme') === 'light';
+            localStorage.setItem('theme', isLight ? 'dark' : 'light');
+            themeBtn.innerHTML = isLight ? '☀️ Modo Claro' : '🌙 Modo Oscuro';
+            if (isLight) html.removeAttribute('data-theme'); else html.setAttribute('data-theme', 'light');
+        });
+    </script>
+</body>
+</html>

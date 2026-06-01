@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Storage en React | Módulo 5</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #0b1120; --card-bg: rgba(15, 23, 42, 0.7); --accent: #61dafb; --accent-glow: rgba(97, 218, 251, 0.25); --text-main: #f8fafc; --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        [data-theme="light"] { --bg-color: #f1f5f9; --card-bg: rgba(255, 255, 255, 0.85); --text-main: #0f172a; --accent: #0891b2; --accent-glow: rgba(8, 145, 178, 0.2); }
+        [data-theme="light"] h1 { background-image: linear-gradient(to right, #1e293b, var(--accent)) !important; }
+        [data-theme="light"] .text-slate-400, [data-theme="light"] .text-slate-300 { color: #475569 !important; }
+        [data-theme="light"] .glass-panel { border-color: rgba(0,0,0,0.1) !important; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); min-height: 100vh; font-size: 1.25rem; }
+        .glass-panel { background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 2.5rem; transition: var(--transition); }
+        .glass-panel:hover { border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow); }
+        .code-snippet { background: #010409; border-radius: 1.5rem; padding: 2rem; border: 1px solid rgba(255, 255, 255, 0.1); font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; line-height: 1.8; overflow-x: auto; }
+        #themeToggle { position: fixed; bottom: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-main); padding: 1rem 2rem; border-radius: 100px; cursor: pointer; font-weight: 600; }
+        .keyword { color: #f472b6; }
+        .string { color: #fbbf24; }
+        .number { color: #818cf8; }
+        .comment { color: #64748b; font-style: italic; }
+        .tag { color: #61dafb; }
+        .attr { color: #a5d6ff; }
+        .func { color: #d2a8ff; }
+        .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(97, 218, 251, 0.3), transparent); margin: 6rem 0; }
+        .tech-tag { background: rgba(97, 218, 251, 0.1); color: var(--accent); padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; display: inline-block; margin-bottom: 0.75rem; }
+        .tecnicismo { border-bottom: 2px dashed var(--accent); cursor: help; position: relative; font-weight: 600; color: var(--accent); }
+        .tecnicismo::after { content: attr(data-tooltip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #0f172a; color: #f8fafc; padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.8rem; font-weight: 400; width: 280px; white-space: normal; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; border: 1px solid rgba(97,218,251,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.4); pointer-events: none; font-family: 'Outfit', sans-serif; }
+        .tecnicismo:hover::after { opacity: 1; visibility: visible; }
+        .api-row { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        .api-method { background: #010409; border-radius: 1rem; padding: 1.25rem 1.5rem; border: 1px solid rgba(97,218,251,0.15); }
+    </style>
+</head>
+<body class="p-6 md:p-12 pb-32">
+    <button id="themeToggle">☀️ Modo Claro</button>
+
+    <div class="max-w-6xl mx-auto">
+        <header class="mb-24 text-center">
+            <nav class="mb-12 flex justify-center gap-6 text-sm font-semibold uppercase tracking-widest flex-wrap">
+                <a href="../index.html" class="hover:opacity-80 transition-opacity font-bold" style="color: var(--accent);">← Hub Principal</a>
+                <span class="text-slate-700">|</span>
+                <a href="index.html" class="hover:opacity-80 transition-opacity" style="color: var(--accent);">Módulo 05</a>
+                <span class="text-slate-700">|</span>
+                <span class="text-slate-500">Local Storage</span>
+            </nav>
+            <h1 class="text-5xl md:text-7xl font-black bg-gradient-to-r from-white to-cyan-300 bg-clip-text text-transparent mb-8 leading-tight">
+                Local Storage
+            </h1>
+            <p class="text-slate-400 text-2xl font-light max-w-3xl mx-auto leading-relaxed">
+                El estado de React vive en memoria: al recargar, desaparece. Local Storage guarda datos en el navegador para que sobrevivan.
+            </p>
+        </header>
+
+        <!-- SECTION 1: QUÉ ES -->
+        <section class="mb-32">
+            <h2 class="text-3xl font-bold mb-8 border-b pb-4 inline-block" style="color: var(--accent); border-color: var(--accent-glow);">1. ¿Qué es Local Storage?</h2>
+            <p class="text-slate-300 text-xl leading-relaxed mt-8 mb-6">
+                <span class="tecnicismo" data-tooltip="localStorage: almacén de pares clave-valor que el navegador guarda en el disco del usuario. Persiste aunque cierres la pestaña o el navegador.">localStorage</span> es una pequeña base de datos que vive en el navegador del usuario. Guarda pares <strong>clave → valor</strong>, como un diccionario que no se borra al recargar.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <div class="glass-panel p-6 text-center">
+                    <div class="text-4xl mb-3">💾</div>
+                    <p class="font-bold mb-2" style="color: var(--accent);">Persiste</p>
+                    <p class="text-slate-400 text-sm">Sobrevive a recargas y a cerrar el navegador.</p>
+                </div>
+                <div class="glass-panel p-6 text-center">
+                    <div class="text-4xl mb-3">🔤</div>
+                    <p class="font-bold mb-2" style="color: var(--accent);">Solo texto</p>
+                    <p class="text-slate-400 text-sm">Únicamente guarda strings. Por eso usamos JSON.</p>
+                </div>
+                <div class="glass-panel p-6 text-center">
+                    <div class="text-4xl mb-3">📦</div>
+                    <p class="font-bold mb-2" style="color: var(--accent);">~5 MB</p>
+                    <p class="text-slate-400 text-sm">Límite por dominio. Ideal para preferencias, no para archivos.</p>
+                </div>
+            </div>
+            <div class="glass-panel p-8 border-l-4" style="border-color: #ef4444;">
+                <p class="font-bold mb-2" style="color:#f87171;">⚠ Nunca guardes datos sensibles</p>
+                <p class="text-slate-400 text-base leading-relaxed">localStorage es accesible por cualquier JavaScript de la página. <strong>No guardes contraseñas, tokens de sesión ni datos privados.</strong> Lo veremos a fondo en <a href="seguridad-spa.html" class="underline" style="color:var(--accent);">Desarrollo Seguro</a>.</p>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECTION 2: API -->
+        <section class="mb-32">
+            <h2 class="text-3xl font-bold mb-8 border-b pb-4 inline-block" style="color: var(--accent); border-color: var(--accent-glow);">2. Los 4 Métodos</h2>
+            <p class="text-slate-300 text-xl leading-relaxed mb-10">
+                Toda la API de localStorage son 4 funciones. Pruébalas en la consola del navegador (F12):
+            </p>
+            <div class="api-row mb-8">
+                <div class="api-method">
+                    <p class="font-mono text-base mb-2" style="color: var(--accent);">localStorage.setItem(clave, valor)</p>
+                    <p class="text-slate-400 text-sm">Guarda un valor. <strong>Ejemplo:</strong> <code class="font-mono text-cyan-300">localStorage.setItem("tema", "oscuro")</code></p>
+                </div>
+                <div class="api-method">
+                    <p class="font-mono text-base mb-2" style="color: var(--accent);">localStorage.getItem(clave)</p>
+                    <p class="text-slate-400 text-sm">Lee un valor. Devuelve <code class="font-mono">null</code> si no existe. <strong>Ejemplo:</strong> <code class="font-mono text-cyan-300">localStorage.getItem("tema")</code> → <code class="font-mono">"oscuro"</code></p>
+                </div>
+                <div class="api-method">
+                    <p class="font-mono text-base mb-2" style="color: var(--accent);">localStorage.removeItem(clave)</p>
+                    <p class="text-slate-400 text-sm">Borra un valor concreto. <strong>Ejemplo:</strong> <code class="font-mono text-cyan-300">localStorage.removeItem("tema")</code></p>
+                </div>
+                <div class="api-method">
+                    <p class="font-mono text-base mb-2" style="color: var(--accent);">localStorage.clear()</p>
+                    <p class="text-slate-400 text-sm">Borra <strong>todo</strong> el almacén de ese dominio. Úsalo con cuidado.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECTION 3: JSON -->
+        <section class="mb-32">
+            <h2 class="text-3xl font-bold mb-8 border-b pb-4 inline-block" style="color: var(--accent); border-color: var(--accent-glow);">3. Guardar Objetos: JSON</h2>
+            <p class="text-slate-300 text-xl leading-relaxed mb-10">
+                localStorage <strong>solo guarda texto</strong>. Si intentas guardar un objeto, se convierte en el inútil <code class="font-mono text-cyan-300">"[object Object]"</code>. La solución: <span class="tecnicismo" data-tooltip="JSON (JavaScript Object Notation): formato de texto para representar objetos y arreglos. Es el lenguaje universal para intercambiar datos.">JSON</span>.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                <div class="glass-panel p-8">
+                    <div class="tech-tag">Guardar: objeto → texto</div>
+                    <p class="text-slate-300 text-base leading-relaxed mb-4"><code class="font-mono text-cyan-300">JSON.stringify</code> convierte un objeto en texto.</p>
+                    <div class="code-snippet text-sm">
+                        <span class="keyword">const</span> usuario = { nombre: <span class="string">"Ana"</span>, edad: <span class="number">22</span> };<br><br>
+                        localStorage.<span class="func">setItem</span>(<br>
+                        &nbsp;&nbsp;<span class="string">"usuario"</span>,<br>
+                        &nbsp;&nbsp;<span style="color:#d2a8ff">JSON</span>.<span class="func">stringify</span>(usuario) <span class="comment">// → texto</span><br>
+                        );
+                    </div>
+                </div>
+                <div class="glass-panel p-8">
+                    <div class="tech-tag">Leer: texto → objeto</div>
+                    <p class="text-slate-300 text-base leading-relaxed mb-4"><code class="font-mono text-cyan-300">JSON.parse</code> convierte el texto de vuelta en objeto.</p>
+                    <div class="code-snippet text-sm">
+                        <span class="keyword">const</span> texto = localStorage.<span class="func">getItem</span>(<span class="string">"usuario"</span>);<br><br>
+                        <span class="keyword">const</span> usuario = <span style="color:#d2a8ff">JSON</span>.<span class="func">parse</span>(texto);<br><br>
+                        console.<span class="func">log</span>(usuario.nombre); <span class="comment">// "Ana"</span>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-panel p-8 border-l-4" style="border-color: #f59e0b;">
+                <p class="text-amber-400 font-bold mb-2">Regla de oro</p>
+                <p class="text-slate-400 text-base leading-relaxed"><strong>stringify al guardar, parse al leer.</strong> Siempre en pareja. Si lees algo que no es JSON válido, <code class="font-mono">JSON.parse</code> lanza error: envuélvelo en <code class="font-mono">try/catch</code> en código real.</p>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECTION 4: REACT + useEffect -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 border-b pb-4 inline-block" style="color: var(--accent); border-color: var(--accent-glow);">4. Local Storage en React</h2>
+            <p class="text-slate-300 text-xl leading-relaxed mb-10">
+                En React combinamos localStorage con dos Hooks: <code class="font-mono text-cyan-300">useState</code> (para el valor inicial) y <span class="tecnicismo" data-tooltip="useEffect: Hook que ejecuta código en respuesta a cambios. Aquí lo usamos para guardar en localStorage cada vez que el estado cambia.">useEffect</span> (para guardar cada vez que cambia).
+            </p>
+            <div class="glass-panel p-10 mb-8">
+                <p class="text-center text-slate-400 text-sm uppercase tracking-widest mb-6">Contador que recuerda su valor al recargar</p>
+                <div class="code-snippet">
+                    <span class="keyword">import</span> { useState, useEffect } <span class="keyword">from</span> <span class="string">"react"</span>;<br><br>
+                    <span class="keyword">function</span> <span class="func">Contador</span>() {<br>
+                    &nbsp;&nbsp;<span class="comment">// 1. Valor inicial: lee de localStorage (o 0 si no hay nada)</span><br>
+                    &nbsp;&nbsp;<span class="keyword">const</span> [conteo, setConteo] = <span class="func">useState</span>(() => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">const</span> guardado = localStorage.<span class="func">getItem</span>(<span class="string">"conteo"</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> guardado ? <span style="color:#d2a8ff">JSON</span>.<span class="func">parse</span>(guardado) : <span class="number">0</span>;<br>
+                    &nbsp;&nbsp;});<br><br>
+                    &nbsp;&nbsp;<span class="comment">// 2. Cada vez que 'conteo' cambia, lo guardamos</span><br>
+                    &nbsp;&nbsp;<span class="func">useEffect</span>(() => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;localStorage.<span class="func">setItem</span>(<span class="string">"conteo"</span>, <span style="color:#d2a8ff">JSON</span>.<span class="func">stringify</span>(conteo));<br>
+                    &nbsp;&nbsp;}, [conteo]); <span class="comment">// ← se ejecuta solo si 'conteo' cambió</span><br><br>
+                    &nbsp;&nbsp;<span class="keyword">return</span> (<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">button</span> <span class="attr">onClick</span>={() => <span class="func">setConteo</span>(conteo + <span class="number">1</span>)}&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clics: {conteo}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span class="tag">button</span>&gt;<br>
+                    &nbsp;&nbsp;);<br>
+                    }
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="glass-panel p-6">
+                    <p class="font-bold mb-2" style="color: var(--accent);">El array de dependencias <code class="font-mono">[conteo]</code></p>
+                    <p class="text-slate-400 text-sm leading-relaxed">Le dice a useEffect "ejecútate solo cuando <code class="font-mono">conteo</code> cambie". Si pones <code class="font-mono">[]</code>, corre una sola vez; si lo omites, corre en cada render.</p>
+                </div>
+                <div class="glass-panel p-6">
+                    <p class="font-bold mb-2" style="color: var(--accent);">El valor inicial como función</p>
+                    <p class="text-slate-400 text-sm leading-relaxed">Pasar una función a <code class="font-mono">useState(() => ...)</code> hace que la lectura de localStorage ocurra <strong>solo una vez</strong>, no en cada render. Es más eficiente.</p>
+                </div>
+            </div>
+            <div class="glass-panel p-8 border-l-4" style="border-color: var(--accent);">
+                <p class="font-bold mb-2" style="color: var(--accent);">Siguiente paso</p>
+                <p class="text-slate-400 text-base leading-relaxed">Ya guardas datos localmente. Pero las apps reales traen datos de un servidor. En la siguiente lección consumimos <a href="api-fetch.html" class="underline" style="color: var(--accent);">APIs externas</a>.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const themeBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        themeBtn.addEventListener('click', () => {
+            const isLight = html.getAttribute('data-theme') === 'light';
+            localStorage.setItem('theme', isLight ? 'dark' : 'light');
+            themeBtn.innerHTML = isLight ? '☀️ Modo Claro' : '🌙 Modo Oscuro';
+            if (isLight) html.removeAttribute('data-theme'); else html.setAttribute('data-theme', 'light');
+        });
+    </script>
+</body>
+</html>

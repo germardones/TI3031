@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Componentes en React | Módulo 5</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #0b1120; --card-bg: rgba(15, 23, 42, 0.7); --accent: #61dafb; --accent-glow: rgba(97, 218, 251, 0.25); --text-main: #f8fafc; --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        [data-theme="light"] { --bg-color: #f1f5f9; --card-bg: rgba(255, 255, 255, 0.85); --text-main: #0f172a; --accent: #0891b2; --accent-glow: rgba(8, 145, 178, 0.2); }
+        [data-theme="light"] h1 { background-image: linear-gradient(to right, #1e293b, var(--accent)) !important; }
+        [data-theme="light"] .text-slate-400, [data-theme="light"] .text-slate-300 { color: #475569 !important; }
+        [data-theme="light"] .glass-panel { border-color: rgba(0,0,0,0.1) !important; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); min-height: 100vh; font-size: 1.25rem; }
+        .glass-panel { background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 2.5rem; transition: var(--transition); }
+        .glass-panel:hover { border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow); }
+        .code-snippet { background: #010409; border-radius: 1.5rem; padding: 2rem; border: 1px solid rgba(255, 255, 255, 0.1); font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; line-height: 1.8; overflow-x: auto; }
+        #themeToggle { position: fixed; bottom: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-main); padding: 1rem 2rem; border-radius: 100px; cursor: pointer; font-weight: 600; }
+        .keyword { color: #f472b6; }
+        .string { color: #fbbf24; }
+        .number { color: #818cf8; }
+        .comment { color: #64748b; font-style: italic; }
+        .tag { color: #61dafb; }
+        .attr { color: #a5d6ff; }
+        .func { color: #d2a8ff; }
+        .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(97, 218, 251, 0.3), transparent); margin: 6rem 0; }
+        .tech-tag { background: rgba(97, 218, 251, 0.1); color: var(--accent); padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; display: inline-block; margin-bottom: 0.75rem; }
+        .tecnicismo { border-bottom: 2px dashed var(--accent); cursor: help; position: relative; font-weight: 600; color: var(--accent); }
+        .tecnicismo::after { content: attr(data-tooltip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #0f172a; color: #f8fafc; padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.8rem; font-weight: 400; width: 280px; white-space: normal; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; border: 1px solid rgba(97,218,251,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.4); pointer-events: none; font-family: 'Outfit', sans-serif; }
+        .tecnicismo:hover::after { opacity: 1; visibility: visible; }
+
+        /* DIAGRAMA ANOTADO DE COMPONENTE */
+        .anatomy { display: grid; grid-template-columns: 1fr; gap: 0; background: #010409; border-radius: 1.5rem; border: 1px solid rgba(97,218,251,0.25); overflow: hidden; }
+        .anatomy-row { display: grid; grid-template-columns: 2.5rem 1fr; align-items: stretch; border-bottom: 1px dashed rgba(148,163,184,0.12); }
+        .anatomy-row:last-child { border-bottom: none; }
+        .anatomy-row:hover { background: rgba(97,218,251,0.06); }
+        .ln { background: rgba(97,218,251,0.08); color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+        .anatomy-code { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 1rem; padding: 0.55rem 1rem; align-items: center; }
+        .anatomy-code code { font-family: 'JetBrains Mono', monospace; font-size: 0.92rem; white-space: pre; overflow-x: auto; }
+        .label { font-family: 'Outfit', sans-serif; font-size: 0.82rem; color: #94a3b8; line-height: 1.4; border-left: 3px solid var(--accent); padding-left: 0.75rem; }
+        .label b { color: var(--accent); font-weight: 700; }
+        @media (max-width: 768px) { .anatomy-code { grid-template-columns: 1fr; gap: 0.5rem; } }
+    </style>
+</head>
+<body class="p-6 md:p-12 pb-32">
+    <button id="themeToggle">☀️ Modo Claro</button>
+
+    <div class="max-w-6xl mx-auto">
+        <header class="mb-24 text-center">
+            <nav class="mb-12 flex justify-center gap-6 text-sm font-semibold uppercase tracking-widest flex-wrap">
+                <a href="../index.html" class="hover:opacity-80 transition-opacity font-bold" style="color: var(--accent);">← Hub Principal</a>
+                <span class="text-slate-700">|</span>
+                <a href="index.html" class="hover:opacity-80 transition-opacity" style="color: var(--accent);">Módulo 05</a>
+                <span class="text-slate-700">|</span>
+                <span class="text-slate-500">Componentes</span>
+            </nav>
+            <h1 class="text-5xl md:text-7xl font-black bg-gradient-to-r from-white to-cyan-300 bg-clip-text text-transparent mb-8 leading-tight">
+                Codificación por Componentes
+            </h1>
+            <p class="text-slate-400 text-2xl font-light max-w-3xl mx-auto leading-relaxed">
+                Un componente es una pieza de interfaz reutilizable. Construir en React es como armar con LEGO: piezas pequeñas que se combinan.
+            </p>
+        </header>
+
+        <!-- SECTION 1: QUÉ ES UN COMPONENTE -->
+        <section class="mb-32">
+            <h2 class="text-3xl font-bold mb-8 border-b pb-4 inline-block" style="color: var(--accent); border-color: var(--accent-glow);">1. La Idea: Piezas Reutilizables</h2>
+            <p class="text-slate-300 text-xl leading-relaxed mt-8 mb-6">
+                Un <span class="tecnicismo" data-tooltip="Componente: función de JavaScript que devuelve un trozo de interfaz (JSX). Se puede reutilizar y combinar con otros componentes.">componente</span> es simplemente una <strong>función que devuelve interfaz</strong>. Una página se arma combinando muchos componentes pequeños.
+            </p>
+            <div class="glass-panel p-10 mb-10">
+                <p class="text-center text-slate-400 text-sm uppercase tracking-widest mb-8">Una página = árbol de componentes</p>
+                <div class="border-2 border-dashed rounded-2xl p-4" style="border-color: var(--accent);">
+                    <p class="text-center text-xs font-bold mb-3" style="color: var(--accent);">&lt;App /&gt;</p>
+                    <div class="border rounded-xl p-3 mb-3" style="border-color: rgba(148,163,184,0.3);">
+                        <p class="text-center text-xs text-slate-400 mb-2">&lt;Header /&gt;</p>
+                        <div class="flex gap-3 justify-center">
+                            <span class="px-3 py-1 rounded-lg text-xs" style="background: var(--accent-glow); color: var(--accent);">&lt;Logo /&gt;</span>
+                            <span class="px-3 py-1 rounded-lg text-xs" style="background: var(--accent-glow); color: var(--accent);">&lt;NavMenu /&gt;</span>
+                        </div>
+                    </div>
+                    <div class="border rounded-xl p-3" style="border-color: rgba(148,163,184,0.3);">
+                        <p class="text-center text-xs text-slate-400 mb-2">&lt;ListaProductos /&gt;</p>
+                        <div class="flex gap-3 justify-center flex-wrap">
+                            <span class="px-3 py-1 rounded-lg text-xs" style="background: var(--accent-glow); color: var(--accent);">&lt;Card /&gt;</span>
+                            <span class="px-3 py-1 rounded-lg text-xs" style="background: var(--accent-glow); color: var(--accent);">&lt;Card /&gt;</span>
+                            <span class="px-3 py-1 rounded-lg text-xs" style="background: var(--accent-glow); color: var(--accent);">&lt;Card /&gt;</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-center text-slate-400 text-sm mt-6">Fíjate: <code class="font-mono text-cyan-300">&lt;Card /&gt;</code> se reutiliza 3 veces. Escribes la pieza <strong>una vez</strong>, la usas las veces que quieras.</p>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECTION 2: ANATOMÍA ANOTADA -->
+        <section class="mb-32">
+            <h2 class="text-3xl font-bold mb-8 border-b pb-4 inline-block" style="color: var(--accent); border-color: var(--accent-glow);">2. Anatomía de un Componente</h2>
+            <p class="text-slate-300 text-xl leading-relaxed mb-10">
+                Este es un componente <code class="font-mono text-cyan-300">Saludo</code> completo. <strong>Cada línea está explicada a su derecha.</strong> Es la "radiografía" que pediste: a qué hace referencia cada parte.
+            </p>
+
+            <div class="anatomy mb-8">
+                <div class="anatomy-row">
+                    <div class="ln">1</div>
+                    <div class="anatomy-code">
+                        <code><span class="keyword">import</span> { useState } <span class="keyword">from</span> <span class="string">"react"</span>;</code>
+                        <div class="label"><b>Importación.</b> Trae la herramienta <code style="font-family:monospace">useState</code> (un Hook) desde la librería React para poder usar estado.</div>
+                    </div>
+                </div>
+                <div class="anatomy-row">
+                    <div class="ln">2</div>
+                    <div class="anatomy-code">
+                        <code> </code>
+                        <div class="label">Línea en blanco: solo separa la importación del código (estilo, no obligatorio).</div>
+                    </div>
+                </div>
+                <div class="anatomy-row">
+                    <div class="ln">3</div>
+                    <div class="anatomy-code">
+                        <code><span class="keyword">function</span> <span class="func">Saludo</span>({ nombre }) {</code>
+                        <div class="label"><b>Definición del componente.</b> Es una función. Su nombre va en <b>Mayúscula</b> (regla de React). Recibe <code style="font-family:monospace">props</code> y aquí desestructura <code style="font-family:monospace">nombre</code>.</div>
+                    </div>
+                </div>
+                <div class="anatomy-row">
+                    <div class="ln">4</div>
+                    <div class="anatomy-code">
+                        <code>  <span class="keyword">const</span> [veces, setVeces] = <span class="func">useState</span>(<span class="number">0</span>);</code>
+                        <div class="label"><b>Estado.</b> <code style="font-family:monospace">veces</code> guarda el valor; <code style="font-family:monospace">setVeces</code> lo cambia. Empieza en <code style="font-family:monospace">0</code>. Al cambiar, React redibuja.</div>
+                    </div>
+                </div>
+                <div class="anatomy-row">
+                    <div class="ln">5</div>
+                    <div class="anatomy-code">
+                        <code> </code>
+                        <div class="label">Separación visual entre la lógica (arriba) y lo que se devuelve (abajo).</div>
+                    </div>
+                </div>
+                <div class="anatomy-row">
+                    <div class="ln">6</div>
+                    <div class="anatomy-code">
+                        <code>  <span class="keyword">return</span> (</code>
+                        <div class="label"><b>return.</b> Aquí empieza lo que el componente <b>muestra en pantalla</b>. El paréntesis permite escribir en varias líneas.</div>
+                    </div>
+                </div>
+                <div class="anatomy-row">
+                    <div class="ln">7</div>
+                    <div class="anatomy-code">
+                        <code>    &lt;<span class="tag">div</span> <span class="attr">className</span>=<span class="string">"tarjeta"</span>&gt;</code>
+                        <div class="label"><b>JSX.</b> Parece HTML pero es JavaScript. Se usa <code style="font-family:monospace">className</code> (no <code style="font-family:monospace">class</code>) porque <code style="font-family:monospace">class</code> es palabra reservada de JS.</div>
+                    </div>
+                </div>
+                <div class="anatomy-row">
+                    <div class="ln">8</div>
+                    <div class="anatomy-code">
+                        <code>      &lt;<span class="tag">h2</span>&gt;Hola, {nombre} 👋&lt;/<span class="tag">h2</span>&gt;</code>
+                        <div class="label"><b>Interpolación.</b> Las llaves <code style="font-family:monospace">{ }</code> insertan un valor de JavaScript dentro del JSX. Aquí muestra la prop <code style="font-family:monospace">nombre</code>.</div>
+                    </div>
+                </div>
+                <div class="anatomy-row">
+                    <div class="ln">9</div>
+                    <div class="anatomy-code">
+                        <code>      &lt;<span class="tag">p</span>&gt;Saludado {veces} veces&lt;/<span class="tag">p</span>&gt;</code>
+                        <div class="label">Muestra el valor actual del <b>estado</b>. Cada vez que <code style="font-family:monospace">veces</code> cambia, este texto se actualiza solo.</div>
+                    </div>
+                </div>
+                <div class="anatomy-row">
+                    <div class="ln">10</div>
+                    <div class="anatomy-code">
+                        <code>      &lt;<span class="tag">button</span> <span class="attr">onClick</span>={() => <span class="func">setVeces</span>(veces + <span class="number">1</span>)}&gt;</code>
+                        <div class="label"><b>Evento.</b> <code style="font-family:monospace">onClick</code> recibe una función. Al hacer clic llama a <code style="font-family:monospace">setVeces</code> y suma 1 al estado.</div>
+                    </div>
+                </div>
+                <div class="anatomy-row">
+                    <div class="ln">11</div>
+                    <div class="anatomy-code">
+                        <code>        Saludar otra vez</code>
+                        <div class="label">Texto interno del botón (lo que ve el usuario).</div>
+                    </div>
+                </div>
+                <div class="anatomy-row">
+                    <div class="ln">12</div>
+                    <div class="anatomy-code">
+                        <code>      &lt;/<span class="tag">button</span>&gt;</code>
+                        <div class="label"><b>Cierre del botón.</b> Toda etiqueta abierta debe cerrarse en JSX (es más estricto que HTML).</div>
+                    </div>
+                </div>
+                <div class="anatomy-row">
+                    <div class="ln">13</div>
+                    <div class="anatomy-code">
+                        <code>    &lt;/<span class="tag">div</span>&gt;</code>
+                        <div class="label">Cierre del contenedor. Un componente debe devolver <b>un solo elemento raíz</b>.</div>
+                    </div>
+                </div>
+                <div class="anatomy-row">
+                    <div class="ln">14</div>
+                    <div class="anatomy-code">
+                        <code>  );</code>
+                        <div class="label">Cierra el <code style="font-family:monospace">return (</code> de la línea 6.</div>
+                    </div>
+                </div>
+                <div class="anatomy-row">
+                    <div class="ln">15</div>
+                    <div class="anatomy-code">
+                        <code>}</code>
+                        <div class="label">Cierra la función del componente (línea 3).</div>
+                    </div>
+                </div>
+                <div class="anatomy-row">
+                    <div class="ln">16</div>
+                    <div class="anatomy-code">
+                        <code> </code>
+                        <div class="label">Separación antes de exportar.</div>
+                    </div>
+                </div>
+                <div class="anatomy-row">
+                    <div class="ln">17</div>
+                    <div class="anatomy-code">
+                        <code><span class="keyword">export default</span> Saludo;</code>
+                        <div class="label"><b>Exportación.</b> Hace que otros archivos puedan importar y usar <code style="font-family:monospace">&lt;Saludo /&gt;</code>.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel p-8 border-l-4" style="border-color: var(--accent);">
+                <p class="font-bold mb-2" style="color: var(--accent);">Resumen de las 4 partes clave</p>
+                <p class="text-slate-400 text-base leading-relaxed"><b>1) Imports</b> (lo que necesitas) → <b>2) Función con props</b> (datos que entran) → <b>3) Estado y lógica</b> (qué puede cambiar) → <b>4) return con JSX</b> (lo que se ve) → <b>export</b> (para reutilizarlo).</p>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECTION 3: PROPS -->
+        <section class="mb-32">
+            <h2 class="text-3xl font-bold mb-8 border-b pb-4 inline-block" style="color: var(--accent); border-color: var(--accent-glow);">3. Props: Pasar Datos al Componente</h2>
+            <p class="text-slate-300 text-xl leading-relaxed mb-10">
+                Las <span class="tecnicismo" data-tooltip="Props (properties): datos que un componente padre envía a un componente hijo. Son de solo lectura: el hijo no las modifica.">props</span> son como los argumentos de una función: datos que entran desde fuera. Permiten que el mismo componente muestre cosas distintas.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                <div class="glass-panel p-8">
+                    <div class="tech-tag">El componente (recibe props)</div>
+                    <div class="code-snippet text-sm">
+                        <span class="keyword">function</span> <span class="func">Card</span>({ titulo, precio }) {<br>
+                        &nbsp;&nbsp;<span class="keyword">return</span> (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">div</span>&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">h3</span>&gt;{titulo}&lt;/<span class="tag">h3</span>&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">p</span>&gt;${precio}&lt;/<span class="tag">p</span>&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span class="tag">div</span>&gt;<br>
+                        &nbsp;&nbsp;);<br>
+                        }
+                    </div>
+                </div>
+                <div class="glass-panel p-8">
+                    <div class="tech-tag">El padre (envía props)</div>
+                    <div class="code-snippet text-sm">
+                        <span class="keyword">function</span> <span class="func">Tienda</span>() {<br>
+                        &nbsp;&nbsp;<span class="keyword">return</span> (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">div</span>&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">Card</span> <span class="attr">titulo</span>=<span class="string">"Teclado"</span> <span class="attr">precio</span>={<span class="number">25</span>} /&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">Card</span> <span class="attr">titulo</span>=<span class="string">"Mouse"</span> <span class="attr">precio</span>={<span class="number">15</span>} /&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span class="tag">div</span>&gt;<br>
+                        &nbsp;&nbsp;);<br>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="glass-panel p-8 border-l-4" style="border-color: #f59e0b;">
+                <p class="text-amber-400 font-bold mb-2">Texto vs. número en props</p>
+                <p class="text-slate-400 text-base leading-relaxed">Un texto va entre comillas: <code class="font-mono text-cyan-300">titulo="Teclado"</code>. Cualquier otro valor de JS (número, variable, booleano) va entre llaves: <code class="font-mono text-cyan-300">precio={25}</code>.</p>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECTION 4: ESTADO -->
+        <section class="mb-32">
+            <h2 class="text-3xl font-bold mb-8 border-b pb-4 inline-block" style="color: var(--accent); border-color: var(--accent-glow);">4. Estado con useState</h2>
+            <p class="text-slate-300 text-xl leading-relaxed mb-10">
+                El <span class="tecnicismo" data-tooltip="Estado (state): datos internos del componente que pueden cambiar con el tiempo. Cuando cambian, React vuelve a dibujar el componente.">estado</span> es la memoria del componente. La diferencia clave con las props: <strong>las props vienen de fuera, el estado vive dentro y cambia</strong>.
+            </p>
+            <div class="glass-panel p-10 mb-8">
+                <div class="code-snippet">
+                    <span class="keyword">const</span> [<span style="color:#34d399">veces</span>, <span style="color:#f472b6">setVeces</span>] = <span class="func">useState</span>(<span class="number">0</span>);<br>
+                    <span class="comment">//      ▲ valor      ▲ función     ▲ valor inicial</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 text-center">
+                    <div class="p-4 rounded-xl" style="background: rgba(52,211,153,0.1);">
+                        <p class="font-mono font-bold" style="color:#34d399;">veces</p>
+                        <p class="text-slate-400 text-sm">El valor actual. Lo lees en el JSX.</p>
+                    </div>
+                    <div class="p-4 rounded-xl" style="background: rgba(244,114,182,0.1);">
+                        <p class="font-mono font-bold" style="color:#f472b6;">setVeces</p>
+                        <p class="text-slate-400 text-sm">La única forma de cambiarlo. Nunca hagas <code class="font-mono">veces = 5</code>.</p>
+                    </div>
+                    <div class="p-4 rounded-xl" style="background: rgba(129,140,248,0.1);">
+                        <p class="font-mono font-bold" style="color:#818cf8;">useState(0)</p>
+                        <p class="text-slate-400 text-sm">Valor con el que arranca.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-panel p-8 border-l-4" style="border-color: #ef4444;">
+                <p class="font-bold mb-2" style="color:#f87171;">Error típico</p>
+                <p class="text-slate-400 text-base leading-relaxed mb-4">No modifiques el estado directamente: React no se entera y la pantalla no se actualiza.</p>
+                <div class="code-snippet text-sm">
+                    <span class="comment">// ❌ Mal: React no redibuja</span><br>
+                    veces = veces + <span class="number">1</span>;<br><br>
+                    <span class="comment">// ✅ Bien: usa la función setter</span><br>
+                    <span class="func">setVeces</span>(veces + <span class="number">1</span>);
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECTION 5: LISTAS -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 border-b pb-4 inline-block" style="color: var(--accent); border-color: var(--accent-glow);">5. Renderizar Listas</h2>
+            <p class="text-slate-300 text-xl leading-relaxed mb-10">
+                Para mostrar una lista de datos usas <code class="font-mono text-cyan-300">.map()</code> (lo viste en el módulo de arreglos). Cada elemento necesita una prop <span class="tecnicismo" data-tooltip="key: identificador único que React usa para saber qué elemento de la lista cambió, se agregó o se borró. Mejora el rendimiento.">key</span> única.
+            </p>
+            <div class="glass-panel p-10 mb-8">
+                <div class="code-snippet">
+                    <span class="keyword">const</span> tareas = [<br>
+                    &nbsp;&nbsp;{ id: <span class="number">1</span>, texto: <span class="string">"Estudiar React"</span> },<br>
+                    &nbsp;&nbsp;{ id: <span class="number">2</span>, texto: <span class="string">"Hacer ejercicio"</span> }<br>
+                    ];<br><br>
+                    <span class="keyword">return</span> (<br>
+                    &nbsp;&nbsp;&lt;<span class="tag">ul</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{tareas.<span class="func">map</span>((tarea) => (<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">li</span> <span class="attr">key</span>={tarea.id}&gt;{tarea.texto}&lt;/<span class="tag">li</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;))}<br>
+                    &nbsp;&nbsp;&lt;/<span class="tag">ul</span>&gt;<br>
+                    );
+                </div>
+            </div>
+            <div class="glass-panel p-8 border-l-4" style="border-color: var(--accent);">
+                <p class="font-bold mb-2" style="color: var(--accent);">Siguiente paso</p>
+                <p class="text-slate-400 text-base leading-relaxed">Ya sabes crear componentes con estado. Pero al recargar la página, el estado se pierde. En la siguiente lección lo guardamos con <a href="local-storage.html" class="underline" style="color: var(--accent);">Local Storage</a>.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const themeBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        themeBtn.addEventListener('click', () => {
+            const isLight = html.getAttribute('data-theme') === 'light';
+            localStorage.setItem('theme', isLight ? 'dark' : 'light');
+            themeBtn.innerHTML = isLight ? '☀️ Modo Claro' : '🌙 Modo Oscuro';
+            if (isLight) html.removeAttribute('data-theme'); else html.setAttribute('data-theme', 'light');
+        });
+    </script>
+</body>
+</html>
