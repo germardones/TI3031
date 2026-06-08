@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>useState y useEffect | Módulo 5</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-color: #0b1120; --card-bg: rgba(15, 23, 42, 0.7); --accent: #61dafb; --accent-glow: rgba(97, 218, 251, 0.25); --text-main: #f8fafc; --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        [data-theme="light"] { --bg-color: #f1f5f9; --card-bg: rgba(255, 255, 255, 0.85); --text-main: #0f172a; --accent: #0891b2; --accent-glow: rgba(8, 145, 178, 0.2); }
+        [data-theme="light"] h1 { background-image: linear-gradient(to right, #1e293b, var(--accent)) !important; }
+        [data-theme="light"] .text-slate-400, [data-theme="light"] .text-slate-300 { color: #475569 !important; }
+        [data-theme="light"] .glass-panel { border-color: rgba(0,0,0,0.1) !important; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-color); color: var(--text-main); transition: var(--transition); min-height: 100vh; font-size: 1.25rem; }
+        .glass-panel { background: var(--card-bg); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 2.5rem; transition: var(--transition); }
+        .glass-panel:hover { border-color: var(--accent); box-shadow: 0 0 30px var(--accent-glow); }
+        .code-snippet { background: #010409; color: #e2e8f0; border-radius: 1.5rem; padding: 2rem; border: 1px solid rgba(255, 255, 255, 0.1); font-family: 'JetBrains Mono', monospace; font-size: 0.95rem; line-height: 1.8; overflow-x: auto; }
+        #themeToggle { position: fixed; bottom: 2rem; right: 2rem; z-index: 1000; background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-main); padding: 1rem 2rem; border-radius: 100px; cursor: pointer; font-weight: 600; }
+        .keyword { color: #f472b6; }
+        .string { color: #fbbf24; }
+        .number { color: #818cf8; }
+        .comment { color: #64748b; font-style: italic; }
+        .tag { color: #61dafb; }
+        .attr { color: #a5d6ff; }
+        .func { color: #d2a8ff; }
+        .prop { color: #a5d6ff; }
+        .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(97, 218, 251, 0.3), transparent); margin: 6rem 0; }
+        .tech-tag { background: rgba(97, 218, 251, 0.1); color: var(--accent); padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; display: inline-block; margin-bottom: 0.75rem; }
+        .tecnicismo { border-bottom: 2px dashed var(--accent); cursor: help; position: relative; font-weight: 600; color: var(--accent); }
+        .tecnicismo::after { content: attr(data-tooltip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background: #0f172a; color: #f8fafc; padding: 0.75rem 1rem; border-radius: 0.75rem; font-size: 0.8rem; font-weight: 400; width: 280px; white-space: normal; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity 0.2s, visibility 0.2s; z-index: 200; border: 1px solid rgba(97,218,251,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.4); pointer-events: none; font-family: 'Outfit', sans-serif; }
+        .tecnicismo:hover::after { opacity: 1; visibility: visible; }
+
+        /* Diagrama ciclo re-render */
+        .cycle-step { background: rgba(97, 218, 251, 0.06); border: 1px solid rgba(97, 218, 251, 0.2); border-radius: 1rem; padding: 1.25rem 1.5rem; text-align: center; }
+        .cycle-arrow { color: var(--accent); font-size: 1.5rem; display: flex; align-items: center; }
+
+        /* Tabla de dependencias */
+        .dep-table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 1rem; overflow: hidden; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; }
+        .dep-table th { background: rgba(97, 218, 251, 0.12); color: var(--accent); padding: 0.75rem 1.25rem; text-align: left; font-weight: 700; font-family: 'Outfit', sans-serif; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .dep-table td { padding: 0.85rem 1.25rem; border-top: 1px solid rgba(255,255,255,0.05); }
+        .dep-table tr:hover td { background: rgba(97,218,251,0.04); }
+        [data-theme="light"] .dep-table td { border-color: rgba(0,0,0,0.06); }
+        [data-theme="light"] .dep-table tr:hover td { background: rgba(8,145,178,0.04); }
+    </style>
+</head>
+<body class="p-6 md:p-12 pb-32">
+    <button id="themeToggle">☀️ Modo Claro</button>
+
+    <div class="max-w-6xl mx-auto">
+        <header class="mb-24 text-center">
+            <nav class="mb-12 flex justify-center gap-6 text-sm font-semibold uppercase tracking-widest flex-wrap">
+                <a href="../index.html" class="hover:opacity-80 transition-opacity font-bold" style="color: var(--accent);">← Hub Principal</a>
+                <span class="text-slate-700">|</span>
+                <a href="index.html" class="hover:opacity-80 transition-opacity" style="color: var(--accent);">Módulo 05</a>
+                <span class="text-slate-700">|</span>
+                <span class="text-slate-500">useState y useEffect</span>
+            </nav>
+            <h1 class="text-5xl md:text-7xl font-black bg-gradient-to-r from-white to-cyan-300 bg-clip-text text-transparent mb-8 leading-tight">
+                useState &amp; useEffect
+            </h1>
+            <p class="text-slate-400 text-2xl font-light max-w-3xl mx-auto leading-relaxed">
+                Los dos <span class="tecnicismo" data-tooltip="Hook: función especial de React que permite usar estado y otras características dentro de componentes funcionales. Siempre empiezan con 'use'.">hooks</span> más importantes de React. Uno guarda información que puede cambiar; el otro sincroniza tu componente con el mundo exterior.
+            </p>
+        </header>
+
+        <!-- SECTION 1: useState -->
+        <section class="mb-32">
+            <h2 class="text-3xl font-bold mb-8 border-b pb-4 inline-block" style="color: var(--accent); border-color: var(--accent-glow);">1. useState — memoria del componente</h2>
+
+            <p class="text-slate-300 text-xl leading-relaxed mb-8">
+                En React, una variable normal <strong>no provoca que la pantalla se actualice</strong> cuando cambia. Para que React "se entere" de un cambio y redibuje la interfaz necesitas declarar esa variable como <strong>estado</strong> con <code class="font-mono text-cyan-300">useState</code>.
+            </p>
+
+            <!-- Comparación variable vs estado -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="glass-panel p-8">
+                    <div class="tech-tag" style="background:rgba(239,68,68,0.1);color:#f87171;">❌ Variable normal</div>
+                    <div class="code-snippet text-sm">
+                        <span class="keyword">function</span> <span class="func">Contador</span>() {<br>
+                        &nbsp;&nbsp;<span class="keyword">let</span> n = <span class="number">0</span>; <span class="comment">// React no la observa</span><br><br>
+                        &nbsp;&nbsp;<span class="keyword">return</span> (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">button</span> <span class="attr">onClick</span>={() => n++}&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clics: {n} <span class="comment">// nunca cambia</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span class="tag">button</span>&gt;<br>
+                        &nbsp;&nbsp;);<br>
+                        }
+                    </div>
+                    <p class="text-slate-500 text-sm mt-4">El valor cambia en memoria, pero la pantalla no se actualiza.</p>
+                </div>
+                <div class="glass-panel p-8">
+                    <div class="tech-tag">✅ useState</div>
+                    <div class="code-snippet text-sm">
+                        <span class="keyword">function</span> <span class="func">Contador</span>() {<br>
+                        &nbsp;&nbsp;<span class="keyword">const</span> [n, setN] = <span class="func">useState</span>(<span class="number">0</span>);<br><br>
+                        &nbsp;&nbsp;<span class="keyword">return</span> (<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">button</span> <span class="attr">onClick</span>={() => <span class="func">setN</span>(n + <span class="number">1</span>)}&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Clics: {n} <span class="comment">// se actualiza</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span class="tag">button</span>&gt;<br>
+                        &nbsp;&nbsp;);<br>
+                        }
+                    </div>
+                    <p class="text-slate-500 text-sm mt-4">Cada llamada a <code class="font-mono">setN</code> dispara un re-render automático.</p>
+                </div>
+            </div>
+
+            <!-- Anatomía de useState -->
+            <h3 class="text-2xl font-bold mb-6" style="color: var(--accent);">Anatomía de useState</h3>
+            <div class="glass-panel p-10 mb-10">
+                <div class="code-snippet text-base mb-8">
+                    <span class="keyword">const</span> [<span class="prop">valor</span>, <span class="func">setValor</span>] = <span class="func">useState</span>(<span class="string">valorInicial</span>);
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+                    <div class="cycle-step">
+                        <p class="font-bold mb-1" style="color: var(--accent);">valor</p>
+                        <p class="text-slate-400">El dato actual. Lo lees directamente en el JSX o en funciones.</p>
+                    </div>
+                    <div class="cycle-step">
+                        <p class="font-bold mb-1" style="color: var(--accent);">setValor</p>
+                        <p class="text-slate-400">La función que actualiza el estado. Llamarla provoca un re-render.</p>
+                    </div>
+                    <div class="cycle-step">
+                        <p class="font-bold mb-1" style="color: var(--accent);">valorInicial</p>
+                        <p class="text-slate-400">Solo se usa la primera vez que el componente se monta. Puede ser cualquier tipo.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ciclo de re-render -->
+            <h3 class="text-2xl font-bold mb-6" style="color: var(--accent);">Ciclo de re-render</h3>
+            <div class="glass-panel p-10 mb-10">
+                <div class="flex flex-col md:flex-row items-center justify-center gap-4 flex-wrap text-center text-sm">
+                    <div class="cycle-step flex-1 min-w-[140px]">
+                        <p class="text-2xl mb-2">🖱️</p>
+                        <p class="font-bold" style="color: var(--accent);">Evento</p>
+                        <p class="text-slate-400 text-xs mt-1">click, input, etc.</p>
+                    </div>
+                    <div class="cycle-arrow">→</div>
+                    <div class="cycle-step flex-1 min-w-[140px]">
+                        <p class="text-2xl mb-2">📞</p>
+                        <p class="font-bold" style="color: var(--accent);">setValor(nuevo)</p>
+                        <p class="text-slate-400 text-xs mt-1">actualizas el estado</p>
+                    </div>
+                    <div class="cycle-arrow">→</div>
+                    <div class="cycle-step flex-1 min-w-[140px]">
+                        <p class="text-2xl mb-2">⚙️</p>
+                        <p class="font-bold" style="color: var(--accent);">React re-renderiza</p>
+                        <p class="text-slate-400 text-xs mt-1">ejecuta la función del componente</p>
+                    </div>
+                    <div class="cycle-arrow">→</div>
+                    <div class="cycle-step flex-1 min-w-[140px]">
+                        <p class="text-2xl mb-2">🖥️</p>
+                        <p class="font-bold" style="color: var(--accent);">Pantalla actualizada</p>
+                        <p class="text-slate-400 text-xs mt-1">el nuevo valor aparece</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ejemplos prácticos -->
+            <h3 class="text-2xl font-bold mb-6" style="color: var(--accent);">Ejemplos prácticos</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div class="glass-panel p-8">
+                    <div class="tech-tag">Estado booleano (toggle)</div>
+                    <div class="code-snippet text-sm">
+                        <span class="keyword">const</span> [abierto, setAbierto] = <span class="func">useState</span>(<span class="keyword">false</span>);<br><br>
+                        &lt;<span class="tag">button</span> <span class="attr">onClick</span>={() => <span class="func">setAbierto</span>(!abierto)}&gt;<br>
+                        &nbsp;&nbsp;{abierto ? <span class="string">"Cerrar"</span> : <span class="string">"Abrir"</span>}<br>
+                        &lt;/<span class="tag">button</span>&gt;<br>
+                        {abierto &amp;&amp; &lt;<span class="tag">div</span>&gt;Contenido&lt;/<span class="tag">div</span>&gt;}
+                    </div>
+                </div>
+                <div class="glass-panel p-8">
+                    <div class="tech-tag">Estado de un input</div>
+                    <div class="code-snippet text-sm">
+                        <span class="keyword">const</span> [nombre, setNombre] = <span class="func">useState</span>(<span class="string">""</span>);<br><br>
+                        &lt;<span class="tag">input</span><br>
+                        &nbsp;&nbsp;<span class="attr">value</span>={nombre}<br>
+                        &nbsp;&nbsp;<span class="attr">onChange</span>={(e) => <span class="func">setNombre</span>(e.target.value)}<br>
+                        /&gt;<br>
+                        &lt;<span class="tag">p</span>&gt;Hola, {nombre}&lt;/<span class="tag">p</span>&gt;
+                    </div>
+                </div>
+                <div class="glass-panel p-8">
+                    <div class="tech-tag">Estado con objeto</div>
+                    <div class="code-snippet text-sm">
+                        <span class="keyword">const</span> [usuario, setUsuario] = <span class="func">useState</span>({<br>
+                        &nbsp;&nbsp;nombre: <span class="string">""</span>, edad: <span class="number">0</span><br>
+                        });<br><br>
+                        <span class="comment">// Siempre spread para no perder otros campos</span><br>
+                        <span class="func">setUsuario</span>({ ...usuario, nombre: <span class="string">"Ana"</span> });
+                    </div>
+                </div>
+                <div class="glass-panel p-8">
+                    <div class="tech-tag">Estado con array</div>
+                    <div class="code-snippet text-sm">
+                        <span class="keyword">const</span> [items, setItems] = <span class="func">useState</span>([]);<br><br>
+                        <span class="comment">// Agregar sin mutar el array original</span><br>
+                        <span class="func">setItems</span>([...items, nuevoItem]);<br><br>
+                        <span class="comment">// Eliminar por id</span><br>
+                        <span class="func">setItems</span>(items.<span class="func">filter</span>((i) => i.id !== id));
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel p-8 border-l-4" style="border-color: #f59e0b;">
+                <p class="text-amber-400 font-bold mb-2">Regla importante</p>
+                <p class="text-slate-400 text-base leading-relaxed">Nunca modifiques el estado directamente (<code class="font-mono text-red-400">estado.campo = valor</code>). Siempre usa el setter (<code class="font-mono text-cyan-300">setEstado(...)</code>). React necesita detectar el cambio para saber que tiene que re-renderizar.</p>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECTION 2: useEffect -->
+        <section class="mb-32">
+            <h2 class="text-3xl font-bold mb-8 border-b pb-4 inline-block" style="color: var(--accent); border-color: var(--accent-glow);">2. useEffect — sincronizar con el exterior</h2>
+
+            <p class="text-slate-300 text-xl leading-relaxed mb-6">
+                El renderizado de React es <strong>puro</strong>: tomar estado → devolver JSX, sin <span class="tecnicismo" data-tooltip="Efecto secundario (side effect): cualquier acción que afecta algo fuera del componente: peticiones de red, timers, suscripciones, manipulación del DOM, localStorage...">efectos secundarios</span>. Pero las apps reales los necesitan. <code class="font-mono text-cyan-300">useEffect</code> es el lugar seguro para ejecutarlos.
+            </p>
+            <p class="text-slate-300 text-xl leading-relaxed mb-10">
+                Ejemplos de efectos: pedir datos a una API, guardar en <code class="font-mono text-cyan-300">localStorage</code>, suscribirse a un evento del DOM, iniciar un temporizador.
+            </p>
+
+            <!-- Sintaxis -->
+            <h3 class="text-2xl font-bold mb-6" style="color: var(--accent);">Sintaxis</h3>
+            <div class="glass-panel p-10 mb-10">
+                <div class="code-snippet mb-8">
+                    <span class="func">useEffect</span>(() => {<br>
+                    &nbsp;&nbsp;<span class="comment">// código del efecto</span><br><br>
+                    &nbsp;&nbsp;<span class="keyword">return</span> () => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// limpieza (opcional)</span><br>
+                    &nbsp;&nbsp;};<br>
+                    }, [<span class="comment">/* dependencias */</span>]);
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                    <div class="cycle-step">
+                        <p class="font-bold mb-1" style="color: var(--accent);">Función del efecto</p>
+                        <p class="text-slate-400">Se ejecuta después de que React pinta el componente. Aquí va tu lógica asíncrona o con efectos secundarios.</p>
+                    </div>
+                    <div class="cycle-step">
+                        <p class="font-bold mb-1" style="color: var(--accent);">Función de limpieza</p>
+                        <p class="text-slate-400">Opcional. Se ejecuta antes de que el componente se desmonte o antes de volver a correr el efecto. Cancela suscripciones y timers aquí.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Array de dependencias -->
+            <h3 class="text-2xl font-bold mb-6" style="color: var(--accent);">El array de dependencias</h3>
+            <p class="text-slate-300 text-xl leading-relaxed mb-8">
+                El segundo argumento controla <strong>cuándo</strong> se ejecuta el efecto. Es la parte más importante (y más confusa) de <code class="font-mono text-cyan-300">useEffect</code>.
+            </p>
+            <div class="glass-panel p-8 mb-10 overflow-x-auto">
+                <table class="dep-table">
+                    <thead>
+                        <tr>
+                            <th>Segundo argumento</th>
+                            <th>¿Cuándo se ejecuta?</th>
+                            <th>Caso de uso típico</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code style="color: #818cf8;">[]</code> — array vacío</td>
+                            <td class="text-slate-400">Solo al <strong>montar</strong> el componente (una vez)</td>
+                            <td class="text-slate-400">Cargar datos iniciales de una API</td>
+                        </tr>
+                        <tr>
+                            <td><code style="color: #818cf8;">[dep1, dep2]</code> — con valores</td>
+                            <td class="text-slate-400">Al montar <strong>y</strong> cada vez que alguna dep cambia</td>
+                            <td class="text-slate-400">Re-buscar datos cuando cambia un filtro</td>
+                        </tr>
+                        <tr>
+                            <td><em class="text-slate-500">sin argumento</em></td>
+                            <td class="text-slate-400">En <strong>cada</strong> re-render (generalmente no es lo que quieres)</td>
+                            <td class="text-slate-400">Raro; puede causar bucles infinitos</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Ejemplos con dependencias -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+                <div class="glass-panel p-8">
+                    <div class="tech-tag">Solo al montar [ ]</div>
+                    <div class="code-snippet text-sm">
+                        <span class="func">useEffect</span>(() => {<br>
+                        &nbsp;&nbsp;<span class="func">cargarDatos</span>();<br>
+                        }, []); <span class="comment">// una vez</span>
+                    </div>
+                    <p class="text-slate-500 text-sm mt-4">Equivale al antiguo <code class="font-mono">componentDidMount</code>.</p>
+                </div>
+                <div class="glass-panel p-8">
+                    <div class="tech-tag">Reactivo a búsqueda</div>
+                    <div class="code-snippet text-sm">
+                        <span class="func">useEffect</span>(() => {<br>
+                        &nbsp;&nbsp;<span class="func">buscar</span>(query);<br>
+                        }, [query]);<br>
+                        <span class="comment">// re-busca si query cambia</span>
+                    </div>
+                    <p class="text-slate-500 text-sm mt-4">Se dispara cada vez que <code class="font-mono">query</code> tiene un nuevo valor.</p>
+                </div>
+                <div class="glass-panel p-8">
+                    <div class="tech-tag">Con limpieza</div>
+                    <div class="code-snippet text-sm">
+                        <span class="func">useEffect</span>(() => {<br>
+                        &nbsp;&nbsp;<span class="keyword">const</span> id = <span class="func">setInterval</span>(<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;tick, <span class="number">1000</span><br>
+                        &nbsp;&nbsp;);<br>
+                        &nbsp;&nbsp;<span class="keyword">return</span> () =><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="func">clearInterval</span>(id);<br>
+                        }, []);
+                    </div>
+                    <p class="text-slate-500 text-sm mt-4">La limpieza cancela el timer cuando el componente se desmonta.</p>
+                </div>
+            </div>
+
+            <div class="glass-panel p-8 border-l-4 mb-8" style="border-color: #f59e0b;">
+                <p class="text-amber-400 font-bold mb-2">Trampa frecuente: bucle infinito</p>
+                <div class="code-snippet text-sm mb-4">
+                    <span class="comment">// ❌ MAL: setDatos cambia datos → re-render → efecto corre → setDatos...</span><br>
+                    <span class="func">useEffect</span>(() => {<br>
+                    &nbsp;&nbsp;<span class="func">setDatos</span>([...datos, extra]);<br>
+                    }); <span class="comment">// sin array de dependencias</span>
+                </div>
+                <p class="text-slate-400 text-base">Si el efecto actualiza un estado que está en sus dependencias sin control, crea un bucle infinito. Añade <code class="font-mono text-cyan-300">[]</code> o revisa bien qué dependencias realmente necesitas.</p>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- SECTION 3: Juntos -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 border-b pb-4 inline-block" style="color: var(--accent); border-color: var(--accent-glow);">3. Trabajando juntos</h2>
+
+            <p class="text-slate-300 text-xl leading-relaxed mb-10">
+                La combinación más común: <code class="font-mono text-cyan-300">useState</code> guarda los datos, <code class="font-mono text-cyan-300">useEffect</code> los carga al montar el componente. El siguiente patrón lo verás en casi toda app React real.
+            </p>
+
+            <!-- Patrón fetch completo -->
+            <div class="glass-panel p-10 mb-8">
+                <div class="tech-tag mb-6">Patrón: cargar datos al montar</div>
+                <div class="code-snippet">
+                    <span class="keyword">import</span> { useState, useEffect } <span class="keyword">from</span> <span class="string">"react"</span>;<br><br>
+                    <span class="keyword">function</span> <span class="func">ListaUsuarios</span>() {<br>
+                    &nbsp;&nbsp;<span class="comment">// 3 estados: datos, carga y error</span><br>
+                    &nbsp;&nbsp;<span class="keyword">const</span> [usuarios, setUsuarios] = <span class="func">useState</span>([]);<br>
+                    &nbsp;&nbsp;<span class="keyword">const</span> [cargando, setCargando] = <span class="func">useState</span>(<span class="keyword">true</span>);<br>
+                    &nbsp;&nbsp;<span class="keyword">const</span> [error, setError] = <span class="func">useState</span>(<span class="keyword">null</span>);<br><br>
+                    &nbsp;&nbsp;<span class="comment">// Efecto: pedir al montar ([] = una sola vez)</span><br>
+                    &nbsp;&nbsp;<span class="func">useEffect</span>(() => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">async function</span> <span class="func">cargar</span>() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">const</span> res = <span class="keyword">await</span> <span class="func">fetch</span>(<span class="string">"/api/usuarios"</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">const</span> json = <span class="keyword">await</span> res.<span class="func">json</span>();<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">setUsuarios</span>(json);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (e) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">setError</span>(e.message);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">finally</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">setCargando</span>(<span class="keyword">false</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="func">cargar</span>();<br>
+                    &nbsp;&nbsp;}, []);<br><br>
+                    &nbsp;&nbsp;<span class="keyword">if</span> (cargando) <span class="keyword">return</span> &lt;<span class="tag">p</span>&gt;Cargando...&lt;/<span class="tag">p</span>&gt;;<br>
+                    &nbsp;&nbsp;<span class="keyword">if</span> (error) <span class="keyword">return</span> &lt;<span class="tag">p</span>&gt;Error: {error}&lt;/<span class="tag">p</span>&gt;;<br><br>
+                    &nbsp;&nbsp;<span class="keyword">return</span> (<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">ul</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{usuarios.<span class="func">map</span>((u) => (<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">li</span> <span class="attr">key</span>={u.id}&gt;{u.nombre}&lt;/<span class="tag">li</span>&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;))}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;/<span class="tag">ul</span>&gt;<br>
+                    &nbsp;&nbsp;);<br>
+                    }
+                </div>
+            </div>
+
+            <!-- Otro patrón: reactivo a búsqueda -->
+            <div class="glass-panel p-10 mb-8">
+                <div class="tech-tag mb-6">Patrón: reaccionar a un filtro</div>
+                <p class="text-slate-400 text-base mb-6">Cuando el usuario escribe en un campo de búsqueda quieres re-buscar automáticamente. El término de búsqueda entra en el array de dependencias.</p>
+                <div class="code-snippet text-sm">
+                    <span class="keyword">const</span> [query, setQuery] = <span class="func">useState</span>(<span class="string">""</span>);<br>
+                    <span class="keyword">const</span> [resultados, setResultados] = <span class="func">useState</span>([]);<br><br>
+                    <span class="func">useEffect</span>(() => {<br>
+                    &nbsp;&nbsp;<span class="keyword">if</span> (!query) { <span class="func">setResultados</span>([]); <span class="keyword">return</span>; }<br>
+                    &nbsp;&nbsp;<span class="func">buscarEnAPI</span>(query).<span class="func">then</span>(setResultados);<br>
+                    }, [query]); <span class="comment">// se ejecuta cada vez que query cambia</span><br><br>
+                    <span class="keyword">return</span> (<br>
+                    &nbsp;&nbsp;&lt;&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="tag">input</span> <span class="attr">value</span>={query} <span class="attr">onChange</span>={(e) => <span class="func">setQuery</span>(e.target.value)} /&gt;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;{resultados.<span class="func">map</span>((r) => &lt;<span class="tag">p</span> <span class="attr">key</span>={r.id}&gt;{r.titulo}&lt;/<span class="tag">p</span>&gt;)}<br>
+                    &nbsp;&nbsp;&lt;/&gt;<br>
+                    );
+                </div>
+            </div>
+
+            <!-- Resumen -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div class="glass-panel p-8 text-center">
+                    <p class="text-5xl mb-4">🧠</p>
+                    <p class="text-xl font-bold mb-2" style="color: var(--accent);">useState</p>
+                    <p class="text-slate-400 text-base leading-relaxed">Guarda información que puede cambiar. Cada cambio provoca un re-render. Es la memoria del componente.</p>
+                </div>
+                <div class="glass-panel p-8 text-center">
+                    <p class="text-5xl mb-4">🔌</p>
+                    <p class="text-xl font-bold mb-2" style="color: var(--accent);">useEffect</p>
+                    <p class="text-slate-400 text-base leading-relaxed">Sincroniza el componente con el exterior. Se ejecuta después del render y controla cuándo correr con el array de dependencias.</p>
+                </div>
+            </div>
+
+            <div class="glass-panel p-8 border-l-4" style="border-color: var(--accent);">
+                <p class="font-bold mb-3" style="color: var(--accent);">Próximos pasos</p>
+                <p class="text-slate-400 text-base leading-relaxed">Ahora que entiendes los hooks, explora cómo se usan en la práctica: <a href="local-storage.html" class="underline" style="color: var(--accent);">Local Storage</a> usa <code class="font-mono">useEffect</code> para persistir datos, y <a href="api-fetch.html" class="underline" style="color: var(--accent);">APIs y Async</a> muestra el patrón completo de consumo de datos externos.</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const themeBtn = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        if (localStorage.getItem('theme') === 'light') { html.setAttribute('data-theme', 'light'); themeBtn.innerHTML = '🌙 Modo Oscuro'; }
+        themeBtn.addEventListener('click', () => {
+            const isLight = html.getAttribute('data-theme') === 'light';
+            localStorage.setItem('theme', isLight ? 'dark' : 'light');
+            themeBtn.innerHTML = isLight ? '☀️ Modo Claro' : '🌙 Modo Oscuro';
+            if (isLight) html.removeAttribute('data-theme'); else html.setAttribute('data-theme', 'light');
+        });
+    </script>
+</body>
+</html>
